@@ -1,50 +1,79 @@
-import Razorpay from "razorpay";
-import { type NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
+import { createClient } from "@supabase/supabase-js";
 
-const orders: any[] = [];
+
+const supabaseUrl = 'https://ugxqilcquusfwvkmlzwo.supabase.co'
+
+// Supabase Server Client
+const supabase = createClient(
+  supabaseUrl,
+  process.env.SUPABASE_SERVICE_API_KEY!
+);
 
 export async function POST(request: NextRequest) {
   try {
     const orderData = await request.json();
 
-    // Validate data
-    const { amount, name, email, phone, address } = orderData;
-    if (!amount || typeof amount !== "number") {
-      return NextResponse.json({ error: "Invalid amount" }, { status: 400 });
+    const {
+      orderId,
+      customerDetails,
+      orderDetails,
+      totalAmount,
+      paymentMethod,
+      orderDate,
+      status,
+      items,
+    } = orderData;
+
+    const {
+      name,
+      email,
+      phone,
+      address,
+      city,
+      pincode,
+      specialInstructions = "",
+    } = customerDetails || {};
+
+    if (!orderId || !name || !totalAmount || !items) {
+      return NextResponse.json(
+        { error: "Missing required fields" },
+        { status: 400 }
+      );
     }
 
-    // ✅ Initialize Razorpay only inside the handler
-    const razorpay = new Razorpay({
-      key_id: process.env.RAZORPAY_KEY_ID!,
-      key_secret: process.env.RAZORPAY_KEY_SECRET!,
-    });
+    const { error } = await supabase.from("orders").insert([
+      {
+        orderId,
+        name,
+        email,
+        phone,
+        address,
+        city,
+        pincode,
+        specialInstructions,
+        orderDetails,
+        totalAmount,
+        paymentMethod,
+        orderDate,
+        status,
+        items,
+      },
+    ]);
 
-    // Create Razorpay order
-    const paymentOrder = await razorpay.orders.create({
-      amount: amount * 100, // amount in paise
-      currency: "INR",
-      receipt: `receipt_${Date.now()}`,
-    });
+    if (error) {
+      console.error("Supabase Insert Error:", error);
+      return NextResponse.json(
+        { error: "Failed to insert order" },
+        { status: 500 }
+      );
+    }
 
-    // Create internal order
-    const orderWithMetadata = {
-      ...orderData,
-      id: Date.now().toString(),
-      razorpayOrderId: paymentOrder.id,
-      createdAt: new Date().toISOString(),
-    };
-
-    orders.push(orderWithMetadata);
-
-    return NextResponse.json({
-      success: true,
-      internalOrderId: orderWithMetadata.id,
-      razorpayOrder: paymentOrder,
-    });
-  } catch (error) {
-    console.error("Error creating order:", error);
+    return NextResponse.json({ success: true, message: "Order saved" });
+  } catch (err) {
+    console.error("Unexpected Error:", err);
     return NextResponse.json(
-      { success: false, error: "Failed to create order" },
+      { error: "Internal Server Error" },
       { status: 500 }
     );
   }
