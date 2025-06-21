@@ -17,7 +17,6 @@ export const metadata: Metadata = {
   title: "Farmer's Dairy - Fresh Farm Milk Delivered",
   description:
     "Premium quality farm-fresh milk delivered to your doorstep. Subscribe for daily, weekly, or monthly delivery.",
-  generator: "v0.dev",
 };
 
 export default function RootLayout({
@@ -26,8 +25,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className={`${montserrat.className} bg-sage-50`}>
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        {/* Razorpay Script - Load in head to avoid hydration issues */}
+        <script
+          src="https://checkout.razorpay.com/v1/checkout.js"
+          async
+          defer
+        />
+      </head>
+      <body
+        className={`${montserrat.className} bg-sage-50`}
+        suppressHydrationWarning>
         <CartProvider>
           <Navigation />
           <main>{children}</main>

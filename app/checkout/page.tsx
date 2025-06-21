@@ -1,15 +1,15 @@
 "use client";
-import { supabase } from "@/lib/supabase";
+
 import type React from "react";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useCart } from "@/components/cart-context";
 import { format, addDays } from "date-fns";
-import { CreditCard, Building, CheckCircle } from "lucide-react";
+import { CreditCard, Building, CheckCircle, AlertCircle } from "lucide-react";
 import { SuccessPopup } from "@/components/success-popup";
 import { useRouter } from "next/navigation";
 
@@ -23,6 +23,7 @@ declare global {
 export default function CheckoutPage() {
   const { items, getTotalPrice, clearCart } = useCart();
   const router = useRouter();
+  const [isClient, setIsClient] = useState(false);
   const [customerDetails, setCustomerDetails] = useState({
     name: "",
     email: "",
@@ -37,6 +38,12 @@ export default function CheckoutPage() {
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [paymentError, setPaymentError] = useState("");
+
+  // Ensure client-side rendering to avoid hydration issues
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   const validateField = (name: string, value: string) => {
     const newErrors = { ...errors };
@@ -178,96 +185,223 @@ export default function CheckoutPage() {
       })
       .join("\n");
   };
-  const saveOrderToDatabase = async (orderId: string) => {
+
+  // Create Razorpay order on server
+  const createRazorpayOrder = async (amount: number) => {
     try {
-      const {
-        name,
-        email,
-        phone,
-        address,
-        city,
-        pincode,
-        specialInstructions,
-      } = customerDetails;
+      const response = await fetch("/api/create-razorpay-order", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          amount: amount * 100, // Convert to paise
+          currency: "INR",
+        }),
+      });
 
-      const orderData = {
-        orderId,
-        name,
-        email,
-        phone,
-        address,
-        city,
-        pincode,
-        specialInstructions,
-        orderDetails: getOrderDetails(),
-        totalAmount: getTotalPrice().toFixed(2),
-        paymentMethod,
-        orderDate: new Date().toISOString(),
-        status: "Confirmed",
-        items: JSON.stringify(items), // store array as JSON string
-      };
+      const data = await response.json();
 
-      const { error } = await supabase.from("orders").insert([orderData]);
-      if (error) {
-        console.error("Error saving to Supabase:", error.message);
+      if (!data.success) {
+        throw new Error(data.error || "Failed to create Razorpay order");
       }
+
+      return data.order;
     } catch (error) {
-      console.error("Error saving order to database:", error);
+      console.error("Error creating Razorpay order:", error);
+      throw error;
     }
   };
 
-  const handleRazorpayPayment = () => {
-    const orderId = generateOrderId();
-
-    const options = {
-      key: "rzp_test_1234567890", // Replace with your Razorpay key
-      amount: getTotalPrice() * 100, // Amount in paise
-      currency: "INR",
-      name: "Farmer's Dairy",
-      description: "Fresh Milk Subscription",
-      order_id: orderId,
-      image: "https://farmersdairy.in/images/farmers-dairy-logo.png",
-      handler: async (response: any) => {
-        // Payment successful
-        setIsProcessing(true);
-
-        // Save order to database
-        await saveOrderToDatabase(orderId);
-
-        // Show success popup
-        setShowSuccessPopup(true);
-
-        // Clear cart and redirect after delay
-        setTimeout(() => {
-          clearCart();
-          setIsProcessing(false);
-          // Navigate to order confirmation page
-          const params = new URLSearchParams({
-            orderId,
-            customerName: customerDetails.name,
-            totalAmount: getTotalPrice().toFixed(2),
-            paymentMethod: "Online Payment",
-          });
-          router.push(`/order-confirmation?${params.toString()}`);
-        }, 3000);
-      },
-      prefill: {
-        name: customerDetails.name,
-        email: customerDetails.email,
-        contact: customerDetails.phone,
-      },
-      theme: {
-        color: "#2d5016",
-      },
-      modal: {
-        ondismiss: () => {
-          setIsProcessing(false);
+  const saveOrderToDatabase = async (
+    orderId: string,
+    paymentType: string,
+    razorpayPaymentId?: string
+  ) => {
+    try {
+      const orderData = {
+        orderId,
+        customerDetails: {
+          name: customerDetails.name,
+          email: customerDetails.email,
+          phone: customerDetails.phone,
+          address: customerDetails.address,
+          city: customerDetails.city,
+          pincode: customerDetails.pincode,
+          specialInstructions: customerDetails.specialInstructions,
         },
-      },
-    };
+        orderDetails: getOrderDetails(),
+        totalAmount: getTotalPrice().toFixed(2),
+        paymentMethod: paymentType,
+        razorpayPaymentId: razorpayPaymentId || null,
+        orderDate: new Date().toISOString(),
+        status: "Confirmed",
+        items: items.map((item) => ({
+          name: item.name,
+          quantity: item.quantity,
+          price: item.totalPrice || item.price,
+          subscription: item.subscription,
+          sampleSize: item.sampleSize,
+          deliveryDate: item.deliveryDate?.toISOString(),
+          dateRange: item.dateRange
+            ? {
+                from: item.dateRange.from?.toISOString(),
+                to: item.dateRange.to?.toISOString(),
+              }
+            : null,
+          totalDays: item.totalDays,
+          holidays: item.holidays?.map((h) => h.toISOString()),
+        })),
+      };
 
-    const rzp = new window.Razorpay(options);
-    rzp.open();
+      console.log("Saving order to database:", orderData);
+
+      const response = await fetch("/api/create-order", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(orderData),
+      });
+
+      const result = await response.json();
+      console.log("Order save result:", result);
+
+      if (!result.success) {
+        throw new Error(result.error || "Failed to save order");
+      }
+
+      return result;
+    } catch (error) {
+      console.error("Error saving order to database:", error);
+      throw error;
+    }
+  };
+
+  const handleRazorpayPayment = async () => {
+    try {
+      setIsProcessing(true);
+      setPaymentError("");
+
+      // Check if Razorpay is loaded
+      if (typeof window === "undefined" || !window.Razorpay) {
+        throw new Error(
+          "Payment gateway is not loaded. Please refresh and try again."
+        );
+      }
+
+      // Create order on server first
+      console.log("Creating Razorpay order...");
+      const razorpayOrder = await createRazorpayOrder(getTotalPrice());
+      console.log("Razorpay order created:", razorpayOrder);
+
+      const orderId = generateOrderId();
+
+      const options = {
+        key:
+          process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || "rzp_live_your_key_here", // Use environment variable
+        amount: razorpayOrder.amount,
+        currency: razorpayOrder.currency,
+        name: "Farmer's Dairy",
+        description: "Fresh Milk Subscription",
+        order_id: razorpayOrder.id, // Use server-created order ID
+        image: "/images/farmers-dairy-logo.png",
+        handler: async (response: any) => {
+          console.log("Payment successful:", response);
+
+          try {
+            // Verify payment on server
+            const verifyResponse = await fetch("/api/verify-payment", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature: response.razorpay_signature,
+              }),
+            });
+
+            const verifyResult = await verifyResponse.json();
+
+            if (!verifyResult.success) {
+              throw new Error("Payment verification failed");
+            }
+
+            // Save order to database
+            await saveOrderToDatabase(
+              orderId,
+              "Online Payment",
+              response.razorpay_payment_id
+            );
+
+            // Show success popup
+            setShowSuccessPopup(true);
+
+            // Clear cart and redirect after delay
+            setTimeout(() => {
+              clearCart();
+              setIsProcessing(false);
+              const params = new URLSearchParams({
+                orderId,
+                customerName: customerDetails.name,
+                totalAmount: getTotalPrice().toFixed(2),
+                paymentMethod: "Online Payment",
+              });
+              router.push(`/order-confirmation?${params.toString()}`);
+            }, 3000);
+          } catch (error) {
+            console.error("Error after payment:", error);
+            setPaymentError(
+              "Payment completed but order processing failed. Please contact support."
+            );
+            setIsProcessing(false);
+          }
+        },
+        prefill: {
+          name: customerDetails.name,
+          email: customerDetails.email,
+          contact: customerDetails.phone,
+        },
+        notes: {
+          order_id: orderId,
+          customer_name: customerDetails.name,
+        },
+        theme: {
+          color: "#2d5016",
+        },
+        modal: {
+          ondismiss: () => {
+            console.log("Payment modal dismissed");
+            setIsProcessing(false);
+          },
+        },
+        retry: {
+          enabled: true,
+          max_count: 3,
+        },
+      };
+
+      console.log("Opening Razorpay with options:", options);
+      const rzp = new window.Razorpay(options);
+
+      rzp.on("payment.failed", (response: any) => {
+        console.error("Payment failed:", response.error);
+        setPaymentError(
+          `Payment failed: ${response.error.description || "Unknown error"}`
+        );
+        setIsProcessing(false);
+      });
+
+      rzp.open();
+    } catch (error) {
+      console.error("Error initiating payment:", error);
+      setPaymentError(
+        error instanceof Error ? error.message : "Failed to initiate payment"
+      );
+      setIsProcessing(false);
+    }
   };
 
   const handleCashOnDelivery = async () => {
@@ -276,7 +410,7 @@ export default function CheckoutPage() {
 
     try {
       // Save order to database
-      await saveOrderToDatabase(orderId);
+      await saveOrderToDatabase(orderId, "Cash on Delivery");
 
       // Clear cart
       clearCart();
@@ -292,7 +426,9 @@ export default function CheckoutPage() {
       router.push(`/order-confirmation?${params.toString()}`);
     } catch (error) {
       console.error("Error processing COD order:", error);
-      alert("There was an error processing your order. Please try again.");
+      setPaymentError(
+        "There was an error processing your order. Please try again."
+      );
     } finally {
       setIsProcessing(false);
     }
@@ -301,95 +437,28 @@ export default function CheckoutPage() {
   const handlePayment = () => {
     if (!isFormValid || !paymentMethod || isProcessing) return;
 
+    setPaymentError(""); // Clear previous errors
+
     if (paymentMethod === "online") {
-      // Load Razorpay script and initiate payment
-      const script = document.createElement("script");
-      script.src = "https://checkout.razorpay.com/v1/checkout.js";
-      script.onload = () => {
-        const handleRazorpayPayment = async () => {
-          try {
-            const orderData = {
-              amount: getTotalPrice(),
-              name: customerDetails.name,
-              email: customerDetails.email,
-              phone: customerDetails.phone,
-              address: customerDetails.address,
-              city: customerDetails.city,
-              pincode: customerDetails.pincode,
-              specialInstructions: customerDetails.specialInstructions,
-              items,
-            };
-
-            const res = await fetch("/api/create-order", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify(orderData),
-            });
-
-            const data = await res.json();
-
-            if (!data.orderId) {
-              alert("Failed to initiate payment. Please try again.");
-              return;
-            }
-
-            const options = {
-              key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID!, // expose in .env
-              amount: data.amount,
-              currency: data.currency,
-              name: "Farmer's Dairy",
-              description: "Fresh Milk Subscription",
-              order_id: data.orderId,
-              image: "https://farmersdairy.in/images/farmers-dairy-logo.png",
-              handler: async (response: any) => {
-                setIsProcessing(true);
-
-                const generatedOrderId = generateOrderId();
-                await saveOrderToDatabase(generatedOrderId); // Save internal order
-
-                setShowSuccessPopup(true);
-
-                setTimeout(() => {
-                  clearCart();
-                  setIsProcessing(false);
-                  const params = new URLSearchParams({
-                    orderId: generatedOrderId,
-                    customerName: customerDetails.name,
-                    totalAmount: getTotalPrice().toFixed(2),
-                    paymentMethod: "Online Payment",
-                  });
-                  router.push(`/order-confirmation?${params.toString()}`);
-                }, 3000);
-              },
-              prefill: {
-                name: customerDetails.name,
-                email: customerDetails.email,
-                contact: customerDetails.phone,
-              },
-              theme: {
-                color: "#2d5016",
-              },
-              modal: {
-                ondismiss: () => {
-                  setIsProcessing(false);
-                },
-              },
-            };
-
-            const rzp = new window.Razorpay(options);
-            rzp.open();
-          } catch (err) {
-            console.error("Razorpay init error:", err);
-            alert("Something went wrong. Please try again.");
-          }
-        };
-      };
-      document.body.appendChild(script);
+      handleRazorpayPayment();
     } else {
-      // Cash on Delivery
       handleCashOnDelivery();
     }
   };
+
+  // Don't render until client-side to avoid hydration mismatch
+  if (!isClient) {
+    return (
+      <div className="min-h-screen py-8">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-green mx-auto"></div>
+            <p className="mt-4 text-lg text-text">Loading checkout...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (items.length === 0) {
     return (
@@ -420,6 +489,14 @@ export default function CheckoutPage() {
           <h1 className="text-4xl font-bold text-text mb-4">Checkout</h1>
           <p className="text-lg text-text">Complete your order details</p>
         </div>
+
+        {/* Payment Error Display */}
+        {paymentError && (
+          <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-center">
+            <AlertCircle className="w-5 h-5 text-red-500 mr-2 flex-shrink-0" />
+            <p className="text-sm text-red-800">{paymentError}</p>
+          </div>
+        )}
 
         <div className="grid lg:grid-cols-2 gap-8">
           {/* Customer Details Form */}
@@ -573,7 +650,14 @@ export default function CheckoutPage() {
                     }`}
                     disabled={!isFormValid || isProcessing}>
                     <CreditCard className="w-5 h-5 text-green" />
-                    <span className="font-medium">Online Payment</span>
+                    <div className="text-left">
+                      <span className="font-medium block">
+                        Online Payment (Razorpay)
+                      </span>
+                      <span className="text-xs text-gray-500">
+                        Credit Card, Debit Card, UPI, Net Banking
+                      </span>
+                    </div>
                   </button>
 
                   {/* Only show COD for sample products */}
