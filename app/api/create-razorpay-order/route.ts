@@ -1,12 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server";
 import Razorpay from "razorpay";
 
-// Initialize Razorpay instance
-const razorpay = new Razorpay({
-  key_id: process.env.RAZORPAY_KEY_ID!,
-  key_secret: process.env.RAZORPAY_KEY_SECRET!,
-});
-
 export async function POST(request: NextRequest) {
   try {
     const { amount, currency = "INR" } = await request.json();
@@ -24,7 +18,12 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Create order
+    // ✅ Initialize Razorpay here instead of module level
+    const razorpay = new Razorpay({
+      key_id: process.env.RAZORPAY_KEY_ID!,
+      key_secret: process.env.RAZORPAY_KEY_SECRET!,
+    });
+
     const order = await razorpay.orders.create({
       amount: amount, // Amount in paise
       currency: currency,
