@@ -298,7 +298,8 @@ export default function CheckoutPage() {
       const orderId = generateOrderId();
 
       const options = {
-        key: process.env.RAZORPAY_KEY_ID || "rzp_live_your_key_here", // Use environment variable
+        key:
+          process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || "rzp_live_your_key_here", // Use environment variable
         amount: razorpayOrder.amount,
         currency: razorpayOrder.currency,
         name: "Farmer's Dairy",
