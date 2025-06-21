@@ -219,6 +219,8 @@ export default function CheckoutPage() {
     razorpayPaymentId?: string
   ) => {
     try {
+      console.log("=== SAVING ORDER TO DATABASE ===");
+
       const orderData = {
         orderId,
         customerDetails: {
@@ -231,7 +233,7 @@ export default function CheckoutPage() {
           specialInstructions: customerDetails.specialInstructions,
         },
         orderDetails: getOrderDetails(),
-        totalAmount: getTotalPrice().toFixed(2),
+        totalAmount: Number.parseFloat(getTotalPrice().toFixed(2)), // Ensure it's a proper number
         paymentMethod: paymentType,
         razorpayPaymentId: razorpayPaymentId || null,
         orderDate: new Date().toISOString(),
@@ -239,7 +241,7 @@ export default function CheckoutPage() {
         items: items.map((item) => ({
           name: item.name,
           quantity: item.quantity,
-          price: item.totalPrice || item.price,
+          price: Number.parseFloat((item.totalPrice || item.price).toFixed(2)), // Ensure proper number format
           subscription: item.subscription,
           sampleSize: item.sampleSize,
           deliveryDate: item.deliveryDate?.toISOString(),
@@ -249,12 +251,31 @@ export default function CheckoutPage() {
                 to: item.dateRange.to?.toISOString(),
               }
             : null,
-          totalDays: item.totalDays,
+          totalDays: item.totalDays || 1, // Ensure totalDays is never undefined
           holidays: item.holidays?.map((h) => h.toISOString()),
         })),
       };
 
-      console.log("Saving order to database:", orderData);
+      // Add validation before sending
+      const totalAmount = Number.parseFloat(getTotalPrice().toFixed(2));
+      if (!totalAmount || totalAmount <= 0) {
+        throw new Error(
+          `Invalid total amount: ${totalAmount}. Please refresh and try again.`
+        );
+      }
+
+      console.log("Order data prepared:", {
+        orderId: orderData.orderId,
+        customerName: orderData.customerDetails.name,
+        totalAmount: orderData.totalAmount,
+        totalAmountType: typeof orderData.totalAmount,
+        paymentMethod: orderData.paymentMethod,
+        itemsCount: orderData.items.length,
+        cartTotal: getTotalPrice(),
+        cartTotalType: typeof getTotalPrice(),
+      });
+
+      console.log("Making API request to /api/create-order...");
 
       const response = await fetch("/api/create-order", {
         method: "POST",
@@ -264,16 +285,40 @@ export default function CheckoutPage() {
         body: JSON.stringify(orderData),
       });
 
-      const result = await response.json();
-      console.log("Order save result:", result);
+      console.log("API response status:", response.status);
+      console.log("API response ok:", response.ok);
 
-      if (!result.success) {
-        throw new Error(result.error || "Failed to save order");
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error("API response error text:", errorText);
+        throw new Error(
+          `API request failed with status ${response.status}: ${errorText}`
+        );
       }
 
+      const result = await response.json();
+      console.log("API response result:", result);
+
+      if (!result.success) {
+        throw new Error(
+          result.error || "Failed to save order - API returned success: false"
+        );
+      }
+
+      console.log("=== ORDER SAVED SUCCESSFULLY ===");
       return result;
     } catch (error) {
-      console.error("Error saving order to database:", error);
+      console.error("=== ERROR IN SAVE ORDER FUNCTION ===");
+      console.error("Error type:", typeof error);
+      console.error("Error instanceof Error:", error instanceof Error);
+      console.error("Error details:", error);
+
+      if (error instanceof TypeError && error.message.includes("fetch")) {
+        throw new Error(
+          "Network connection failed. Please check your internet connection."
+        );
+      }
+
       throw error;
     }
   };
@@ -406,30 +451,61 @@ export default function CheckoutPage() {
 
   const handleCashOnDelivery = async () => {
     setIsProcessing(true);
+    setPaymentError(""); // Clear previous errors
     const orderId = generateOrderId();
 
     try {
-      // Save order to database
-      await saveOrderToDatabase(orderId, "Cash on Delivery");
+      console.log("Processing COD order:", orderId);
 
-      // Clear cart
-      clearCart();
+      // Save order to database with detailed logging
+      console.log("Saving COD order to database...");
+      const result = await saveOrderToDatabase(orderId, "Cash on Delivery");
+      console.log("COD order saved successfully:", result);
 
-      // Redirect to order confirmation page
-      const params = new URLSearchParams({
-        orderId,
-        customerName: customerDetails.name,
-        totalAmount: getTotalPrice().toFixed(2),
-        paymentMethod: "Cash on Delivery",
-      });
+      // Show success popup first
+      setShowSuccessPopup(true);
 
-      router.push(`/order-confirmation?${params.toString()}`);
+      // Clear cart after a short delay
+      setTimeout(() => {
+        clearCart();
+        setIsProcessing(false);
+
+        // Redirect to order confirmation page
+        const params = new URLSearchParams({
+          orderId,
+          customerName: customerDetails.name,
+          totalAmount: getTotalPrice().toFixed(2),
+          paymentMethod: "Cash on Delivery",
+        });
+
+        router.push(`/order-confirmation?${params.toString()}`);
+      }, 2000);
     } catch (error) {
-      console.error("Error processing COD order:", error);
-      setPaymentError(
-        "There was an error processing your order. Please try again."
-      );
-    } finally {
+      console.error("Detailed COD order error:", error);
+
+      // More specific error message
+      let errorMessage =
+        "There was an error processing your order. Please try again.";
+
+      if (error instanceof Error) {
+        console.error("Error details:", {
+          message: error.message,
+          stack: error.stack,
+          name: error.name,
+        });
+
+        if (error.message.includes("fetch")) {
+          errorMessage =
+            "Network error. Please check your connection and try again.";
+        } else if (error.message.includes("required")) {
+          errorMessage =
+            "Missing required information. Please check all fields.";
+        } else {
+          errorMessage = `Order processing failed: ${error.message}`;
+        }
+      }
+
+      setPaymentError(errorMessage);
       setIsProcessing(false);
     }
   };

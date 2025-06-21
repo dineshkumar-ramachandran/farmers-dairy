@@ -33,6 +33,8 @@ export async function POST(request: NextRequest) {
         created_at: new Date().toISOString(),
       },
     });
+    console.log("KEY_ID:", process.env.RAZORPAY_KEY_ID);
+    console.log("KEY_SECRET:", process.env.RAZORPAY_KEY_SECRET);
 
     console.log("Razorpay order created successfully:", order.id);
 
