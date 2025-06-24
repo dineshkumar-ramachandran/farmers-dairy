@@ -1,6 +1,13 @@
-import Link from "next/link"
-import { Phone, Mail, MapPin, Facebook, Instagram, Youtube } from "lucide-react"
-import Image from "next/image"
+import Link from "next/link";
+import {
+  Phone,
+  Mail,
+  MapPin,
+  Facebook,
+  Instagram,
+  Youtube,
+} from "lucide-react";
+import Image from "next/image";
 
 export function Footer() {
   return (
@@ -19,15 +26,15 @@ export function Footer() {
               />
             </div>
             <p className="text-text text-sm">
-              Fresh farm milk delivered to your doorstep daily. Pure, natural, and healthy.
+              Fresh farm milk delivered to your doorstep daily. Pure, natural,
+              and healthy.
             </p>
             <div className="flex space-x-4">
               <a
                 href="https://www.facebook.com/farmersdairy.in/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-text hover:text-green cursor-pointer transition-colors duration-300 animate-float"
-              >
+                className="text-text hover:text-green cursor-pointer transition-colors duration-300 animate-float">
                 <Facebook className="w-5 h-5" />
               </a>
               <a
@@ -35,8 +42,7 @@ export function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-text hover:text-green cursor-pointer transition-colors duration-300 animate-float"
-                style={{ animationDelay: "0.5s" }}
-              >
+                style={{ animationDelay: "0.5s" }}>
                 <Instagram className="w-5 h-5" />
               </a>
               <a
@@ -44,8 +50,7 @@ export function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-text hover:text-green cursor-pointer transition-colors duration-300 animate-float"
-                style={{ animationDelay: "1s" }}
-              >
+                style={{ animationDelay: "1s" }}>
                 <Youtube className="w-5 h-5" />
               </a>
             </div>
@@ -56,22 +61,30 @@ export function Footer() {
             <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
             <ul className="space-y-2">
               <li>
-                <Link href="/" className="text-text hover:text-green transition-colors duration-300">
+                <Link
+                  href="/"
+                  className="text-text hover:text-green transition-colors duration-300">
                   Home
                 </Link>
               </li>
               <li>
-                <Link href="/about" className="text-text hover:text-green transition-colors duration-300">
+                <Link
+                  href="/about"
+                  className="text-text hover:text-green transition-colors duration-300">
                   About Us
                 </Link>
               </li>
               <li>
-                <Link href="/shop" className="text-text hover:text-green transition-colors duration-300">
+                <Link
+                  href="/shop"
+                  className="text-text hover:text-green transition-colors duration-300">
                   Shop
                 </Link>
               </li>
               <li>
-                <Link href="/contact" className="text-text hover:text-green transition-colors duration-300">
+                <Link
+                  href="/contact"
+                  className="text-text hover:text-green transition-colors duration-300">
                   Contact
                 </Link>
               </li>
@@ -85,29 +98,28 @@ export function Footer() {
               <li>
                 <Link
                   href="/terms-and-conditions"
-                  className="text-text hover:text-green transition-colors duration-300"
-                >
+                  className="text-text hover:text-green transition-colors duration-300">
                   Terms & Conditions
                 </Link>
               </li>
               <li>
                 <Link
                   href="/shipping-and-delivery"
-                  className="text-text hover:text-green transition-colors duration-300"
-                >
+                  className="text-text hover:text-green transition-colors duration-300">
                   Shipping & Delivery
                 </Link>
               </li>
               <li>
                 <Link
                   href="/cancellation-and-refund"
-                  className="text-text hover:text-green transition-colors duration-300"
-                >
+                  className="text-text hover:text-green transition-colors duration-300">
                   Cancellation & Refund
                 </Link>
               </li>
               <li>
-                <Link href="/privacy-policy" className="text-text hover:text-green transition-colors duration-300">
+                <Link
+                  href="/privacy-policy"
+                  className="text-text hover:text-green transition-colors duration-300">
                   Privacy Policy
                 </Link>
               </li>
@@ -136,10 +148,11 @@ export function Footer() {
 
         <div className="border-t border-mint mt-8 pt-8 text-center">
           <p className="text-text text-sm animate-fade-in">
-            © 2024 Farmer's Dairy. All rights reserved. | Designed by Onprimehub
+            © 2024 Farmer's Dairy. All rights reserved. | Designed by
+            Onprimehub
           </p>
         </div>
       </div>
     </footer>
-  )
+  );
 }
