@@ -1,0 +1,134 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: "Montserrat", system-ui, sans-serif;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 3.9%;
+    --primary: 0 0% 9%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 0 0% 96.1%;
+    --secondary-foreground: 0 0% 9%;
+    --muted: 0 0% 96.1%;
+    --muted-foreground: 0 0% 45.1%;
+    --accent: 0 0% 96.1%;
+    --accent-foreground: 0 0% 9%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 89.8%;
+    --input: 0 0% 89.8%;
+    --ring: 0 0% 3.9%;
+    --chart-1: 12 76% 61%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+    --radius: 0.5rem;
+
+    /* Custom color palette inspired by Organic Valley */
+    --color-bg: #f8faf6; /* Soft cream-white background */
+    --color-card: #ffffff; /* Pure white for cards */
+    --color-mint-light: #e8f5e8; /* Very light green for subtle accents */
+    --color-mint: #7fb069; /* Fresh green for highlights */
+    --color-green: #2d5016; /* Deep forest green for buttons/CTAs */
+    --color-text: #2c3e2d; /* Dark green-gray for text */
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply text-text;
+    background-color: var(--color-bg);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply text-text;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    background-color: var(--color-green);
+    color: white;
+    @apply px-6 py-3 rounded-full font-medium transition-all duration-300 shadow-sm hover:shadow-lg transform hover:scale-105;
+  }
+
+  .btn-primary:hover {
+    background-color: #1f3a0f;
+  }
+
+  .btn-secondary {
+    background-color: var(--color-mint-light);
+    color: var(--color-text);
+    @apply px-6 py-3 rounded-full font-medium transition-all duration-300 border hover:border-mint;
+    border-color: var(--color-mint);
+  }
+
+  .btn-secondary:hover {
+    background-color: var(--color-mint);
+  }
+
+  .card {
+    background-color: var(--color-card);
+    @apply rounded-2xl shadow-sm p-6 transition-all duration-300 hover:shadow-xl hover:scale-105;
+    border: 1px solid var(--color-mint-light);
+  }
+
+  .card:hover {
+    border-color: var(--color-mint);
+  }
+
+  .card-hover {
+    @apply transform transition-all duration-300 hover:scale-105 hover:shadow-lg;
+  }
+
+  .icon-hover {
+    @apply transition-all duration-300 hover:scale-110;
+    color: var(--color-green);
+  }
+
+  .icon-hover:hover {
+    color: var(--color-green);
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-mint-light);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-green);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #1f3a0f;
+}
