@@ -22,7 +22,7 @@ export function Footer() {
                 alt="Farmer's Dairy Logo"
                 width={120}
                 height={60}
-                className="h-12 w-auto"
+                className="h-auto w-[90px]"
               />
             </div>
             <p className="text-text text-sm">

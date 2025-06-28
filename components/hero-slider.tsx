@@ -31,7 +31,7 @@ const slides = [
     subtitle: "Glass Bottles",
     description:
       "We deliver milk in eco-friendly glass bottles to reduce environmental impact.",
-    backgroundImage: "url('images/Hero-slider-image-3.png)",
+    backgroundImage: "url('images/Hero-slider-image-3.png')",
     cta: "Learn More",
     textPosition: "left",
   },

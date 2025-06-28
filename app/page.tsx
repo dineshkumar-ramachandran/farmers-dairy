@@ -15,21 +15,21 @@ const featuredProducts = [
     id: 3,
     name: "Sample Pack",
     price: "35 - 60",
-    image: "/images/sample-milk.png",
+    image: "/images/fd-sample-milk.png",
     description: "Try our milk with this sample pack",
   },
   {
     id: 1,
     name: "Fresh Cow Milk 500ml",
     price: 35,
-    image: "images/500ml-milk.png",
+    image: "/images/fd-500ml-milk.png",
     description: "Pure farm-fresh cow milk in convenient 500ml bottles",
   },
   {
     id: 2,
     name: "Fresh Cow Milk 1000ml",
     price: 60,
-    image: "images/1000ml-milk.png",
+    image: "/images/fd-1000ml-milk.png",
     description: "Pure farm-fresh cow milk in family-size 1000ml bottles",
   },
 ];
@@ -181,8 +181,8 @@ export default function HomePage() {
                 Always Fresh
               </h3>
               <p className="text-text opacity-80">
-                Milked in the morning, delivered the same day for maximum
-                freshness.
+                We assure the milk delivered to each and every customer is fresh
+                and completely hygienic.
               </p>
             </div>
 
