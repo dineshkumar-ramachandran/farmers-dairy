@@ -90,7 +90,7 @@ export default function AdminPage() {
   const ordersPerPage = 10;
 
   const handleLogin = () => {
-    if (password === "farmersDAIRY@2025") {
+    if (password === "Farmersdairy@2024") {
       setIsAuthenticated(true);
       setError("");
       fetchOrders();
