@@ -1,0 +1,50 @@
+/* components/CowVacation.css */
+.cow-vacation-wrapper {
+  background-image: url("./cow-vacation.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 100vh;
+  width: 100vw;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 999999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  text-align: center;
+}
+
+.overlay-content {
+  background: rgba(255, 255, 255, 0.85);
+  padding: 30px;
+  border-radius: 20px;
+  max-width: 600px;
+  font-family: "Comic Sans MS", cursive, sans-serif;
+  animation: float 3s ease-in-out infinite;
+}
+
+h1 {
+  font-size: 1.8rem;
+  color: #5c4033;
+}
+
+p {
+  font-size: 1.2rem;
+  color: #333;
+  margin-top: 10px;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
