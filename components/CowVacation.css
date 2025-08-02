@@ -1,6 +1,6 @@
 /* components/CowVacation.css */
 .cow-vacation-wrapper {
-  background-image: url("./cow-vacation.png");
+  background-image: url("/cow-vacation.png");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
