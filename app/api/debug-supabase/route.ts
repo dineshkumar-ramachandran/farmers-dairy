@@ -1,21 +1,21 @@
-import { NextResponse } from "next/server"
-import { supabase } from "@/lib/supabase"
+import { NextResponse } from "next/server";
+import { supabase } from "@/lib/supabase";
 
 export async function GET() {
   try {
-    console.log("🔍 Debug Supabase connection and data...")
+    console.log("🔍 Debug Supabase connection and data...");
 
     // Test basic connection
     const { data: testData, error: testError } = await supabase
       .from("orders")
-      .select("count", { count: "exact", head: true })
+      .select("count", { count: "exact", head: true });
 
     if (testError) {
       return NextResponse.json({
         success: false,
         error: `Connection failed: ${testError.message}`,
         connected: false,
-      })
+      });
     }
 
     // Get recent orders
@@ -23,20 +23,20 @@ export async function GET() {
       .from("orders")
       .select("*")
       .order("created_at", { ascending: false })
-      .limit(10)
+      .limit(10);
 
     if (ordersError) {
       return NextResponse.json({
         success: false,
         error: `Orders fetch failed: ${ordersError.message}`,
         connected: true,
-      })
+      });
     }
 
     // Get table info
     const { data: tableInfo, error: tableError } = await supabase
       .rpc("get_table_info", { table_name: "orders" })
-      .single()
+      .single();
 
     return NextResponse.json({
       success: true,
@@ -45,7 +45,7 @@ export async function GET() {
         totalOrders: testData?.length || 0,
         recentOrdersCount: orders?.length || 0,
         tableExists: !tableError,
-        supabaseUrl: "https://ugxqilcquusfwvkmlzwo.supabase.co",
+        supabaseUrl: "https://ddcungvetvmbikwfvytq.supabase.co",
         timestamp: new Date().toISOString(),
       },
       recentOrders:
@@ -58,16 +58,16 @@ export async function GET() {
           created_at: order.created_at,
         })) || [],
       message: "Supabase debug information retrieved successfully",
-    })
+    });
   } catch (error) {
-    console.error("❌ Error in Supabase debug:", error)
+    console.error("❌ Error in Supabase debug:", error);
     return NextResponse.json(
       {
         success: false,
         error: error instanceof Error ? error.message : "Unknown error",
         connected: false,
       },
-      { status: 500 },
-    )
+      { status: 500 }
+    );
   }
 }

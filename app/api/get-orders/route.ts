@@ -1,41 +1,47 @@
-import { NextResponse } from "next/server"
-import { createClient } from "@supabase/supabase-js"
+import { NextResponse } from "next/server";
+import { createClient } from "@supabase/supabase-js";
 
-const supabaseUrl = "https://ugxqilcquusfwvkmlzwo.supabase.co"
+const supabaseUrl = "https://ddcungvetvmbikwfvytq.supabase.co";
 
 // 🔄 Use the same Supabase setup as your create-order route
-const supabase = createClient(supabaseUrl, process.env.SUPABASE_SERVICE_API_KEY!)
+const supabase = createClient(
+  supabaseUrl,
+  process.env.SUPABASE_SERVICE_API_KEY!
+);
 
 export async function GET() {
   try {
-    console.log("🔍 Fetching orders from Supabase...")
+    console.log("🔍 Fetching orders from Supabase...");
 
     // 🔄 Fetch orders from Supabase with proper ordering
-    const { data, error } = await supabase.from("orders").select("*").order("orderDate", { ascending: false })
+    const { data, error } = await supabase
+      .from("orders")
+      .select("*")
+      .order("orderDate", { ascending: false });
 
     if (error) {
-      console.error("❌ Supabase error:", error)
+      console.error("❌ Supabase error:", error);
       return NextResponse.json(
         {
           success: false,
           error: `Database error: ${error.message}`,
           orders: [],
         },
-        { status: 500 },
-      )
+        { status: 500 }
+      );
     }
 
     if (!data) {
-      console.log("⚠️ No data returned from Supabase")
+      console.log("⚠️ No data returned from Supabase");
       return NextResponse.json({
         success: true,
         orders: [],
         total: 0,
         message: "No orders found",
-      })
+      });
     }
 
-    console.log(`✅ Fetched ${data.length} orders from Supabase`)
+    console.log(`✅ Fetched ${data.length} orders from Supabase`);
 
     // 🔄 Transform data to match your admin interface expectations
     const transformedOrders = data.map((order) => ({
@@ -56,23 +62,23 @@ export async function GET() {
       status: order.status || "Pending",
       items: order.items || [],
       razorpayOrderId: order.razorpayorderid || null,
-    }))
+    }));
 
     return NextResponse.json({
       success: true,
       orders: transformedOrders,
       total: transformedOrders.length,
       message: `Found ${transformedOrders.length} orders`,
-    })
+    });
   } catch (error) {
-    console.error("❌ Get orders error:", error)
+    console.error("❌ Get orders error:", error);
     return NextResponse.json(
       {
         success: false,
         error: `Connection error: ${error instanceof Error ? error.message : "Unknown error"}`,
         orders: [],
       },
-      { status: 500 },
-    )
+      { status: 500 }
+    );
   }
 }
