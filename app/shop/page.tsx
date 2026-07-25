@@ -551,7 +551,7 @@ export default function ShopPage() {
           className={
             viewMode === "list"
               ? "grid grid-cols-1 gap-6 max-w-3xl mx-auto"
-              : "grid md:grid-cols-2 lg:grid-cols-3 gap-8"
+              : "grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6 lg:gap-8"
           }>
           {products
             .filter(
@@ -564,8 +564,8 @@ export default function ShopPage() {
                 key={product.id}
                 className="card group border-0 !p-0 overflow-hidden animate-slide-up opacity-95"
                 style={{ animationDelay: `${index * 0.12}s` }}>
-                <CardHeader className="text-center pb-4">
-                  <div className="relative w-full h-64 mb-4 mx-auto flex items-center justify-center p-4">
+                <CardHeader className={viewMode === "grid" ? "text-center pb-2 !p-3" : "text-center pb-4"}>
+                  <div className={`relative w-full mb-3 mx-auto flex items-center justify-center ${viewMode === "grid" ? "h-32 sm:h-44 p-2" : "h-64 p-4"}`}>
                     <img
                       src={product.image || "/placeholder.svg"}
                       alt={product.name}
@@ -575,23 +575,27 @@ export default function ShopPage() {
                       }}
                       className="relative max-w-full max-h-full object-contain mix-blend-multiply opacity-80"
                     />
-                    <span className="absolute top-2 right-2 text-[10px] font-bold uppercase tracking-[0.16em] text-teal/70 px-2.5 py-1">
+                    <span className="absolute top-2 right-2 text-[10px] font-bold uppercase tracking-[0.16em] text-teal/70 px-2 py-1">
                       {product.category}
                     </span>
                   </div>
-                  <CardTitle className="font-display text-xl sm:text-2xl font-semibold text-text">
+                  <CardTitle className={`font-display font-semibold text-text ${viewMode === "grid" ? "text-sm sm:text-base leading-snug" : "text-xl sm:text-2xl"}`}>
                     {product.name}
                   </CardTitle>
-                  <p className="text-text text-sm opacity-80">
-                    {product.description}
-                  </p>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex flex-col items-center gap-3 py-10">
-                    <span className="chip text-sm">Coming Soon</span>
-                    <p className="text-sm text-text/70 text-center px-4">
-                      {product.details.note2}
+                  {viewMode === "list" && (
+                    <p className="text-text text-sm opacity-80">
+                      {product.description}
                     </p>
+                  )}
+                </CardHeader>
+                <CardContent className={viewMode === "grid" ? "!px-3 !pt-0 !pb-4" : ""}>
+                  <div className={`flex flex-col items-center gap-3 ${viewMode === "grid" ? "py-2" : "py-10"}`}>
+                    <span className="chip text-sm">Coming Soon</span>
+                    {viewMode === "list" && (
+                      <p className="text-sm text-text/70 text-center px-4">
+                        {product.details.note2}
+                      </p>
+                    )}
                   </div>
                 </CardContent>
               </Card>
@@ -600,69 +604,82 @@ export default function ShopPage() {
               key={product.id}
               className="card group border-0 !p-0 overflow-hidden animate-slide-up"
               style={{ animationDelay: `${index * 0.12}s` }}>
-              <CardHeader className="text-center pb-4">
-                <div className="relative w-full h-64 mb-4 mx-auto flex items-center justify-center p-4">
+              <CardHeader className={viewMode === "grid" ? "text-center pb-2 !p-3" : "text-center pb-4"}>
+                <div className={`relative w-full mb-3 mx-auto flex items-center justify-center ${viewMode === "grid" ? "h-32 sm:h-44 p-2" : "h-64 p-4"}`}>
                   <img
                     src={product.image || "/placeholder.svg"}
                     alt={product.name}
                     loading="lazy"
                     className="relative max-w-full max-h-full object-contain mix-blend-multiply transition-transform duration-500 group-hover:scale-105"
                   />
-                  <span className="absolute top-2 right-2 text-[10px] font-bold uppercase tracking-[0.16em] text-teal/70 px-2.5 py-1">
+                  <span className="absolute top-2 right-2 text-[10px] font-bold uppercase tracking-[0.16em] text-teal/70 px-2 py-1">
                     {product.category}
                   </span>
                 </div>
-                <CardTitle className="font-display text-xl sm:text-2xl font-semibold text-text">
+                <CardTitle className={`font-display font-semibold text-text ${viewMode === "grid" ? "text-sm sm:text-base leading-snug" : "text-xl sm:text-2xl"}`}>
                   {product.name}
                 </CardTitle>
-                <p className="text-text text-sm opacity-80">
-                  {product.description}
-                </p>
-                <div className="font-display text-2xl font-semibold text-green">
+                {viewMode === "list" && (
+                  <p className="text-text text-sm opacity-80">
+                    {product.description}
+                  </p>
+                )}
+                <div className={`font-display font-semibold text-green ${viewMode === "grid" ? "text-base sm:text-lg mt-1" : "text-2xl"}`}>
                   ₹{product.price}
                 </div>
 
-                {/* Product Details Dialog */}
-                <Dialog>
-                  <DialogTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="text-green hover:text-text">
-                      <Info className="w-4 h-4 mr-1" />
-                      Product Details
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent className="max-w-md">
-                    <DialogHeader>
-                      <DialogTitle>{product.name}</DialogTitle>
-                    </DialogHeader>
-                    <div className="space-y-4">
-                      <p className="text-sm text-text">
-                        {product.details.note1}
-                      </p>
-                      <p className="text-sm text-text">
-                        {product.details.note2}
-                      </p>
-                      <div>
-                        <h4 className="font-medium text-text mb-2">
-                          Categories:
-                        </h4>
-                        <div className="flex flex-wrap gap-2">
-                          {product.details.categories.map((category, idx) => (
-                            <span
-                              key={idx}
-                              className="bg-mint-light text-text px-2 py-1 rounded-full text-xs">
-                              {category}
-                            </span>
-                          ))}
+                {viewMode === "list" && (
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="text-green hover:text-text">
+                        <Info className="w-4 h-4 mr-1" />
+                        Product Details
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="max-w-md">
+                      <DialogHeader>
+                        <DialogTitle>{product.name}</DialogTitle>
+                      </DialogHeader>
+                      <div className="space-y-4">
+                        <p className="text-sm text-text">
+                          {product.details.note1}
+                        </p>
+                        <p className="text-sm text-text">
+                          {product.details.note2}
+                        </p>
+                        <div>
+                          <h4 className="font-medium text-text mb-2">
+                            Categories:
+                          </h4>
+                          <div className="flex flex-wrap gap-2">
+                            {product.details.categories.map((category, idx) => (
+                              <span
+                                key={idx}
+                                className="bg-mint-light text-text px-2 py-1 rounded-full text-xs">
+                                {category}
+                              </span>
+                            ))}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </DialogContent>
-                </Dialog>
+                    </DialogContent>
+                  </Dialog>
+                )}
               </CardHeader>
 
+              {viewMode === "grid" ? (
+                <CardContent className="!px-3 !pt-0 !pb-3">
+                  <Button
+                    onClick={() => setViewMode("list")}
+                    className="btn-primary w-full text-xs sm:text-sm !py-2.5 !px-3">
+                    <ShoppingCart className="w-3.5 h-3.5 mr-1.5" />
+                    Order
+                  </Button>
+                </CardContent>
+              ) : (
               <CardContent className="space-y-4">
                 {/* Variant Size Selection (sample pack, ghee, paneer) */}
                 {product.variants?.length && (
@@ -952,6 +969,7 @@ export default function ShopPage() {
                   )}
                 </div>
               </CardContent>
+              )}
             </Card>
           ))}
         </div>

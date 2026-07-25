@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import Link from "next/link";
 import { ArrowRight, ChevronDown, Leaf, Truck, ShieldCheck } from "lucide-react";
 import { Magnetic } from "@/components/animations/magnetic";
@@ -15,12 +15,12 @@ const TRUST = [
 ];
 
 /**
- * Clean, product-forward editorial hero. Used as the mobile / reduced-motion /
- * low-power fallback for the cinematic WebGL hero.
+ * Static-image hero used as the mobile / reduced-motion fallback for the
+ * cinematic scroll-scrubbed hero. The image is one still from the same
+ * commercial sequence so mobile and desktop tell an identical story.
  */
 export function HeroClassic() {
   const root = useRef<HTMLElement>(null);
-  const stage = useRef<HTMLDivElement>(null);
 
   useIsomorphicLayoutEffect(() => {
     const el = root.current;
@@ -40,60 +40,65 @@ export function HeroClassic() {
       });
       gsap.from("[data-hero-product]", {
         opacity: 0,
-        y: 40,
-        scale: 0.94,
-        duration: 1.2,
+        y: 30,
+        scale: 0.96,
+        duration: 1.1,
         ease: "power3.out",
-        delay: 0.25,
+        delay: 0.2,
       });
     }, el);
     return () => ctx.revert();
   }, []);
 
-  useEffect(() => {
-    const el = stage.current;
-    if (!el || prefersReducedMotion()) return;
-    if (window.matchMedia("(pointer: coarse)").matches) return;
-    const layers = el.querySelectorAll<HTMLElement>("[data-depth]");
-    const onMove = (e: MouseEvent) => {
-      const r = el.getBoundingClientRect();
-      const cx = (e.clientX - (r.left + r.width / 2)) / r.width;
-      const cy = (e.clientY - (r.top + r.height / 2)) / r.height;
-      layers.forEach((layer) => {
-        const d = Number(layer.dataset.depth || 0);
-        gsap.to(layer, { x: cx * d * 40, y: cy * d * 40, duration: 0.8, ease: "power3.out" });
-      });
-    };
-    window.addEventListener("mousemove", onMove);
-    return () => window.removeEventListener("mousemove", onMove);
-  }, []);
-
   return (
     <section
       ref={root}
-      className="relative min-h-[100svh] flex items-center overflow-hidden"
+      className="relative min-h-[100svh] flex items-center overflow-hidden bg-[#eef0ef]"
       aria-label="Farmer's Dairy — fresh farm milk delivered"
     >
-      <div className="absolute -top-40 -left-40 w-[36rem] h-[36rem] blob animate-blob bg-teal-bright/25" aria-hidden="true" />
-      <div className="absolute -bottom-52 -right-40 w-[34rem] h-[34rem] blob animate-blob-slow bg-butter/25" aria-hidden="true" />
+      {/* Full-bleed hero still from the same commercial sequence */}
+      <div className="absolute inset-0" aria-hidden="true">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          data-hero-product
+          src="/hero-frames/ezgif-frame-240.jpg"
+          alt=""
+          className="h-full w-full object-cover"
+          style={{ objectPosition: "70% 50%" }}
+        />
+        {/* Legibility scrim — reads copy against the soft studio backdrop */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "linear-gradient(180deg, rgba(238,240,239,0.95) 0%, rgba(238,240,239,0.55) 22%, rgba(238,240,239,0) 45%), linear-gradient(90deg, rgba(238,240,239,0.85) 0%, rgba(238,240,239,0.55) 40%, rgba(238,240,239,0) 68%)",
+          }}
+        />
+      </div>
 
-      <div className="relative z-10 max-w-[88rem] mx-auto w-full px-4 sm:px-6 lg:px-10 grid lg:grid-cols-[1.02fr_0.98fr] items-center gap-10 lg:gap-6 py-24 lg:py-16">
-        <div className="order-2 lg:order-1">
+      <div className="relative z-10 max-w-[88rem] mx-auto w-full px-4 sm:px-6 lg:px-10 pt-20 sm:pt-24 pb-24 lg:py-16">
+        <div className="max-w-md lg:max-w-lg">
           <p data-hero-in className="eyebrow mb-6">
             Hosur · Tamil Nadu · Farm fresh daily
           </p>
-          <h1 className="display-hero text-[3rem] leading-[0.92] sm:text-6xl lg:text-[5.2rem]">
-            <SplitReveal text="Fresh farm milk," as="span" className="block" />
-            <SplitReveal text="delivered" as="span" className="block" wordClassName="text-gradient-green" delay={0.08} />
+          <h1 className="display-hero text-[2.4rem] leading-[1.02] sm:text-5xl lg:text-[4.2rem]">
+            <SplitReveal text="Fresh farm milk" as="span" className="block" />
+            <SplitReveal
+              text="delivered"
+              as="span"
+              className="block"
+              wordClassName="text-gradient-green"
+              delay={0.08}
+            />
             <SplitReveal text="before dawn." as="span" className="block" delay={0.16} />
           </h1>
 
-          <p data-hero-in className="mt-7 max-w-lg text-lg text-ink-soft/80 leading-relaxed">
+          <p data-hero-in className="mt-6 sm:mt-7 max-w-md text-base sm:text-lg text-ink-soft/80 leading-relaxed">
             Pure, unprocessed cow milk from our own Hosur pastures — no water,
             no preservatives. Sealed at 2 AM and at your door before 7.
           </p>
 
-          <div data-hero-in className="mt-9 flex flex-wrap items-center gap-4">
+          <div data-hero-in className="mt-8 flex flex-wrap items-center gap-3 sm:gap-4">
             <Magnetic>
               <Link href="/shop" className="btn-primary">
                 Start your subscription
@@ -107,49 +112,19 @@ export function HeroClassic() {
             </Magnetic>
           </div>
 
-          <ul data-hero-in className="mt-12 flex flex-wrap gap-x-8 gap-y-4">
+          <ul data-hero-in className="mt-10 sm:mt-12 flex flex-wrap gap-x-6 gap-y-3">
             {TRUST.map(({ Icon, label }) => (
-              <li key={label} className="flex items-center gap-2.5 text-sm font-semibold text-ink-soft/75">
-                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-mint-light text-teal">
+              <li
+                key={label}
+                className="flex items-center gap-2 text-[13px] sm:text-sm font-semibold text-ink-soft/75"
+              >
+                <span className="flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-full bg-mint-light text-teal">
                   <Icon className="w-4 h-4" aria-hidden="true" />
                 </span>
                 {label}
               </li>
             ))}
           </ul>
-        </div>
-
-        <div ref={stage} className="order-1 lg:order-2 relative h-[380px] sm:h-[480px] lg:h-[600px]">
-          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[78%] aspect-square rounded-full bg-gradient-to-br from-white/70 to-mint-light/50 blur-2xl" aria-hidden="true" />
-
-          <div data-hero-product data-depth="0.6" className="absolute inset-0 flex items-center justify-center">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/images/product-milk-pouch.png"
-              alt="Farmer's Dairy fresh cow milk packet"
-              className="max-h-[86%] w-auto object-contain mix-blend-multiply drop-shadow-[0_30px_45px_rgba(15,46,43,0.18)] animate-float"
-            />
-          </div>
-
-          <div data-depth="1.2" className="absolute bottom-[4%] left-[2%] w-[30%] max-w-[180px]">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/images/product-ghee.png"
-              alt="Farmer's Dairy organic cow ghee"
-              className="w-full h-auto object-contain mix-blend-multiply drop-shadow-[0_20px_30px_rgba(15,46,43,0.16)]"
-              style={{ animation: "floatY 7s ease-in-out infinite" }}
-            />
-          </div>
-
-          <div data-depth="1.5" className="absolute top-[2%] right-[0%] w-[28%] max-w-[168px]">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/images/product-paneer.png"
-              alt="Farmer's Dairy organic malai paneer"
-              className="w-full h-auto object-contain mix-blend-multiply drop-shadow-[0_20px_30px_rgba(15,46,43,0.16)]"
-              style={{ animation: "floatY 8s ease-in-out infinite" }}
-            />
-          </div>
         </div>
       </div>
 
