@@ -124,9 +124,7 @@ export function HolidaySelector({
                 disabled={(date) => !isDateInRange(date) || holidays.some((h) => h.getTime() === date.getTime())}
                 className="rounded-md border"
                 classNames={{
-                  head_cell: "text-center font-normal text-sm w-9",
-                  day: "h-9 w-9 p-0 font-normal",
-                  day_selected: "bg-blue-500 text-white hover:bg-blue-600",
+                  selected: "bg-blue-500 text-white rounded-md hover:bg-blue-600",
                 }}
               />
 

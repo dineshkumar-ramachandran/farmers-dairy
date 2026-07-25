@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 520" role="img" aria-label="Farmer's Dairy Organic Cow Ghee jar">
+  <defs>
+    <linearGradient id="gheeGold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f7d84a"/>
+      <stop offset="0.45" stop-color="#f2c937"/>
+      <stop offset="1" stop-color="#e0ac1f"/>
+    </linearGradient>
+    <linearGradient id="jarGlass" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.55"/>
+      <stop offset="0.18" stop-color="#ffffff" stop-opacity="0.05"/>
+      <stop offset="0.82" stop-color="#ffffff" stop-opacity="0.05"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0.45"/>
+    </linearGradient>
+    <linearGradient id="lidBlack" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#4a4a4e"/>
+      <stop offset="0.3" stop-color="#1c1c20"/>
+      <stop offset="1" stop-color="#0c0c0e"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Lid -->
+  <ellipse cx="240" cy="86" rx="118" ry="26" fill="url(#lidBlack)"/>
+  <path d="M122 86 L122 116 Q122 140 148 142 L332 142 Q358 140 358 116 L358 86 Z" fill="url(#lidBlack)"/>
+  <ellipse cx="240" cy="82" rx="104" ry="18" fill="#2e2e33"/>
+  <ellipse cx="212" cy="78" rx="46" ry="8" fill="#5b5b62" opacity="0.7"/>
+
+  <!-- Jar body filled with ghee -->
+  <path d="M132 142 Q120 150 120 176 L118 420 Q118 470 168 478 L312 478 Q362 470 362 420 L360 176 Q360 150 348 142 Z" fill="url(#gheeGold)"/>
+  <!-- Glass highlights -->
+  <path d="M132 142 Q120 150 120 176 L118 420 Q118 470 168 478 L312 478 Q362 470 362 420 L360 176 Q360 150 348 142 Z" fill="url(#jarGlass)"/>
+  <path d="M148 160 Q140 300 146 452 L162 460 Q154 300 162 156 Z" fill="#ffffff" opacity="0.45"/>
+  <!-- Ghee surface swirl -->
+  <ellipse cx="240" cy="158" rx="106" ry="16" fill="#f9e06a"/>
+  <path d="M170 154 q30 12 70 6 q40 -6 70 2" stroke="#e8bd2e" stroke-width="5" fill="none" stroke-linecap="round" opacity="0.7"/>
+
+  <!-- Label print on jar -->
+  <g transform="translate(0 6)">
+    <g transform="translate(154 236) scale(0.7)" fill="#3a2a08">
+      <path d="M52 34 q-16 -4 -20 -16 q-4 -12 6 -12 q2 -8 12 -6 q6 -16 28 -18 q30 -4 46 6 q12 8 10 20 q10 0 8 10 q-2 8 -12 10 q-6 10 -20 10 l-4 12 -8 0 2 -10 -24 2 -2 10 -8 0 0 -12 q-8 0 -14 -6 Z" transform="translate(64 22)"/>
+      <path d="M52 64 q64 10 128 0 l0 6 q-64 10 -128 0 Z" opacity="0.9" transform="translate(12 6)"/>
+    </g>
+    <text x="240" y="298" text-anchor="middle" font-family="Georgia, serif" font-weight="bold" font-size="27" letter-spacing="2" fill="#3a2a08">FARMER'S DAIRY</text>
+    <text x="240" y="330" text-anchor="middle" font-family="Georgia, serif" font-weight="bold" font-size="19" letter-spacing="5" fill="#3a2a08">ORGANIC</text>
+    <text x="240" y="368" text-anchor="middle" font-family="Georgia, serif" font-weight="bold" font-size="36" letter-spacing="3" fill="#3a2a08">COW GHEE</text>
+    <text x="240" y="394" text-anchor="middle" font-family="Georgia, serif" font-style="italic" font-weight="bold" font-size="16" fill="#3a2a08">www.farmersdairy.in</text>
+    <!-- 100% organic script -->
+    <g transform="translate(196 254) rotate(-6)">
+      <text x="0" y="0" font-family="Verdana, sans-serif" font-weight="bold" font-size="13" fill="#3a2a08">100%</text>
+      <text x="40" y="2" font-family="'Segoe Script','Brush Script MT',cursive" font-size="14" font-style="italic" fill="#3a2a08">organic</text>
+    </g>
+    <!-- farm scene base line -->
+    <g fill="#3a2a08" opacity="0.85">
+      <path d="M168 428 q20 -14 34 -2 l-4 -12 q10 2 12 10 q8 -6 14 0 l-60 8 Z"/>
+      <path d="M292 424 q-4 -10 6 -12 q10 -2 14 4 q6 -4 10 2 l4 10 -34 0 Z"/>
+      <path d="M150 434 Q240 450 330 432 L330 438 Q240 456 150 440 Z"/>
+    </g>
+  </g>
+</svg>

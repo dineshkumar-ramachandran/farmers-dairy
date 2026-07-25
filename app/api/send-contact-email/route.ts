@@ -1,10 +1,12 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { Resend } from "resend"
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+// Created lazily so the build doesn't require the API key
+const getResend = () => new Resend(process.env.RESEND_API_KEY)
 
 export async function POST(request: NextRequest) {
   try {
+    const resend = getResend()
     console.log("📧 Contact form submission received")
 
     const { name, email, phone, message } = await request.json()

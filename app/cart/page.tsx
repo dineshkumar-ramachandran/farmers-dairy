@@ -31,8 +31,8 @@ export default function CartPage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <ShoppingBag className="w-24 h-24 text-sage-300 mx-auto mb-6" />
-            <h1 className="text-3xl font-bold text-earth-900 mb-4">Your Cart is Empty</h1>
-            <p className="text-lg text-earth-600 mb-8">Add some fresh milk products to get started!</p>
+            <h1 className="text-3xl font-bold text-ink mb-4">Your Cart is Empty</h1>
+            <p className="text-lg text-ink-soft mb-8">Add some fresh milk products to get started!</p>
             <Link href="/shop" className="btn-primary inline-flex items-center">
               Continue Shopping
             </Link>
@@ -46,8 +46,8 @@ export default function CartPage() {
     <div className="min-h-screen py-8">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-earth-900 mb-4">Shopping Cart 🛒</h1>
-          <p className="text-lg text-earth-600">Review your items and proceed to checkout</p>
+          <h1 className="text-4xl font-bold text-ink mb-4">Shopping Cart 🛒</h1>
+          <p className="text-lg text-ink-soft">Review your items and proceed to checkout</p>
         </div>
 
         <div className="grid lg:grid-cols-3 gap-8">
@@ -58,7 +58,7 @@ export default function CartPage() {
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between">
                     <div className="flex-1">
-                      <h3 className="text-lg font-semibold text-earth-900">{item.name}</h3>
+                      <h3 className="text-lg font-semibold text-ink">{item.name}</h3>
                       {item.sampleSize && <p className="text-sm text-sage-600">Size: {item.sampleSize}</p>}
                       <p className="text-sm text-sage-600 capitalize">
                         Subscription: {item.subscription === "sample" ? "One-time sample" : item.subscription}
@@ -172,22 +172,22 @@ export default function CartPage() {
           <div className="lg:col-span-1">
             <Card className="card border-0 shadow-lg">
               <CardHeader>
-                <CardTitle className="text-xl text-earth-900">Order Summary</CardTitle>
+                <CardTitle className="text-xl text-ink">Order Summary</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex justify-between">
-                  <span className="text-earth-600">Subtotal:</span>
+                  <span className="text-ink-soft">Subtotal:</span>
                   <span className="font-semibold">₹{getTotalPrice().toFixed(2)}</span>
                 </div>
 
                 <div className="flex justify-between">
-                  <span className="text-earth-600">Delivery:</span>
+                  <span className="text-ink-soft">Delivery:</span>
                   <span className="font-semibold text-btngreen">Free</span>
                 </div>
 
                 <div className="pt-4">
                   <div className="flex justify-between">
-                    <span className="text-lg font-semibold text-earth-900">Total:</span>
+                    <span className="text-lg font-semibold text-ink">Total:</span>
                     <span className="text-lg font-bold text-btngreen">₹{getTotalPrice().toFixed(2)}</span>
                   </div>
                 </div>

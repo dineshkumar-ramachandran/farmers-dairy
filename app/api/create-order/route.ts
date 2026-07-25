@@ -3,15 +3,13 @@ import { createClient } from "@supabase/supabase-js";
 
 const supabaseUrl = "https://ddcungvetvmbikwfvytq.supabase.co";
 
-console.log(supabaseUrl, process.env.SUPABASE_SERVICE_API_KEY!);
-// Supabase Server Client
-const supabase = createClient(
-  supabaseUrl,
-  process.env.SUPABASE_SERVICE_API_KEY!
-);
+// Supabase Server Client — created lazily so the build doesn't require the service key
+const getSupabase = () =>
+  createClient(supabaseUrl, process.env.SUPABASE_SERVICE_API_KEY!);
 
 export async function POST(request: NextRequest) {
   try {
+    const supabase = getSupabase();
     const orderData = await request.json();
     console.log("📦 Received order data:", orderData);
 

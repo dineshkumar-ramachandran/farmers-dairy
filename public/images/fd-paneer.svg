@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 520" role="img" aria-label="Farmer's Dairy Fresh Paneer">
+  <defs>
+    <linearGradient id="paneerTop" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fffdf6"/>
+      <stop offset="1" stop-color="#f7f1e0"/>
+    </linearGradient>
+    <linearGradient id="paneerSide" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f3ecd8"/>
+      <stop offset="1" stop-color="#e6dcc0"/>
+    </linearGradient>
+    <linearGradient id="paneerFront" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fbf6e8"/>
+      <stop offset="1" stop-color="#efe6cc"/>
+    </linearGradient>
+    <radialGradient id="plateShadow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#2d5016" stop-opacity="0.22"/>
+      <stop offset="1" stop-color="#2d5016" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Soft ground shadow -->
+  <ellipse cx="240" cy="446" rx="190" ry="38" fill="url(#plateShadow)"/>
+
+  <!-- Big paneer block -->
+  <g>
+    <path d="M110 250 L282 226 L370 262 L370 388 L198 416 L110 376 Z" fill="url(#paneerFront)"/>
+    <path d="M110 250 L282 226 L370 262 L198 290 Z" fill="url(#paneerTop)"/>
+    <path d="M198 290 L370 262 L370 388 L198 416 Z" fill="url(#paneerSide)"/>
+    <path d="M110 250 L198 290 L198 416 L110 376 Z" fill="#efe7ce"/>
+    <!-- porous texture dots -->
+    <g fill="#dfd4b2" opacity="0.8">
+      <circle cx="150" cy="320" r="4"/><circle cx="172" cy="368" r="3"/><circle cx="136" cy="352" r="2.6"/>
+      <circle cx="238" cy="330" r="4"/><circle cx="268" cy="356" r="3"/><circle cx="300" cy="310" r="3.4"/>
+      <circle cx="330" cy="348" r="2.8"/><circle cx="226" cy="386" r="3"/><circle cx="296" cy="382" r="2.4"/>
+    </g>
+  </g>
+
+  <!-- Cube slice front left -->
+  <g>
+    <path d="M84 388 L156 376 L192 394 L192 452 L120 464 L84 446 Z" fill="url(#paneerFront)"/>
+    <path d="M84 388 L156 376 L192 394 L120 406 Z" fill="url(#paneerTop)"/>
+    <path d="M120 406 L192 394 L192 452 L120 464 Z" fill="url(#paneerSide)"/>
+    <circle cx="146" cy="432" r="2.6" fill="#dfd4b2"/>
+  </g>
+
+  <!-- Cube slice right -->
+  <g>
+    <path d="M312 402 L376 392 L410 408 L410 456 L346 466 L312 450 Z" fill="url(#paneerFront)"/>
+    <path d="M312 402 L376 392 L410 408 L346 418 Z" fill="url(#paneerTop)"/>
+    <path d="M346 418 L410 408 L410 456 L346 466 Z" fill="url(#paneerSide)"/>
+    <circle cx="372" cy="440" r="2.4" fill="#dfd4b2"/>
+  </g>
+
+  <!-- Mint garnish -->
+  <g fill="#2d8a3e">
+    <path d="M206 214 q10 -22 30 -24 q-4 20 -22 26 q18 -4 30 6 q-20 8 -34 -4 Z"/>
+    <path d="M252 208 q2 -18 18 -24 q0 16 -12 24 q14 -6 26 0 q-14 10 -30 4 Z" opacity="0.85"/>
+  </g>
+
+  <!-- Brand heading -->
+  <g transform="translate(240 96)" fill="#2d5016">
+    <path d="M-52 6 q-16 -4 -20 -16 q-4 -12 6 -12 q2 -8 12 -6 q6 -16 28 -18 q30 -4 46 6 q12 8 10 20 q10 0 8 10 q-2 8 -12 10 q-6 10 -20 10 l-4 12 -8 0 2 -10 -24 2 -2 10 -8 0 0 -12 q-8 0 -14 -6 Z" transform="scale(0.62)"/>
+  </g>
+  <text x="240" y="140" text-anchor="middle" font-family="Georgia, serif" font-weight="bold" font-size="30" letter-spacing="2" fill="#2d5016">FARMER'S DAIRY</text>
+  <text x="240" y="176" text-anchor="middle" font-family="Georgia, serif" font-weight="bold" font-size="24" letter-spacing="6" fill="#1c1c1c">FRESH</text>
+  <text x="240" y="212" text-anchor="middle" font-family="Georgia, serif" font-weight="bold" font-size="40" letter-spacing="4" fill="#e8871e">PANEER</text>
+
+  <!-- Footnote -->
+  <text x="240" y="498" text-anchor="middle" font-family="Verdana, sans-serif" font-weight="bold" font-size="15" fill="#1c1c1c">&#8226;Soft &amp; Fresh  &#8226;Made from Pure Cow Milk</text>
+</svg>

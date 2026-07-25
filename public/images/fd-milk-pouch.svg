@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 520" role="img" aria-label="Farmer's Dairy Fresh Cow Milk pouch">
+  <defs>
+    <linearGradient id="pouchBody" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="0.55" stop-color="#f6f8f4"/>
+      <stop offset="1" stop-color="#e9ede6"/>
+    </linearGradient>
+    <linearGradient id="pouchShine" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0"/>
+      <stop offset="0.5" stop-color="#ffffff" stop-opacity="0.85"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Pillow pouch body -->
+  <path d="M52 84 Q40 60 66 52 Q240 18 414 52 Q440 60 428 84 Q452 240 430 420 Q444 468 404 476 Q240 508 76 476 Q36 468 50 420 Q28 240 52 84 Z" fill="url(#pouchBody)" stroke="#d6ddd2" stroke-width="2"/>
+  <!-- Soft sheen -->
+  <path d="M110 70 Q120 250 108 452 L146 458 Q136 250 148 66 Z" fill="url(#pouchShine)" opacity="0.5"/>
+
+  <!-- Green milk-drip header -->
+  <path d="M56 60 Q240 28 424 60 L420 96 Q414 118 400 100 Q396 132 382 108 Q370 152 356 112 Q348 132 336 110 Q326 158 308 112 Q296 134 284 112 Q272 170 252 112 Q240 136 228 112 Q214 156 200 110 Q188 132 176 110 Q164 150 150 108 Q140 128 128 106 Q120 140 106 102 Q96 120 84 100 Q74 116 62 96 Z" fill="#2d5016"/>
+  <circle cx="150" cy="78" r="7" fill="#ffffff"/>
+  <circle cx="240" cy="70" r="8" fill="#ffffff"/>
+  <circle cx="330" cy="80" r="6" fill="#ffffff"/>
+
+  <!-- 100% organic badge -->
+  <g transform="translate(96 150) rotate(-8)">
+    <text x="0" y="0" font-family="Georgia, serif" font-weight="bold" font-size="26" fill="#7a1f1f">100%</text>
+    <text x="-6" y="26" font-family="'Segoe Script','Brush Script MT',cursive" font-size="26" fill="#7a1f1f" font-style="italic">organic</text>
+    <path d="M-8 -20 q10 -8 20 -2 M64 -18 q10 -8 20 -2" stroke="#2d5016" stroke-width="3" fill="none" stroke-linecap="round"/>
+  </g>
+
+  <!-- FSSAI-style mark -->
+  <rect x="368" y="140" width="30" height="30" rx="4" fill="none" stroke="#1d8a34" stroke-width="3"/>
+  <circle cx="383" cy="155" r="6" fill="#1d8a34"/>
+
+  <!-- Grazing cow mark -->
+  <g transform="translate(240 196)" fill="#2d5016">
+    <path d="M-52 6 q-16 -4 -20 -16 q-4 -12 6 -12 q2 -8 12 -6 q6 -16 28 -18 q30 -4 46 6 q12 8 10 20 q10 0 8 10 q-2 8 -12 10 q-6 10 -20 10 l-4 12 -8 0 2 -10 -24 2 -2 10 -8 0 0 -12 q-8 0 -14 -6 Z"/>
+    <path d="M-64 12 q64 10 128 0 l0 6 q-64 10 -128 0 Z" opacity="0.9"/>
+  </g>
+
+  <!-- Brand + product names -->
+  <text x="240" y="258" text-anchor="middle" font-family="Georgia, serif" font-weight="bold" font-size="34" letter-spacing="2" fill="#2d5016">FARMER'S DAIRY</text>
+  <text x="240" y="304" text-anchor="middle" font-family="Georgia, serif" font-weight="bold" font-size="34" letter-spacing="6" fill="#1c1c1c">FRESH</text>
+  <text x="240" y="356" text-anchor="middle" font-family="Georgia, serif" font-weight="bold" font-size="52" letter-spacing="3" fill="#e8871e">COW MILK</text>
+  <text x="240" y="386" text-anchor="middle" font-family="Verdana, sans-serif" font-weight="bold" font-size="17" fill="#1c1c1c">&#8226;Unprocessed Raw Milk  &#8226;Unadulterated</text>
+
+  <!-- Palm trees -->
+  <g fill="#2d5016" transform="translate(96 430)">
+    <path d="M0 40 L8 40 L6 -6 Q22 -20 38 -12 Q22 -16 8 -8 Q22 -26 34 -28 Q18 -30 6 -14 Q8 -34 -2 -42 Q4 -30 2 -12 Q-10 -28 -24 -26 Q-10 -22 0 -10 Q-16 -16 -28 -8 Q-14 -14 2 -4 Z"/>
+    <path d="M34 44 L40 44 L38 8 Q50 -2 62 4 Q50 0 40 6 Q50 -8 60 -10 Q48 -10 38 0 Q40 -14 32 -20 Q36 -12 36 2 Q26 -8 16 -6 Q26 -4 34 4 Z" opacity="0.92"/>
+  </g>
+
+  <!-- Farmer plowing with oxen silhouette -->
+  <g fill="#2d5016" transform="translate(212 448)">
+    <path d="M0 22 q4 -20 10 -22 q4 -2 4 4 l-2 8 14 6 16 -2 2 -8 4 0 -2 10 -8 6 -18 0 -12 12 -4 -2 8 -10 Z"/>
+    <path d="M56 26 q-2 -14 12 -18 q18 -6 34 -2 q8 2 10 -6 q2 -6 8 -4 q6 2 4 8 l10 -2 q6 2 2 8 l-8 4 -2 14 -6 12 -6 0 2 -12 -20 4 -2 10 -6 0 0 -12 q-16 4 -26 -2 Z"/>
+    <path d="M30 30 l30 4 0 4 -30 -2 Z" opacity="0.9"/>
+  </g>
+  <!-- Ground grass band -->
+  <path d="M56 470 Q240 496 424 468 L420 476 Q240 506 60 478 Z" fill="#2d5016"/>
+
+  <!-- 16g protein -->
+  <text x="392" y="416" text-anchor="middle" font-family="Verdana, sans-serif" font-weight="bold" font-size="30" fill="#1c1c1c">16g</text>
+  <rect x="368" y="424" width="48" height="4" fill="#e8871e"/>
+  <text x="392" y="444" text-anchor="middle" font-family="Verdana, sans-serif" font-weight="bold" font-size="13" fill="#1c1c1c">PROTEIN</text>
+</svg>

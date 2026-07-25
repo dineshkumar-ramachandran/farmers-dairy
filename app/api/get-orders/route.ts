@@ -4,13 +4,13 @@ import { createClient } from "@supabase/supabase-js";
 const supabaseUrl = "https://ddcungvetvmbikwfvytq.supabase.co";
 
 // 🔄 Use the same Supabase setup as your create-order route
-const supabase = createClient(
-  supabaseUrl,
-  process.env.SUPABASE_SERVICE_API_KEY!
-);
+// Created lazily so the build doesn't require the service key
+const getSupabase = () =>
+  createClient(supabaseUrl, process.env.SUPABASE_SERVICE_API_KEY!);
 
 export async function GET() {
   try {
+    const supabase = getSupabase();
     console.log("🔍 Fetching orders from Supabase...");
 
     // 🔄 Fetch orders from Supabase with proper ordering

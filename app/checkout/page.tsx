@@ -3,6 +3,7 @@
 import type React from "react"
 
 import { useState, useEffect } from "react"
+import Script from "next/script"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
@@ -540,10 +541,12 @@ export default function CheckoutPage() {
 
   return (
     <div className="min-h-screen py-8">
+      {/* Razorpay is only needed here, keeping it off every other page */}
+      <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="afterInteractive" />
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-text mb-4">Checkout</h1>
-          <p className="text-lg text-text">Complete your order details</p>
+          <h1 className="font-display text-4xl sm:text-5xl font-semibold tracking-tight text-text mb-4">Checkout</h1>
+          <p className="text-lg text-text/75">Complete your order details</p>
         </div>
 
         {/* Payment Error Display */}
@@ -728,7 +731,7 @@ export default function CheckoutPage() {
                         <h4 className="font-medium text-text">{item.name}</h4>
                         {item.sampleSize && <p className="text-sm text-text opacity-70">Size: {item.sampleSize}</p>}
                         <p className="text-sm text-text opacity-70 capitalize">
-                          {item.subscription === "sample" ? "One-time sample" : `${item.subscription} subscription`}
+                          {item.subscription === "sample" ? "One-time purchase" : `${item.subscription} subscription`}
                         </p>
 
                         {/* Subscription dates - improved layout */}
@@ -758,9 +761,11 @@ export default function CheckoutPage() {
                       </div>
                       <div className="text-right">
                         <p className="font-medium">
-                          ₹{item.totalPrice || item.price} × {item.subscription === "sample" ? 1 : item.totalDays || 1}{" "}
+                          ₹{item.totalPrice || item.price} × {item.subscription === "sample" ? item.quantity : item.totalDays || 1}{" "}
                           {item.subscription === "sample"
-                            ? "sample"
+                            ? item.quantity > 1
+                              ? "items"
+                              : "item"
                             : item.totalDays && item.totalDays > 1
                               ? "days"
                               : "day"}
@@ -768,10 +773,12 @@ export default function CheckoutPage() {
                         <p className="text-sm text-text opacity-70">
                           ₹{((item.totalPrice || item.price) * item.quantity).toFixed(2)}
                         </p>
-                        <div className="text-xs text-text opacity-70 mt-1">
-                          <div>Per day cost: ₹{item.price}</div>
-                          <div>for {item.name.includes("500ml") ? "500ml" : "1000ml"} milk</div>
-                        </div>
+                        {item.subscription !== "sample" && (
+                          <div className="text-xs text-text opacity-70 mt-1">
+                            <div>Per day cost: ₹{item.price}</div>
+                            <div>for {item.name.includes("500ml") ? "500ml" : "1000ml"} milk</div>
+                          </div>
+                        )}
                       </div>
                     </div>
                     {index < items.length - 1 && <div className="h-4"></div>}

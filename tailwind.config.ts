@@ -1,4 +1,11 @@
 import type { Config } from "tailwindcss"
+
+/**
+ * Farmer's Dairy — v2 visual reboot ("Daybreak Creamery").
+ * A fresh, premium, natural design language: deep teal-pine ink + butter-gold
+ * accent on a cool porcelain-milk canvas. Deliberately distinct from the
+ * previous forest-green editorial system.
+ */
 const config: Config = {
   darkMode: ["class"],
   content: [
@@ -43,94 +50,90 @@ const config: Config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        // Custom color palette inspired by Organic Valley
-        bg: "#f8faf6" /* Soft cream-white background */,
-        "card-bg": "#ffffff" /* Pure white for cards */,
-        "mint-light": "#e8f5e8" /* Very light green for subtle accents */,
-        mint: "#7fb069" /* Fresh green for highlights */,
-        green: "#2d5016" /* Deep forest green for buttons/CTAs */,
-        text: "#2c3e2d" /* Dark green-gray for text */,
+
+        /* ---- Daybreak Creamery brand palette ---- */
+        milk: "#F2F1EA" /* Cool porcelain-milk canvas */,
+        "milk-deep": "#E8E6DA" /* Slightly deeper milk for banding */,
+        cloud: "#FBFBF7" /* Near-white surface for cards */,
+        pine: "#0F2E2B" /* Deep teal-pine — primary ink / dark sections */,
+        "pine-soft": "#1C4A44" /* Softer teal for large fills */,
+        teal: "#2E7D74" /* Fresh dairy teal — primary brand accent */,
+        "teal-bright": "#3FA093" /* Brighter teal for highlights/hovers */,
+        butter: "#F0B23E" /* Butter-gold accent (cream/ghee richness) */,
+        "butter-deep": "#D9922A" /* Deeper butter for hovers */,
+        clay: "#C36A44" /* Warm terracotta for tertiary accents */,
+        ink: "#12211F" /* Near-black teal for display type */,
+        "ink-soft": "#3B4E4B" /* Muted body text */,
+
+        /* ---- Legacy aliases (remapped to the new palette) so existing
+           shop/cart/checkout/legal pages inherit the reboot automatically ---- */
+        bg: "#F2F1EA",
+        "card-bg": "#FBFBF7",
+        "mint-light": "#DCEBE8",
+        mint: "#3FA093",
+        green: "#2E7D74",
+        "green-deep": "#0F2E2B",
+        text: "#3B4E4B",
+        cream: "#FBFBF7",
+        gold: "#F0B23E",
       },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
+        "4xl": "2rem",
+        "5xl": "2.75rem",
+        blob: "42% 58% 61% 39% / 45% 41% 59% 55%",
       },
       fontFamily: {
-        sans: ["Montserrat", "system-ui", "sans-serif"],
-        display: ["Montserrat", "system-ui", "sans-serif"],
+        sans: ["var(--font-sans)", "Plus Jakarta Sans", "system-ui", "sans-serif"],
+        display: ["var(--font-display)", "Bricolage Grotesque", "system-ui", "sans-serif"],
       },
-      animation: {
-        "fade-in": "fadeIn 0.8s ease-in-out",
-        "slide-up": "slideUp 0.6s ease-out",
-        "slide-left": "slideLeft 0.7s ease-out",
-        "slide-right": "slideRight 0.7s ease-out",
-        "scale-in": "scaleIn 0.5s ease-out",
-        "rotate-in": "rotateIn 0.8s ease-out",
-        "bounce-gentle": "bounceGentle 2s ease-in-out infinite",
-        float: "float 3s ease-in-out infinite",
-        "pulse-slow": "pulse 3s ease-in-out infinite",
-        wiggle: "wiggle 1s ease-in-out infinite",
-        "spin-slow": "spin 3s linear infinite",
-        "milk-drop": "milkDrop 2s ease-in-out infinite",
-        "cow-walk": "cowWalk 8s linear infinite",
-        "milk-pour": "milkPour 3s ease-in-out infinite",
-        "udder-bounce": "udderBounce 2.5s ease-in-out infinite",
+      letterSpacing: {
+        tightest: "-0.045em",
+      },
+      boxShadow: {
+        soft: "0 1px 2px rgba(15,46,43,0.04), 0 10px 30px -14px rgba(15,46,43,0.16)",
+        lifted:
+          "0 2px 6px rgba(15,46,43,0.06), 0 30px 60px -22px rgba(15,46,43,0.30)",
+        glow: "0 0 60px -10px rgba(63,160,147,0.55)",
+        butter: "0 14px 30px -14px rgba(217,146,42,0.6)",
+      },
+      transitionTimingFunction: {
+        "out-expo": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "in-out-soft": "cubic-bezier(0.65, 0, 0.35, 1)",
       },
       keyframes: {
-        fadeIn: {
-          "0%": { opacity: "0" },
-          "100%": { opacity: "1" },
+        floatY: {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-16px)" },
         },
-        slideUp: {
-          "0%": { transform: "translateY(30px)", opacity: "0" },
-          "100%": { transform: "translateY(0)", opacity: "1" },
+        blobDrift: {
+          "0%, 100%": { transform: "translate3d(0,0,0) scale(1) rotate(0deg)" },
+          "33%": { transform: "translate3d(4%,-6%,0) scale(1.08) rotate(6deg)" },
+          "66%": { transform: "translate3d(-5%,4%,0) scale(0.94) rotate(-4deg)" },
         },
-        slideLeft: {
-          "0%": { transform: "translateX(-30px)", opacity: "0" },
-          "100%": { transform: "translateX(0)", opacity: "1" },
+        marqueeX: {
+          from: { transform: "translateX(0)" },
+          to: { transform: "translateX(-50%)" },
         },
-        slideRight: {
-          "0%": { transform: "translateX(30px)", opacity: "0" },
-          "100%": { transform: "translateX(0)", opacity: "1" },
+        shimmer: {
+          "0%": { backgroundPosition: "-200% 0" },
+          "100%": { backgroundPosition: "200% 0" },
         },
-        scaleIn: {
-          "0%": { transform: "scale(0.8)", opacity: "0" },
+        popIn: {
+          "0%": { transform: "scale(0.6)", opacity: "0" },
+          "60%": { transform: "scale(1.12)", opacity: "1" },
           "100%": { transform: "scale(1)", opacity: "1" },
         },
-        rotateIn: {
-          "0%": { transform: "rotate(-10deg) scale(0.8)", opacity: "0" },
-          "100%": { transform: "rotate(0deg) scale(1)", opacity: "1" },
-        },
-        bounceGentle: {
-          "0%, 100%": { transform: "translateY(0)" },
-          "50%": { transform: "translateY(-10px)" },
-        },
-        float: {
-          "0%, 100%": { transform: "translateY(0px)" },
-          "50%": { transform: "translateY(-15px)" },
-        },
-        wiggle: {
-          "0%, 100%": { transform: "rotate(-3deg)" },
-          "50%": { transform: "rotate(3deg)" },
-        },
-        milkDrop: {
-          "0%, 100%": { transform: "translateY(0) scale(1)" },
-          "50%": { transform: "translateY(-8px) scale(1.1)" },
-        },
-        cowWalk: {
-          "0%": { transform: "translateX(-100px)" },
-          "100%": { transform: "translateX(calc(100vw + 100px))" },
-        },
-        milkPour: {
-          "0%": { transform: "scaleY(0)", transformOrigin: "top" },
-          "50%": { transform: "scaleY(1)", transformOrigin: "top" },
-          "100%": { transform: "scaleY(0)", transformOrigin: "top" },
-        },
-        udderBounce: {
-          "0%, 100%": { transform: "translateY(0) scaleY(1)" },
-          "50%": { transform: "translateY(-5px) scaleY(1.1)" },
-        },
+      },
+      animation: {
+        float: "floatY 6s ease-in-out infinite",
+        blob: "blobDrift 20s ease-in-out infinite",
+        "blob-slow": "blobDrift 30s ease-in-out infinite reverse",
+        marquee: "marqueeX var(--marquee-duration, 40s) linear infinite",
+        shimmer: "shimmer 2.4s linear infinite",
+        "pop-in": "popIn 0.42s cubic-bezier(0.16,1,0.3,1) both",
       },
     },
   },
