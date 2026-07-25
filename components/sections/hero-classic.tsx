@@ -111,9 +111,9 @@ export function HeroClassic() {
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src="/images/product-milk-pouch.png"
+              src="/images/product-milk-pouch-transparent.png"
               alt="Farmer's Dairy fresh cow milk packet"
-              className="max-h-[340px] sm:max-h-[420px] lg:max-h-[520px] w-auto object-contain mix-blend-multiply"
+              className="max-h-[340px] sm:max-h-[420px] lg:max-h-[520px] w-auto object-contain"
             />
           </div>
         </div>
