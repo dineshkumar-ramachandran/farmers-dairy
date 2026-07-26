@@ -84,9 +84,17 @@ export function HeroSlider() {
             backgroundRepeat: "no-repeat",
           }}
         >
-          {/* Soft cream scrim on the left for text legibility */}
+          {/* Mobile: strong full-width cream scrim so text never overlaps
+              product art. Desktop: soft partial gradient. */}
           <div
-            className="absolute inset-0 pointer-events-none"
+            className="absolute inset-0 pointer-events-none md:hidden"
+            style={{
+              background:
+                "linear-gradient(180deg, rgba(251,235,209,0.94) 0%, rgba(251,235,209,0.82) 55%, rgba(251,235,209,0.35) 100%)",
+            }}
+          />
+          <div
+            className="absolute inset-0 pointer-events-none hidden md:block"
             style={{
               background:
                 "linear-gradient(90deg, rgba(251,235,209,0.85) 0%, rgba(251,235,209,0.55) 30%, rgba(251,235,209,0) 60%)",

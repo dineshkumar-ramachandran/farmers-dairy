@@ -104,7 +104,7 @@ const products: any[] = [
       categories: ["Ghee", "Organic"],
     },
     isSample: true,
-    ctaLabel: "Order Now",
+    ctaLabel: "Buy Now",
     variantLabel: "Choose Size",
     variants: [
       { label: "1/2 litre", price: 629 },
@@ -124,7 +124,7 @@ const products: any[] = [
       categories: ["Paneer", "Organic"],
     },
     isSample: true,
-    ctaLabel: "Order Now",
+    ctaLabel: "Buy Now",
     variantLabel: "Choose Weight",
     variants: [
       { label: "200g", price: 159 },
@@ -146,7 +146,7 @@ const products: any[] = [
       categories: ["Butter", "Organic"],
     },
     isSample: true,
-    ctaLabel: "Order Now",
+    ctaLabel: "Buy Now",
     variantLabel: "Choose Size",
     variants: [
       { label: "250g", price: 249 },
@@ -417,6 +417,9 @@ export default function ShopPage() {
       price: typeof price === "number" ? price : 35,
       quantity,
       subscription: product.isSample ? "sample" : subscription,
+      // Only the actual Sample Pack (id 3) qualifies for Cash on Delivery.
+      // Ghee/Paneer/Butter are one-time buys but must be prepaid.
+      codEligible: product.id === 3,
       deliveryDate,
       dateRange,
       sampleSize,

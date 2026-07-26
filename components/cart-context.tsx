@@ -16,6 +16,8 @@ export interface CartItem {
   holidays?: Date[]
   adjustedEndDate?: Date
   totalPrice?: number
+  /** True only for the actual Sample Pack — used to gate COD at checkout. */
+  codEligible?: boolean
 }
 
 interface CartContextType {

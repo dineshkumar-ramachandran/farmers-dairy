@@ -695,9 +695,10 @@ export default function CheckoutPage() {
                     </div>
                   </button>
 
-                  {/* Only show COD for sample products */}
-                  {items.some((item) => item.subscription === "sample") &&
-                    !items.some((item) => item.subscription !== "sample") && (
+                  {/* COD only when EVERY cart item is COD-eligible (Sample Pack).
+                      Ghee / Paneer / Butter and milk subscriptions are prepaid. */}
+                  {items.length > 0 &&
+                    items.every((item) => item.codEligible === true) && (
                       <button
                         onClick={() => setPaymentMethod("cod")}
                         className={`p-4 border rounded-lg flex items-center space-x-3 transition-all duration-300 ${
