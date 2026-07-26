@@ -37,7 +37,7 @@ export function ProductShowcase() {
               Our Fresh <span className="italic text-gradient-green">Products</span>
             </>
           }
-          description="Choose from our selection of farm-fresh milk products delivered straight to your doorstep."
+          description="From our Farm to your Home. Explore our wide range of Pure and Healthy Dairy Products."
         />
 
         <motion.div
@@ -54,7 +54,7 @@ export function ProductShowcase() {
               variants={card}
               className="group h-full flex flex-col rounded-4xl border border-pine/12 bg-cloud transition-all duration-500 ease-out-expo hover:border-teal/40 hover:shadow-lifted hover:-translate-y-2 overflow-hidden [transform-style:preserve-3d]"
             >
-              {/* Product stage — frameless */}
+              {/* Product stage — frameless, no category tag overlay */}
               <div className="relative mx-3 mt-3">
                 <div className="flex items-center justify-center h-44 sm:h-52 p-4">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -64,9 +64,6 @@ export function ProductShowcase() {
                     className="max-h-40 sm:max-h-44 w-auto object-contain mix-blend-multiply transition-transform duration-500 group-hover:scale-110"
                   />
                 </div>
-                <span className="absolute top-2 right-2 text-[10px] font-bold uppercase tracking-[0.16em] text-teal/70 px-2.5 py-1">
-                  {product.category}
-                </span>
               </div>
 
               <div className="flex flex-col flex-1 p-4 sm:p-5">

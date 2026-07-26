@@ -22,7 +22,7 @@ const STAGES = [
   },
   {
     no: "03",
-    title: "Bottling & Sealing",
+    title: "Packing & Sealing",
     time: "2:00 AM",
     copy: "Each batch is filled and sealed in the small hours so every pack reaches you at its freshest, still cool from the dairy.",
     Icon: PackageCheck,

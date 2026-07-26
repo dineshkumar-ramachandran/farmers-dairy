@@ -101,7 +101,7 @@ const products: any[] = [
     id: 4,
     name: "Organic Cow Ghee",
     price: "629 - 1249",
-    image: "/images/product-ghee.png",
+    image: "/images/organic-ghee.png",
     description: "Pure organic cow ghee, slow-made from farm-fresh milk",
     details: {
       note1:
@@ -163,22 +163,52 @@ const products: any[] = [
   },
   {
     id: 7,
-    name: "Wood Pressed Oil",
+    name: "Wood Pressed Groundnut Oil",
     price: "Coming Soon",
-    image: "/images/wood-pressed-oil.png",
-    description: "Cold wood-pressed oil — coming soon to Farmer's Dairy.",
+    image: "/images/wood-pressed-groundnut-oil.png",
+    description: "Cold wood-pressed groundnut oil — coming soon.",
     details: {
       note1:
-        "Traditional wood-pressed (chekku) oil, made the slow, natural way.",
+        "Traditional wood-pressed (chekku) groundnut oil, made the slow, natural way.",
       note2: "Launching soon — stay tuned.",
       categories: ["Oil", "Organic"],
     },
     category: "Oil",
     comingSoon: true,
   },
+  {
+    id: 8,
+    name: "Wood Pressed Coconut Oil",
+    price: "Coming Soon",
+    image: "/images/coconut-oil.png",
+    description: "Cold wood-pressed coconut oil — coming soon.",
+    details: {
+      note1:
+        "Traditional wood-pressed (chekku) coconut oil, made the slow, natural way.",
+      note2: "Launching soon — stay tuned.",
+      categories: ["Oil", "Organic"],
+    },
+    category: "Oil",
+    comingSoon: true,
+  },
+  {
+    id: 9,
+    name: "Healthy Mix",
+    price: "Coming Soon",
+    image: "/images/health-mix.png",
+    description: "Nourishing multi-grain mix — coming soon.",
+    details: {
+      note1:
+        "A wholesome multi-grain mix crafted for daily nutrition.",
+      note2: "Launching soon — stay tuned.",
+      categories: ["Mix", "Wellness"],
+    },
+    category: "Mix",
+    comingSoon: true,
+  },
 ];
 
-const categories = ["All", "Milk", "Ghee", "Paneer", "Butter", "Oil"];
+const categories = ["All", "Milk", "Ghee", "Paneer", "Butter", "Oil", "Mix"];
 
 export default function ShopPage() {
   const [quantities, setQuantities] = useState<{ [key: number]: number }>({});
@@ -575,9 +605,6 @@ export default function ShopPage() {
                       }}
                       className="relative max-w-full max-h-full object-contain mix-blend-multiply opacity-80"
                     />
-                    <span className="absolute top-2 right-2 text-[10px] font-bold uppercase tracking-[0.16em] text-teal/70 px-2 py-1">
-                      {product.category}
-                    </span>
                   </div>
                   <CardTitle className={`font-display font-semibold text-text ${viewMode === "grid" ? "text-sm sm:text-base leading-snug" : "text-xl sm:text-2xl"}`}>
                     {product.name}
@@ -612,9 +639,6 @@ export default function ShopPage() {
                     loading="lazy"
                     className="relative max-w-full max-h-full object-contain mix-blend-multiply transition-transform duration-500 group-hover:scale-105"
                   />
-                  <span className="absolute top-2 right-2 text-[10px] font-bold uppercase tracking-[0.16em] text-teal/70 px-2 py-1">
-                    {product.category}
-                  </span>
                 </div>
                 <CardTitle className={`font-display font-semibold text-text ${viewMode === "grid" ? "text-sm sm:text-base leading-snug" : "text-xl sm:text-2xl"}`}>
                   {product.name}

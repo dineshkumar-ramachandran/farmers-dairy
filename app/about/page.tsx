@@ -26,7 +26,7 @@ const values = [
   {
     icon: Truck,
     title: "Eco-Friendly Delivery",
-    text: "We deliver milk in eco-friendly glass bottles to reduce environmental impact. Our delivery team takes pride in punctual, reliable service.",
+    text: "We deliver milk in eco-friendly packets to reduce environmental impact. Our delivery team takes pride in punctual, reliable service.",
   },
   {
     icon: Users,
@@ -145,7 +145,7 @@ export default function AboutPage() {
               </h2>
               <p className="text-text/70 leading-[1.9]">
                 In this busy running world we deliver milk through eco friendly
-                glass bottles to your doorstep. We envision a future where every
+                packets to your doorstep. We envision a future where every
                 family has access to pure, fresh, and nutritious milk directly
                 from the farm.
               </p>

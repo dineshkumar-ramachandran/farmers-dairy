@@ -35,7 +35,7 @@ export const metadata: Metadata = {
     "farm fresh milk",
     "raw cow milk",
     "milk delivery Hosur",
-    "glass bottle milk",
+    "milk packets",
     "milk subscription",
     "Farmer's Dairy",
   ],

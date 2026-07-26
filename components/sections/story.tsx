@@ -79,7 +79,7 @@ export function Story() {
                 Farmer's Dairy is a small initiative that helps in benefiting
                 both farmer's and the consumer with good price and good health.
                 In this busy running world we deliver milk through eco friendly
-                glass bottles to your doorstep.
+                packets to your doorstep.
               </p>
             </Reveal>
           </div>

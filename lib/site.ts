@@ -22,49 +22,62 @@ export const siteConfig = {
   },
 } as const;
 
+/**
+ * Hero carousel — four product slides. Client content, verbatim.
+ * Bullet lines are separated by `\n` so the hero component can render them
+ * as a proper list.
+ */
 export const heroSlides = [
   {
     id: 1,
-    title: "Fresh Farm Milk",
-    subtitle: "Delivered Daily",
+    eyebrow: "Farm Fresh · Organic",
+    title: "Raw Cow Milk",
     description:
-      "Experience the pure taste of farm-fresh milk delivered straight to your doorstep.",
-    image: "/images/Hero-slider-image-2.png",
+      "Unprocessed Organic Cow Milk directly from our Farm to your Home",
+    bullets: ["No Preservatives", "No Antibiotics"],
+    image: "/images/500ml-raw-cow-milk.png",
     cta: "Start Subscription",
+    href: "/shop",
   },
   {
     id: 2,
-    title: "100% Pure & Natural",
-    subtitle: "No Preservatives",
+    eyebrow: "Slow-made · Aromatic",
+    title: "Organic Cow Ghee",
     description:
-      "Our cows graze on natural pastures, ensuring the highest quality and nutrition.",
-    image: "/images/Hero-slider-image-2.png",
-    cta: "Shop Now",
+      "Pure and Aromatic Organic Cow Ghee made from fresh Organic Cream, extracted from our Organic Milk.",
+    bullets: [],
+    image: "/images/organic-ghee.png",
+    cta: "Shop Ghee",
+    href: "/shop",
   },
   {
     id: 3,
-    title: "Eco-Friendly Delivery",
-    subtitle: "Glass Bottles",
+    eyebrow: "Soft · Fresh",
+    title: "Organic Paneer",
     description:
-      "We deliver milk in eco-friendly glass bottles to reduce environmental impact.",
-    image: "/images/Hero-slider-image-3.png",
-    cta: "Learn More",
+      "Soft and Healthy Paneer made from Organic Cow milk & Lemon. Comes with paneer water inside.",
+    bullets: [],
+    image: "/images/organic-paneer.png",
+    cta: "Shop Paneer",
+    href: "/shop",
   },
   {
     id: 4,
-    title: "Farm to Table",
-    subtitle: "Fresh Daily",
+    eyebrow: "Churned Fresh",
+    title: "Organic Butter",
     description:
-      "From our family farm to your family table, ensuring freshness in every drop.",
-    image: "/images/Hero-slider-image-4.png",
-    cta: "Order Now",
+      "Churned from Organic Cream. Soft and creamy butter for tasty dosas.",
+    bullets: [],
+    image: "/images/organic-butter.png",
+    cta: "Shop Butter",
+    href: "/shop",
   },
 ] as const;
 
 /**
- * Milk is now delivered in eco-friendly pouches (packaging updated from the
- * earlier glass bottles). Swap the .svg artwork for real product photos by
- * replacing these image paths once the photos are added to public/images.
+ * Featured product grid on the home page. Order matches the client-approved
+ * layout: milk sample → milk sizes → ghee → paneer → butter → coming-soon
+ * oils and the healthy-mix blend.
  */
 export const featuredProducts = [
   {
@@ -101,7 +114,7 @@ export const featuredProducts = [
     id: 4,
     name: "Organic Cow Ghee",
     price: "629 - 1249",
-    image: "/images/product-ghee.png",
+    image: "/images/organic-ghee.png",
     fallback: "/images/fd-ghee-jar.svg",
     description: "Pure organic cow ghee, slow-made from farm-fresh milk",
     category: "Ghee",
@@ -129,12 +142,32 @@ export const featuredProducts = [
   },
   {
     id: 7,
-    name: "Wood Pressed Oil",
+    name: "Wood Pressed Groundnut Oil",
     price: "Coming Soon",
-    image: "/images/wood-pressed-oil.png",
+    image: "/images/wood-pressed-groundnut-oil.png",
     fallback: "/images/fd-ghee-jar.svg",
-    description: "Cold wood-pressed oil — coming soon to Farmer's Dairy.",
+    description: "Cold wood-pressed groundnut oil — coming soon.",
     category: "Oil",
+    comingSoon: true,
+  },
+  {
+    id: 8,
+    name: "Wood Pressed Coconut Oil",
+    price: "Coming Soon",
+    image: "/images/coconut-oil.png",
+    fallback: "/images/fd-ghee-jar.svg",
+    description: "Cold wood-pressed coconut oil — coming soon.",
+    category: "Oil",
+    comingSoon: true,
+  },
+  {
+    id: 9,
+    name: "Healthy Mix",
+    price: "Coming Soon",
+    image: "/images/health-mix.png",
+    fallback: "/images/fd-ghee-jar.svg",
+    description: "Nourishing multi-grain mix — coming soon.",
+    category: "Mix",
     comingSoon: true,
   },
 ] as const;
@@ -144,7 +177,7 @@ export const testimonials = [
     name: "MS. NIRMALA",
     location: "Hosur",
     rating: 5,
-    text: "Fat and Thickness of the milk is very good. Bottles are also well Cleaned.",
+    text: "Fat and Thickness of the milk is very good. Packets are also well sealed.",
   },
   {
     name: "MR. LOKESH",
@@ -161,7 +194,7 @@ export const testimonials = [
 ] as const;
 
 export const freshnessTimeline = [
-  { time: "2 AM", label: "Bottling and Sealing" },
+  { time: "2 AM", label: "Packing and Sealing" },
   { time: "4 AM", label: "Delivery Starts" },
   { time: "7 AM", label: "Delivery Ends" },
 ] as const;
@@ -173,7 +206,7 @@ export const farmGallery = [
   },
   {
     src: "/images/Hero-slider-image-3.png",
-    alt: "Fresh milk in eco-friendly glass bottles",
+    alt: "Fresh milk in eco-friendly packets",
   },
   {
     src: "/images/Hero-slider-image-4.png",
