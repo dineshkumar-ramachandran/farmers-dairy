@@ -51,31 +51,33 @@ const config: Config = {
           foreground: "hsl(var(--card-foreground))",
         },
 
-        /* ---- Daybreak Creamery brand palette ---- */
-        milk: "#F2F1EA" /* Cool porcelain-milk canvas */,
-        "milk-deep": "#E8E6DA" /* Slightly deeper milk for banding */,
-        cloud: "#FBFBF7" /* Near-white surface for cards */,
-        pine: "#0F2E2B" /* Deep teal-pine — primary ink / dark sections */,
-        "pine-soft": "#1C4A44" /* Softer teal for large fills */,
-        teal: "#2E7D74" /* Fresh dairy teal — primary brand accent */,
-        "teal-bright": "#3FA093" /* Brighter teal for highlights/hovers */,
-        butter: "#F0B23E" /* Butter-gold accent (cream/ghee richness) */,
-        "butter-deep": "#D9922A" /* Deeper butter for hovers */,
+        /* ---- Farmer's Dairy brand palette (from client's product photography):
+               deep forest green primary + warm amber accent on a soft cream canvas.
+               Sampled directly from the wood-pressed-groundnut-oil packaging. ---- */
+        milk: "#FBEBD1" /* Soft warm cream canvas — page background */,
+        "milk-deep": "#F5DBAE" /* Deeper cream for banding */,
+        cloud: "#FFFBF3" /* Near-white surface for cards */,
+        pine: "#0F2E0A" /* Deep forest ink — dark sections */,
+        "pine-soft": "#204B14" /* Softer forest for large fills */,
+        teal: "#1C4610" /* Primary brand green (from Coming Soon stamp) */,
+        "teal-bright": "#2D6014" /* Brighter forest for highlights/hovers */,
+        butter: "#F9BB6A" /* Amber accent (from oil bottle backdrop) */,
+        "butter-deep": "#E89A47" /* Deeper amber for hovers */,
         clay: "#C36A44" /* Warm terracotta for tertiary accents */,
-        ink: "#12211F" /* Near-black teal for display type */,
-        "ink-soft": "#3B4E4B" /* Muted body text */,
+        ink: "#12210A" /* Near-black forest for display type */,
+        "ink-soft": "#3B4E32" /* Muted body text */,
 
         /* ---- Legacy aliases (remapped to the new palette) so existing
            shop/cart/checkout/legal pages inherit the reboot automatically ---- */
-        bg: "#F2F1EA",
-        "card-bg": "#FBFBF7",
-        "mint-light": "#DCEBE8",
-        mint: "#3FA093",
-        green: "#2E7D74",
-        "green-deep": "#0F2E2B",
-        text: "#3B4E4B",
-        cream: "#FBFBF7",
-        gold: "#F0B23E",
+        bg: "#FBEBD1",
+        "card-bg": "#FFFBF3",
+        "mint-light": "#F5DBAE",
+        mint: "#2D6014",
+        green: "#1C4610",
+        "green-deep": "#0F2E0A",
+        text: "#3B4E32",
+        cream: "#FFFBF3",
+        gold: "#F9BB6A",
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -93,11 +95,11 @@ const config: Config = {
         tightest: "-0.045em",
       },
       boxShadow: {
-        soft: "0 1px 2px rgba(15,46,43,0.04), 0 10px 30px -14px rgba(15,46,43,0.16)",
+        soft: "0 1px 2px rgba(15,46,10,0.04), 0 10px 30px -14px rgba(15,46,10,0.16)",
         lifted:
-          "0 2px 6px rgba(15,46,43,0.06), 0 30px 60px -22px rgba(15,46,43,0.30)",
-        glow: "0 0 60px -10px rgba(63,160,147,0.55)",
-        butter: "0 14px 30px -14px rgba(217,146,42,0.6)",
+          "0 2px 6px rgba(15,46,10,0.06), 0 30px 60px -22px rgba(15,46,10,0.30)",
+        glow: "0 0 60px -10px rgba(45,96,20,0.55)",
+        butter: "0 14px 30px -14px rgba(232,154,71,0.6)",
       },
       transitionTimingFunction: {
         "out-expo": "cubic-bezier(0.16, 1, 0.3, 1)",
