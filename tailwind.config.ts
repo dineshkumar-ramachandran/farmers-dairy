@@ -43,13 +43,17 @@ const config: Config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        // Custom color palette inspired by Organic Valley
-        bg: "#f8faf6" /* Soft cream-white background */,
-        "card-bg": "#ffffff" /* Pure white for cards */,
-        "mint-light": "#e8f5e8" /* Very light green for subtle accents */,
-        mint: "#7fb069" /* Fresh green for highlights */,
-        green: "#2d5016" /* Deep forest green for buttons/CTAs */,
-        text: "#2c3e2d" /* Dark green-gray for text */,
+        // Farmer's Dairy brand palette — sampled from the wood-pressed
+        // groundnut oil packaging. Deep forest green + warm amber cream.
+        bg: "#FBEBD1" /* Soft warm cream page background (tinted amber) */,
+        "card-bg": "#FFFBF3" /* Near-white surface for cards */,
+        "mint-light": "#F5DBAE" /* Light amber for chips / subtle accents */,
+        mint: "#2D6014" /* Medium forest green for hovers */,
+        green: "#1C4610" /* Primary brand green (from Coming Soon stamp) */,
+        "green-deep": "#0F2E0A" /* Deep forest ink */,
+        text: "#3B4E32" /* Muted body text */,
+        butter: "#F9BB6A" /* Amber accent (from oil-bottle backdrop) */,
+        "butter-deep": "#E89A47" /* Deeper amber for hovers */,
       },
       borderRadius: {
         lg: "var(--radius)",

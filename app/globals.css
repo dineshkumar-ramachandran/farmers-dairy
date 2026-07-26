@@ -40,13 +40,17 @@ body {
     --chart-5: 27 87% 67%;
     --radius: 0.5rem;
 
-    /* Custom color palette inspired by Organic Valley */
-    --color-bg: #f8faf6; /* Soft cream-white background */
-    --color-card: #ffffff; /* Pure white for cards */
-    --color-mint-light: #e8f5e8; /* Very light green for subtle accents */
-    --color-mint: #7fb069; /* Fresh green for highlights */
-    --color-green: #2d5016; /* Deep forest green for buttons/CTAs */
-    --color-text: #2c3e2d; /* Dark green-gray for text */
+    /* Farmer's Dairy brand palette — sampled from the wood-pressed
+       groundnut oil packaging: deep forest green + warm amber cream. */
+    --color-bg: #FBEBD1;         /* Soft warm cream page background */
+    --color-card: #FFFBF3;       /* Near-white surface for cards */
+    --color-mint-light: #F5DBAE; /* Light amber for chips / subtle accents */
+    --color-mint: #2D6014;       /* Medium forest green for hovers */
+    --color-green: #1C4610;      /* Primary brand green (from Coming Soon stamp) */
+    --color-green-deep: #0F2E0A; /* Deep forest ink */
+    --color-text: #3B4E32;       /* Muted body text */
+    --color-butter: #F9BB6A;     /* Amber accent (from oil bottle backdrop) */
+    --color-butter-deep: #E89A47;
   }
 }
 
@@ -77,18 +81,28 @@ body {
   }
 
   .btn-primary:hover {
-    background-color: #1f3a0f;
+    background-color: var(--color-green-deep);
+  }
+
+  .btn-accent {
+    background-color: var(--color-butter);
+    color: var(--color-green-deep);
+    @apply px-6 py-3 rounded-full font-semibold transition-all duration-300 shadow-sm hover:shadow-lg transform hover:scale-105;
+  }
+  .btn-accent:hover {
+    background-color: var(--color-butter-deep);
   }
 
   .btn-secondary {
     background-color: var(--color-mint-light);
-    color: var(--color-text);
-    @apply px-6 py-3 rounded-full font-medium transition-all duration-300 border hover:border-mint;
-    border-color: var(--color-mint);
+    color: var(--color-green-deep);
+    @apply px-6 py-3 rounded-full font-medium transition-all duration-300 border;
+    border-color: var(--color-green);
   }
 
   .btn-secondary:hover {
-    background-color: var(--color-mint);
+    background-color: var(--color-green);
+    color: white;
   }
 
   .card {

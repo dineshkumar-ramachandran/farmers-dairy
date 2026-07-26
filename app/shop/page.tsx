@@ -37,49 +37,160 @@ import { useCart } from "@/components/cart-context";
 import { useRouter } from "next/navigation";
 import { HolidaySelector } from "@/components/holiday-selector";
 
-const products = [
+interface ProductVariant {
+  label: string;
+  price: number;
+}
+
+const products: any[] = [
   {
     id: 3,
     name: "Sample Pack",
     price: "35 - 60",
-    image: "/images/fd-sample-milk.png",
-    description:
-      "Try our milk with this sample pack - choose your preferred size",
+    image: "/images/sample-raw-cow-milk.png",
+    description: "Try & Taste our Milk with the Sample Pack.",
     details: {
       note1:
         "Sample pack allows you to try our fresh milk before committing to a subscription.",
-      note2: "Choose between 500ml (₹35) or 1000ml (₹60) sample bottles.",
-      categories: ["Booking", "Fresh Cow Milk", "Sample"],
+      note2: "Choose between 500ml (₹35) or 1000ml (₹60) sample packs.",
+      categories: ["Booking", "Raw Cow Milk", "Sample"],
     },
     isSample: true,
+    ctaLabel: "Get Sample",
+    variantLabel: "Choose Quantity",
+    variants: [
+      { label: "500ml", price: 35 },
+      { label: "1000ml", price: 60 },
+    ] as ProductVariant[],
   },
   {
     id: 1,
-    name: "Fresh Cow Milk 500ml",
+    name: "Raw Cow Milk 500ml",
     price: 35,
-    image: "/images/fd-500ml-milk.png",
-    description: "Pure farm-fresh cow milk in convenient 500ml bottles",
+    image: "/images/500ml-raw-cow-milk.png",
+    description: "Each drop of Farmer's Dairy milk carries Purity & Trust.",
     details: {
       note1:
         "If the milk is not delivered to you on any day after weekly or monthly subscription, the payments will be adjusted to the upcoming week or month.",
       note2:
         "Kindly note if you are ordering after 5 AM on the respective day please select the next day as your first day.",
-      categories: ["Booking", "Fresh Cow Milk"],
+      categories: ["Booking", "Raw Cow Milk"],
     },
   },
   {
     id: 2,
-    name: "Fresh Cow Milk 1000ml",
+    name: "Raw Cow Milk 1000ml",
     price: 60,
-    image: "/images/fd-1000ml-milk.png",
-    description: "Pure farm-fresh cow milk in family-size 1000ml bottles",
+    image: "/images/1000ml-raw-cow-milk.png",
+    description: "Each drop of Farmer's Dairy milk carries Purity & Trust.",
     details: {
       note1:
         "If the milk is not delivered to you on any day after weekly or monthly subscription, the payments will be adjusted to the upcoming week or month.",
       note2:
         "Kindly note if you are ordering after 5 AM on the respective day please select the next day as your first day.",
-      categories: ["Booking", "Fresh Cow Milk"],
+      categories: ["Booking", "Raw Cow Milk"],
     },
+  },
+  {
+    id: 4,
+    name: "Organic Cow Ghee",
+    price: "629 - 1249",
+    image: "/images/organic-ghee.png",
+    description: "Pure organic cow ghee, slow-made from farm-fresh milk.",
+    details: {
+      note1:
+        "Our organic cow ghee is prepared from pure farm-fresh cow milk without any additives.",
+      note2: "Choose between 1/2 litre (₹629) or 1 litre (₹1249) jars.",
+      categories: ["Ghee", "Organic"],
+    },
+    isSample: true,
+    ctaLabel: "Order Now",
+    variantLabel: "Choose Size",
+    variants: [
+      { label: "1/2 litre", price: 629 },
+      { label: "1 litre", price: 1249 },
+    ] as ProductVariant[],
+  },
+  {
+    id: 5,
+    name: "Organic Paneer",
+    price: "159 - 719",
+    image: "/images/organic-paneer.png",
+    description:
+      "Soft and Healthy Paneer made from Organic Cow milk & Lemon. Comes with paneer water inside.",
+    details: {
+      note1: "Our paneer is made fresh from pure cow milk for the softest texture.",
+      note2: "Choose between 200g (₹159), 400g (₹299) or 1kg (₹719) packs.",
+      categories: ["Paneer", "Organic"],
+    },
+    isSample: true,
+    ctaLabel: "Order Now",
+    variantLabel: "Choose Weight",
+    variants: [
+      { label: "200g", price: 159 },
+      { label: "400g", price: 299 },
+      { label: "1kg", price: 719 },
+    ] as ProductVariant[],
+  },
+  {
+    id: 6,
+    name: "Organic Butter",
+    price: "249 - 449",
+    image: "/images/organic-butter.png",
+    description:
+      "Churned from Organic Cream. Soft and creamy butter for tasty dosas.",
+    details: {
+      note1:
+        "Our organic butter is churned from pure farm-fresh cream — rich, wholesome and additive-free.",
+      note2: "Choose between 250g (₹249) or 500g (₹449) packs.",
+      categories: ["Butter", "Organic"],
+    },
+    isSample: true,
+    ctaLabel: "Order Now",
+    variantLabel: "Choose Size",
+    variants: [
+      { label: "250g", price: 249 },
+      { label: "500g", price: 449 },
+    ] as ProductVariant[],
+  },
+  {
+    id: 7,
+    name: "Wood Pressed Groundnut Oil",
+    price: "Coming Soon",
+    image: "/images/wood-pressed-groundnut-oil.png",
+    description: "Cold wood-pressed groundnut oil — coming soon.",
+    details: {
+      note1: "Traditional wood-pressed (chekku) groundnut oil, made the slow, natural way.",
+      note2: "Launching soon — stay tuned.",
+      categories: ["Oil", "Organic"],
+    },
+    comingSoon: true,
+  },
+  {
+    id: 8,
+    name: "Wood Pressed Coconut Oil",
+    price: "Coming Soon",
+    image: "/images/coconut-oil.png",
+    description: "Cold wood-pressed coconut oil — coming soon.",
+    details: {
+      note1: "Traditional wood-pressed (chekku) coconut oil, made the slow, natural way.",
+      note2: "Launching soon — stay tuned.",
+      categories: ["Oil", "Organic"],
+    },
+    comingSoon: true,
+  },
+  {
+    id: 9,
+    name: "Healthy Mix",
+    price: "Coming Soon",
+    image: "/images/health-mix.png",
+    description: "Nourishing multi-grain mix — coming soon.",
+    details: {
+      note1: "A wholesome multi-grain mix crafted for daily nutrition.",
+      note2: "Launching soon — stay tuned.",
+      categories: ["Mix", "Wellness"],
+    },
+    comingSoon: true,
   },
 ];
 
@@ -101,8 +212,31 @@ export default function ShopPage() {
     [key: number]: boolean;
   }>({});
 
-  const { addToCart } = useCart();
+  const { addToCart, items } = useCart();
   const router = useRouter();
+
+  // Resolve the price for a product, honouring its selected variant.
+  const getVariantPrice = (product: any, selected?: string): number => {
+    if (product.variants?.length) {
+      const v =
+        product.variants.find((x: ProductVariant) => x.label === selected) ??
+        product.variants[0];
+      return v.price;
+    }
+    return typeof product.price === "number" ? product.price : 0;
+  };
+
+  // Selected variant for a product (or its first variant if none picked).
+  const selectedVariant = (product: any): string | undefined =>
+    product.variants?.length
+      ? sampleSizes[product.id] ?? product.variants[0].label
+      : sampleSizes[product.id];
+
+  // Is this product (with its currently-selected size) already in the cart?
+  const isInCart = (product: any) =>
+    items.some(
+      (i) => i.id === product.id && i.sampleSize === selectedVariant(product)
+    );
 
   // Silences Chrome’s benign ResizeObserver loop error so it never reaches the console
   useEffect(() => {
@@ -182,8 +316,8 @@ export default function ShopPage() {
     holidayCount = 0
   ) => {
     let price = product.price;
-    if (product.isSample && sampleSizes[product.id]) {
-      price = sampleSizes[product.id] === "500ml" ? 35 : 60;
+    if (product.isSample) {
+      price = getVariantPrice(product, sampleSizes[product.id]);
     }
 
     if (subscription === "custom" && dateRange?.from && dateRange?.to) {
@@ -230,7 +364,10 @@ export default function ShopPage() {
     const subscription = subscriptions[product.id] || "weekly";
     const deliveryDate = deliveryDates[product.id];
     const dateRange = dateRanges[product.id];
-    const sampleSize = sampleSizes[product.id];
+    // Fall back to the first variant so the cart always records a size.
+    const sampleSize = product.variants?.length
+      ? sampleSizes[product.id] ?? product.variants[0].label
+      : sampleSizes[product.id];
     const productHolidays = holidays[product.id] || [];
 
     // Check if date is selected for non-sample products
@@ -250,8 +387,8 @@ export default function ShopPage() {
     }
 
     let price = product.price;
-    if (product.isSample && sampleSize) {
-      price = sampleSize === "500ml" ? 35 : 60;
+    if (product.isSample) {
+      price = getVariantPrice(product, sampleSize);
     }
 
     const totalPrice = calculateTotalPrice(
@@ -365,7 +502,38 @@ export default function ShopPage() {
         </Dialog>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {products.map((product, index) => (
+          {products.map((product, index) =>
+            product.comingSoon ? (
+              <Card
+                key={product.id}
+                className="card border-0 shadow-lg opacity-95">
+                <CardHeader className="text-center pb-4">
+                  <div className="w-full h-64 bg-mint-light rounded-xl mb-4 flex items-center justify-center p-4">
+                    <img
+                      src={product.image || "/placeholder.svg"}
+                      alt={product.name}
+                      className="max-w-full max-h-full object-contain opacity-90"
+                    />
+                  </div>
+                  <CardTitle className="text-xl text-text">
+                    {product.name}
+                  </CardTitle>
+                  <p className="text-text text-sm opacity-80">
+                    {product.description}
+                  </p>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex flex-col items-center gap-3 py-10">
+                    <span className="inline-flex items-center px-4 py-1.5 rounded-full bg-butter/25 text-green-deep font-bold text-sm uppercase tracking-wider">
+                      Coming Soon
+                    </span>
+                    <p className="text-sm text-text/70 text-center px-4">
+                      {product.details.note2}
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
+            ) : (
             <Card key={product.id} className="card border-0 shadow-lg">
               <CardHeader className="text-center pb-4">
                 <div className="w-full h-64 bg-mint-light rounded-xl mb-4 flex items-center justify-center p-4">
@@ -427,14 +595,14 @@ export default function ShopPage() {
               </CardHeader>
 
               <CardContent className="space-y-4">
-                {/* Sample Pack Size Selection */}
-                {product.isSample && (
+                {/* Variant selector — sample pack, ghee, paneer, butter */}
+                {product.variants?.length && (
                   <div>
                     <label className="block text-sm font-medium text-text mb-2">
-                      Choose Quantity
+                      {product.variantLabel || "Choose Size"}
                     </label>
                     <Select
-                      value={sampleSizes[product.id] || "500ml"}
+                      value={sampleSizes[product.id] || product.variants[0].label}
                       onValueChange={(value) =>
                         setSampleSizes((prev) => ({
                           ...prev,
@@ -442,11 +610,14 @@ export default function ShopPage() {
                         }))
                       }>
                       <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Select quantity" />
+                        <SelectValue placeholder="Select option" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="500ml">500ml - ₹35</SelectItem>
-                        <SelectItem value="1000ml">1000ml - ₹60</SelectItem>
+                        {product.variants.map((v: ProductVariant) => (
+                          <SelectItem key={v.label} value={v.label}>
+                            {v.label} - ₹{v.price}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                   </div>
@@ -688,7 +859,7 @@ export default function ShopPage() {
                     <Button
                       onClick={() => handleGetSample(product)}
                       className="btn-primary w-full">
-                      Get Sample
+                      {product.ctaLabel || "Get Sample"}
                     </Button>
                   ) : (
                     <Button
@@ -698,18 +869,29 @@ export default function ShopPage() {
                       Subscribe Now
                     </Button>
                   )}
-                  <Button
-                    onClick={() => handleAddToCart(product)}
-                    variant="outline"
-                    className="w-full hover:bg-mint-light transition-colors duration-300"
-                    disabled={!product.isSample && !isDateSelected(product.id)}>
-                    <ShoppingCart className="w-4 h-4 mr-2" />
-                    Add to Cart
-                  </Button>
+                  {isInCart(product) ? (
+                    <Button
+                      onClick={() => router.push("/cart")}
+                      variant="outline"
+                      className="w-full border-green text-green hover:bg-mint-light transition-colors duration-300">
+                      <ShoppingCart className="w-4 h-4 mr-2" />
+                      Go to Cart
+                    </Button>
+                  ) : (
+                    <Button
+                      onClick={() => handleAddToCart(product)}
+                      variant="outline"
+                      className="w-full hover:bg-mint-light transition-colors duration-300"
+                      disabled={!product.isSample && !isDateSelected(product.id)}>
+                      <ShoppingCart className="w-4 h-4 mr-2" />
+                      Add to Cart
+                    </Button>
+                  )}
                 </div>
               </CardContent>
             </Card>
-          ))}
+            )
+          )}
         </div>
       </div>
     </div>

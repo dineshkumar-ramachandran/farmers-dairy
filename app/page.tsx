@@ -15,22 +15,74 @@ const featuredProducts = [
     id: 3,
     name: "Sample Pack",
     price: "35 - 60",
-    image: "/images/fd-sample-milk.png",
-    description: "Try our milk with this sample pack",
+    image: "/images/sample-raw-cow-milk.png",
+    description: "Try & Taste our Milk with the Sample Pack.",
+    comingSoon: false,
   },
   {
     id: 1,
-    name: "Fresh Cow Milk 500ml",
+    name: "Raw Cow Milk 500ml",
     price: 35,
-    image: "/images/fd-500ml-milk.png",
-    description: "Pure farm-fresh cow milk in convenient 500ml bottles",
+    image: "/images/500ml-raw-cow-milk.png",
+    description: "Each drop of Farmer's Dairy milk carries Purity & Trust.",
+    comingSoon: false,
   },
   {
     id: 2,
-    name: "Fresh Cow Milk 1000ml",
+    name: "Raw Cow Milk 1000ml",
     price: 60,
-    image: "/images/fd-1000ml-milk.png",
-    description: "Pure farm-fresh cow milk in family-size 1000ml bottles",
+    image: "/images/1000ml-raw-cow-milk.png",
+    description: "Each drop of Farmer's Dairy milk carries Purity & Trust.",
+    comingSoon: false,
+  },
+  {
+    id: 4,
+    name: "Organic Cow Ghee",
+    price: "629 - 1249",
+    image: "/images/organic-ghee.png",
+    description: "Pure organic cow ghee, slow-made from farm-fresh milk.",
+    comingSoon: false,
+  },
+  {
+    id: 5,
+    name: "Organic Paneer",
+    price: "159 - 719",
+    image: "/images/organic-paneer.png",
+    description:
+      "Soft and Healthy Paneer made from Organic Cow milk & Lemon. Comes with paneer water inside.",
+    comingSoon: false,
+  },
+  {
+    id: 6,
+    name: "Organic Butter",
+    price: "249 - 449",
+    image: "/images/organic-butter.png",
+    description: "Churned from Organic Cream. Soft and creamy butter for tasty dosas.",
+    comingSoon: false,
+  },
+  {
+    id: 7,
+    name: "Wood Pressed Groundnut Oil",
+    price: "Coming Soon",
+    image: "/images/wood-pressed-groundnut-oil.png",
+    description: "Cold wood-pressed groundnut oil — coming soon.",
+    comingSoon: true,
+  },
+  {
+    id: 8,
+    name: "Wood Pressed Coconut Oil",
+    price: "Coming Soon",
+    image: "/images/coconut-oil.png",
+    description: "Cold wood-pressed coconut oil — coming soon.",
+    comingSoon: true,
+  },
+  {
+    id: 9,
+    name: "Healthy Mix",
+    price: "Coming Soon",
+    image: "/images/health-mix.png",
+    description: "Nourishing multi-grain mix — coming soon.",
+    comingSoon: true,
   },
 ];
 
@@ -39,7 +91,7 @@ const testimonials = [
     name: "MS. NIRMALA",
     location: "Hosur",
     rating: 5,
-    text: "Fat and Thickness of the milk is very good. Bottles are also well Cleaned.",
+    text: "Fat and Thickness of the milk is very good. Packets are also well sealed.",
   },
   {
     name: "MR. LOKESH",
@@ -69,39 +121,47 @@ export default function HomePage() {
               Our Fresh Products
             </h2>
             <p className="text-lg text-text max-w-2xl mx-auto animate-fade-in">
-              Choose from our selection of farm-fresh milk products delivered
-              straight to your doorstep.
+              From our Farm to your Home. Explore our wide range of Pure and
+              Healthy Dairy Products.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
             {featuredProducts.map((product, index) => (
               <div
                 key={product.id}
-                className="card text-center animate-slide-up"
-                style={{ animationDelay: `${index * 0.1}s` }}>
-                <div className="w-full h-48 bg-mint-light rounded-xl mb-4 flex items-center justify-center p-4">
+                className="card text-center animate-slide-up flex flex-col"
+                style={{ animationDelay: `${index * 0.08}s` }}>
+                <div className="w-full h-40 sm:h-48 bg-mint-light rounded-xl mb-4 flex items-center justify-center p-3 sm:p-4">
                   <img
                     src={product.image || "/placeholder.svg"}
                     alt={product.name}
                     className="max-w-full max-h-full object-contain"
                   />
                 </div>
-                <h3 className="text-xl font-semibold text-text mb-2">
+                <h3 className="text-base sm:text-xl font-semibold text-text mb-2">
                   {product.name}
                 </h3>
-                <p className="text-text opacity-80 mb-4">
+                <p className="text-sm sm:text-base text-text opacity-80 mb-4 flex-1">
                   {product.description}
                 </p>
-                <div className="text-2xl font-bold text-green mb-4">
-                  ₹{product.price}
-                </div>
-                <Link
-                  href="/shop"
-                  className="btn-primary inline-flex items-center">
-                  Buy Now
-                  <ArrowRight className="ml-2 w-4 h-4" />
-                </Link>
+                {product.comingSoon ? (
+                  <span className="inline-flex items-center justify-center px-4 py-2 rounded-full bg-butter/20 text-green-deep text-xs sm:text-sm font-bold uppercase tracking-wider">
+                    Coming Soon
+                  </span>
+                ) : (
+                  <>
+                    <div className="text-xl sm:text-2xl font-bold text-green mb-4">
+                      ₹{product.price}
+                    </div>
+                    <Link
+                      href="/shop"
+                      className="btn-primary inline-flex items-center justify-center text-sm">
+                      Buy Now
+                      <ArrowRight className="ml-2 w-4 h-4" />
+                    </Link>
+                  </>
+                )}
               </div>
             ))}
           </div>
@@ -125,7 +185,7 @@ export default function HomePage() {
             cow milk without adding any water or other preservatives. Farmer's
             Dairy is a small initiative that helps in benefiting both farmer's
             and the consumer with good price and good health. In this busy
-            running world we deliver milk through eco friendly glass bottles to
+            running world we deliver milk through eco friendly packets to
             your doorstep.
           </p>
         </div>
