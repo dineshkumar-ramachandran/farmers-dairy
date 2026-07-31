@@ -743,7 +743,7 @@ export default function CheckoutPage() {
                           {item.subscription === "sample"
                             ? item.codEligible
                               ? "One-time sample"
-                              : "One-time purchase"
+                              : "" /* non-milk one-time — no label needed */
                             : `${item.subscription} subscription`}
                         </p>
 

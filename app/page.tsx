@@ -138,13 +138,15 @@ export default function HomePage() {
             {featuredProducts.map((product, index) => (
               <div
                 key={product.id}
-                className="card text-center animate-slide-up flex flex-col"
+                className="card text-center animate-slide-up flex flex-col group"
                 style={{ animationDelay: `${index * 0.08}s` }}>
-                <div className="w-full h-40 sm:h-48 bg-mint-light rounded-xl mb-4 flex items-center justify-center p-3 sm:p-4">
+                {/* Frameless image container — matches shop for consistency */}
+                <div className="w-full h-56 sm:h-72 mb-3 flex items-center justify-center">
                   <img
                     src={product.image || "/placeholder.svg"}
                     alt={product.name}
-                    className="max-w-full max-h-full object-contain"
+                    loading="lazy"
+                    className="max-w-full max-h-full object-contain transition-transform duration-300 ease-out group-hover:scale-105"
                   />
                 </div>
                 <h3 className="text-base sm:text-xl font-semibold text-text mb-2">
@@ -164,9 +166,10 @@ export default function HomePage() {
                     </div>
                     <Link
                       href="/shop"
-                      className="btn-primary inline-flex items-center justify-center text-sm">
+                      aria-label={`Buy ${product.name}`}
+                      className="btn-primary inline-flex items-center justify-center text-sm min-h-[44px]">
                       Buy Now
-                      <ArrowRight className="ml-2 w-4 h-4" />
+                      <ArrowRight className="ml-2 w-4 h-4" aria-hidden="true" />
                     </Link>
                   </>
                 )}

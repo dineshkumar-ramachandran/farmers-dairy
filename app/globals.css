@@ -58,9 +58,20 @@ body {
   * {
     @apply border-border;
   }
+
+  html {
+    scroll-behavior: smooth;
+    /* 16px base prevents iOS Safari from zooming on input focus. */
+    font-size: 16px;
+    -webkit-text-size-adjust: 100%;
+  }
+
   body {
     @apply text-text;
     background-color: var(--color-bg);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   h1,
@@ -70,24 +81,71 @@ body {
   h5,
   h6 {
     @apply text-text;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+  }
+
+  /* Accessibility: strong, brand-coloured focus ring on every interactive
+     element. Uses :focus-visible so mouse clicks don't show the ring. */
+  :focus-visible {
+    outline: 2px solid var(--color-green);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+  /* Buttons already have a rounded shape — reinforce the ring for keyboards. */
+  button:focus-visible,
+  a:focus-visible,
+  [role="button"]:focus-visible {
+    outline-offset: 3px;
+  }
+
+  /* Brand-coloured selection. */
+  ::selection {
+    background-color: var(--color-green);
+    color: #ffffff;
+  }
+
+  /* Respect the visitor's motion preference: kill all decorative motion
+     and shorten transitions so nothing flashes or shifts. */
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
   }
 }
 
 @layer components {
+  /* Buttons — 44×44 minimum for reliable touch, transform on hover (GPU-only,
+     no layout shift), a subtle press effect on active. */
   .btn-primary {
     background-color: var(--color-green);
-    color: white;
-    @apply px-6 py-3 rounded-full font-medium transition-all duration-300 shadow-sm hover:shadow-lg transform hover:scale-105;
+    color: #ffffff;
+    min-height: 44px;
+    @apply inline-flex items-center justify-center px-6 py-3 rounded-full font-medium shadow-sm transition-all duration-200 ease-out hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 active:shadow-sm;
   }
-
   .btn-primary:hover {
     background-color: var(--color-green-deep);
+  }
+  .btn-primary:disabled {
+    opacity: 0.5;
+    transform: none;
+    cursor: not-allowed;
+    box-shadow: none;
   }
 
   .btn-accent {
     background-color: var(--color-butter);
     color: var(--color-green-deep);
-    @apply px-6 py-3 rounded-full font-semibold transition-all duration-300 shadow-sm hover:shadow-lg transform hover:scale-105;
+    min-height: 44px;
+    @apply inline-flex items-center justify-center px-6 py-3 rounded-full font-semibold shadow-sm transition-all duration-200 ease-out hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 active:shadow-sm;
   }
   .btn-accent:hover {
     background-color: var(--color-butter-deep);
@@ -96,53 +154,54 @@ body {
   .btn-secondary {
     background-color: var(--color-mint-light);
     color: var(--color-green-deep);
-    @apply px-6 py-3 rounded-full font-medium transition-all duration-300 border;
+    border: 1px solid var(--color-green);
+    min-height: 44px;
+    @apply inline-flex items-center justify-center px-6 py-3 rounded-full font-medium transition-all duration-200 ease-out hover:-translate-y-0.5 active:translate-y-0;
+  }
+  .btn-secondary:hover {
+    background-color: var(--color-green);
+    color: #ffffff;
+  }
+
+  /* Cards — subtle lift on hover using transform-only (no layout shift, no
+     scale-jitter on text) and a soft shadow escalation. */
+  .card {
+    background-color: var(--color-card);
+    border: 1px solid rgba(28, 70, 16, 0.08);
+    box-shadow: 0 1px 2px rgba(15, 46, 10, 0.04);
+    @apply rounded-2xl p-6 transition-all duration-300 ease-out;
+  }
+  .card:hover {
+    border-color: rgba(28, 70, 16, 0.35);
+    box-shadow: 0 8px 24px -6px rgba(15, 46, 10, 0.18);
+    transform: translateY(-4px);
+  }
+  .card:focus-within {
     border-color: var(--color-green);
   }
 
-  .btn-secondary:hover {
-    background-color: var(--color-green);
-    color: white;
-  }
-
-  .card {
-    background-color: var(--color-card);
-    @apply rounded-2xl shadow-sm p-6 transition-all duration-300 hover:shadow-xl hover:scale-105;
-    border: 1px solid var(--color-mint-light);
-  }
-
-  .card:hover {
-    border-color: var(--color-mint);
-  }
-
   .card-hover {
-    @apply transform transition-all duration-300 hover:scale-105 hover:shadow-lg;
+    @apply transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-lg;
   }
 
   .icon-hover {
-    @apply transition-all duration-300 hover:scale-110;
     color: var(--color-green);
-  }
-
-  .icon-hover:hover {
-    color: var(--color-green);
+    @apply transition-transform duration-200 ease-out hover:scale-110;
   }
 }
 
 /* Custom scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 10px;
 }
-
 ::-webkit-scrollbar-track {
   background: var(--color-mint-light);
 }
-
 ::-webkit-scrollbar-thumb {
   background: var(--color-green);
-  border-radius: 4px;
+  border-radius: 5px;
+  border: 2px solid var(--color-mint-light);
 }
-
 ::-webkit-scrollbar-thumb:hover {
-  background: #1f3a0f;
+  background: var(--color-green-deep);
 }
