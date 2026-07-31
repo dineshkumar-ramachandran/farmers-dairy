@@ -154,21 +154,34 @@ const products: any[] = [
     ] as ProductVariant[],
   },
   {
-    id: 7,
-    name: "Wood Pressed Groundnut Oil",
+    id: 10,
+    name: "Honey",
     price: "Coming Soon",
-    image: "/images/wood-pressed-groundnut-oil.png",
-    description: "Cold wood-pressed groundnut oil — coming soon.",
+    image: "/images/honey.png",
+    description: "Raw, unprocessed, unfiltered honey — coming soon.",
     details: {
-      note1: "Traditional wood-pressed (chekku) groundnut oil, made the slow, natural way.",
+      note1: "From happy bees to healthy families — 100% raw, unprocessed and unfiltered.",
       note2: "Launching soon — stay tuned.",
-      categories: ["Oil", "Organic"],
+      categories: ["Honey", "Raw"],
+    },
+    comingSoon: true,
+  },
+  {
+    id: 9,
+    name: "Nutri Mix",
+    price: "Coming Soon",
+    image: "/images/nutri-mix.png",
+    description: "Nourishing multi-grain nutri mix — coming soon.",
+    details: {
+      note1: "A wholesome multi-grain nutri mix crafted for daily nutrition.",
+      note2: "Launching soon — stay tuned.",
+      categories: ["Mix", "Wellness"],
     },
     comingSoon: true,
   },
   {
     id: 8,
-    name: "Wood Pressed Coconut Oil",
+    name: "Coconut Oil",
     price: "Coming Soon",
     image: "/images/coconut-oil.png",
     description: "Cold wood-pressed coconut oil — coming soon.",
@@ -180,15 +193,15 @@ const products: any[] = [
     comingSoon: true,
   },
   {
-    id: 9,
-    name: "Healthy Mix",
+    id: 7,
+    name: "Groundnut Oil",
     price: "Coming Soon",
-    image: "/images/health-mix.png",
-    description: "Nourishing multi-grain mix — coming soon.",
+    image: "/images/groundnut-oil.png",
+    description: "Cold wood-pressed groundnut oil — coming soon.",
     details: {
-      note1: "A wholesome multi-grain mix crafted for daily nutrition.",
+      note1: "Traditional wood-pressed (chekku) groundnut oil, made the slow, natural way.",
       note2: "Launching soon — stay tuned.",
-      categories: ["Mix", "Wellness"],
+      categories: ["Oil", "Organic"],
     },
     comingSoon: true,
   },
@@ -511,7 +524,7 @@ export default function ShopPage() {
                 key={product.id}
                 className="card border-0 shadow-lg opacity-95">
                 <CardHeader className="text-center pb-4">
-                  <div className="w-full h-64 bg-mint-light rounded-xl mb-4 flex items-center justify-center p-4">
+                  <div className="w-full h-80 sm:h-96 mb-2 flex items-center justify-center">
                     <img
                       src={product.image || "/placeholder.svg"}
                       alt={product.name}
@@ -539,7 +552,7 @@ export default function ShopPage() {
             ) : (
             <Card key={product.id} className="card border-0 shadow-lg">
               <CardHeader className="text-center pb-4">
-                <div className="w-full h-64 bg-mint-light rounded-xl mb-4 flex items-center justify-center p-4">
+                <div className="w-full h-80 sm:h-96 mb-2 flex items-center justify-center">
                   <img
                     src={product.image || "/placeholder.svg"}
                     alt={product.name}

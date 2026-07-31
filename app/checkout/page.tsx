@@ -177,16 +177,27 @@ export default function CheckoutPage() {
       .join("\n")
   }
 
-  // Calculate total price with validation
-  const getValidatedTotalPrice = () => {
+  /* ---- Shipping ---- Farmer's Dairy delivers free in Hosur (pincodes 6351xx);
+     addresses outside Hosur district are charged a flat ₹99. */
+  const HOSUR_PINCODE_PREFIX = "6351"
+  const OUTSIDE_HOSUR_SHIPPING = 99
+
+  const getSubtotal = () => {
     const total = getTotalPrice()
-    console.log("Cart total calculation:", {
-      items: items.length,
-      total,
-      totalType: typeof total,
-      isValid: total > 0,
-    })
     return total > 0 ? total : 0
+  }
+
+  const getShippingFee = () => {
+    if (getSubtotal() <= 0) return 0
+    const pin = customerDetails.pincode.trim()
+    if (pin.length !== 6) return 0 // charge shows up once a valid pincode is entered
+    return pin.startsWith(HOSUR_PINCODE_PREFIX) ? 0 : OUTSIDE_HOSUR_SHIPPING
+  }
+
+  // Total the customer actually pays (subtotal + shipping).
+  const getValidatedTotalPrice = () => {
+    const sub = getSubtotal()
+    return sub > 0 ? sub + getShippingFee() : 0
   }
 
   // Create Razorpay order on server
@@ -729,7 +740,11 @@ export default function CheckoutPage() {
                         <h4 className="font-medium text-text">{item.name}</h4>
                         {item.sampleSize && <p className="text-sm text-text opacity-70">Size: {item.sampleSize}</p>}
                         <p className="text-sm text-text opacity-70 capitalize">
-                          {item.subscription === "sample" ? "One-time sample" : `${item.subscription} subscription`}
+                          {item.subscription === "sample"
+                            ? item.codEligible
+                              ? "One-time sample"
+                              : "One-time purchase"
+                            : `${item.subscription} subscription`}
                         </p>
 
                         {/* Subscription dates - improved layout */}
@@ -761,7 +776,7 @@ export default function CheckoutPage() {
                         <p className="font-medium">
                           ₹{item.totalPrice || item.price} × {item.subscription === "sample" ? 1 : item.totalDays || 1}{" "}
                           {item.subscription === "sample"
-                            ? "sample"
+                            ? item.codEligible ? "sample" : "unit"
                             : item.totalDays && item.totalDays > 1
                               ? "days"
                               : "day"}
@@ -769,10 +784,14 @@ export default function CheckoutPage() {
                         <p className="text-sm text-text opacity-70">
                           ₹{((item.totalPrice || item.price) * item.quantity).toFixed(2)}
                         </p>
-                        <div className="text-xs text-text opacity-70 mt-1">
-                          <div>Per day cost: ₹{item.price}</div>
-                          <div>for {item.name.includes("500ml") ? "500ml" : "1000ml"} milk</div>
-                        </div>
+                        {/* Per-day breakdown only makes sense for actual milk subscriptions.
+                            Skip it for one-time purchases (ghee/paneer/butter/sample). */}
+                        {item.subscription !== "sample" && item.name.toLowerCase().includes("milk") && (
+                          <div className="text-xs text-text opacity-70 mt-1">
+                            <div>Per day cost: ₹{item.price}</div>
+                            <div>for {item.name.includes("500ml") ? "500ml" : "1000ml"} milk</div>
+                          </div>
+                        )}
                       </div>
                     </div>
                     {index < items.length - 1 && <div className="h-4"></div>}
@@ -782,12 +801,19 @@ export default function CheckoutPage() {
                 <div className="pt-4 space-y-2">
                   <div className="flex justify-between">
                     <span className="text-text">Subtotal:</span>
-                    <span className="font-semibold">₹{totalPrice.toFixed(2)}</span>
+                    <span className="font-semibold">₹{getSubtotal().toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-text">Delivery:</span>
-                    <span className="font-semibold text-green">Free</span>
+                    <span className={`font-semibold ${getShippingFee() > 0 ? "text-text" : "text-green"}`}>
+                      {getShippingFee() > 0 ? `₹${getShippingFee().toFixed(2)}` : "Free"}
+                    </span>
                   </div>
+                  {getShippingFee() > 0 && (
+                    <p className="text-xs text-text/70 -mt-1">
+                      Standard delivery fee for addresses outside Hosur district.
+                    </p>
+                  )}
                   <div className="flex justify-between text-lg font-bold pt-2">
                     <span className="text-text">Total:</span>
                     <span className="text-green">₹{totalPrice.toFixed(2)}</span>

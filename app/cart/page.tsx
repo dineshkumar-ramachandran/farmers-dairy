@@ -60,9 +60,15 @@ export default function CartPage() {
                     <div className="flex-1">
                       <h3 className="text-lg font-semibold text-earth-900">{item.name}</h3>
                       {item.sampleSize && <p className="text-sm text-sage-600">Size: {item.sampleSize}</p>}
-                      <p className="text-sm text-sage-600 capitalize">
-                        Subscription: {item.subscription === "sample" ? "One-time sample" : item.subscription}
-                      </p>
+                      {item.subscription === "sample" ? (
+                        <p className="text-sm text-sage-600">
+                          {item.codEligible ? "One-time sample" : "One-time purchase"}
+                        </p>
+                      ) : (
+                        <p className="text-sm text-sage-600 capitalize">
+                          Subscription: {item.subscription}
+                        </p>
+                      )}
 
                       {/* Date Information */}
                       {item.subscription === "custom" && item.dateRange?.from && item.dateRange?.to && (
