@@ -9,6 +9,7 @@ import {
   Quote,
 } from "lucide-react";
 import { HeroSlider } from "@/components/hero-slider";
+import { productDetails } from "@/lib/product-details";
 
 const featuredProducts = [
   {
@@ -134,24 +135,29 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
             {featuredProducts.map((product, index) => (
               <div
                 key={product.id}
                 className="card text-center animate-slide-up flex flex-col group"
                 style={{ animationDelay: `${index * 0.08}s` }}>
-                {/* Frameless image container — matches shop for consistency */}
-                <div className="w-full h-56 sm:h-72 mb-3 flex items-center justify-center">
-                  <img
-                    src={product.image || "/placeholder.svg"}
-                    alt={product.name}
-                    loading="lazy"
-                    className="max-w-full max-h-full object-contain transition-transform duration-300 ease-out group-hover:scale-105"
-                  />
-                </div>
-                <h3 className="text-base sm:text-xl font-semibold text-text mb-2">
-                  {product.name}
-                </h3>
+                {/* Image + name link to the individual product page */}
+                <Link
+                  href={`/shop/${productDetails[product.id]?.slug || ""}`}
+                  aria-label={`View details for ${product.name}`}
+                  className="block">
+                  <div className="w-full h-64 sm:h-80 md:h-96 mb-3 flex items-center justify-center">
+                    <img
+                      src={product.image || "/placeholder.svg"}
+                      alt={product.name}
+                      loading="lazy"
+                      className="max-w-full max-h-full object-contain transition-transform duration-300 ease-out group-hover:scale-105"
+                    />
+                  </div>
+                  <h3 className="text-base sm:text-xl font-semibold text-text mb-2 group-hover:text-green transition-colors">
+                    {product.name}
+                  </h3>
+                </Link>
                 <p className="text-sm sm:text-base text-text opacity-80 mb-4 flex-1">
                   {product.description}
                 </p>
@@ -165,7 +171,7 @@ export default function HomePage() {
                       ₹{product.price}
                     </div>
                     <Link
-                      href="/shop"
+                      href={`/shop/${productDetails[product.id]?.slug || ""}`}
                       aria-label={`Buy ${product.name}`}
                       className="btn-primary inline-flex items-center justify-center text-sm min-h-[44px]">
                       Buy Now

@@ -177,8 +177,9 @@ export default function CheckoutPage() {
       .join("\n")
   }
 
-  /* ---- Shipping ---- Farmer's Dairy delivers free in Hosur (pincodes 6351xx);
-     addresses outside Hosur district are charged a flat ₹99. */
+  /* ---- Shipping ---- Only Ghee and Butter incur a delivery charge
+     (₹99 flat) for addresses outside Hosur (pincodes not starting 6351).
+     Milk, Paneer, and coming-soon items ship free everywhere. */
   const HOSUR_PINCODE_PREFIX = "6351"
   const OUTSIDE_HOSUR_SHIPPING = 99
 
@@ -187,8 +188,16 @@ export default function CheckoutPage() {
     return total > 0 ? total : 0
   }
 
+  // True if the cart contains any product whose name mentions Ghee or Butter.
+  const hasShippableItem = () =>
+    items.some((i) => {
+      const n = i.name.toLowerCase()
+      return n.includes("ghee") || n.includes("butter")
+    })
+
   const getShippingFee = () => {
     if (getSubtotal() <= 0) return 0
+    if (!hasShippableItem()) return 0 // milk + paneer + samples → always free
     const pin = customerDetails.pincode.trim()
     if (pin.length !== 6) return 0 // charge shows up once a valid pincode is entered
     return pin.startsWith(HOSUR_PINCODE_PREFIX) ? 0 : OUTSIDE_HOSUR_SHIPPING

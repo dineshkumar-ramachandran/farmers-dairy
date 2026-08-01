@@ -35,7 +35,9 @@ import { format, differenceInDays, addDays } from "date-fns";
 import type { DateRange } from "react-day-picker";
 import { useCart } from "@/components/cart-context";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { HolidaySelector } from "@/components/holiday-selector";
+import { productDetails } from "@/lib/product-details";
 
 interface ProductVariant {
   label: string;
@@ -517,26 +519,37 @@ export default function ShopPage() {
           </DialogContent>
         </Dialog>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-2 gap-6 lg:gap-8">
           {products.map((product, index) =>
             product.comingSoon ? (
               <Card
                 key={product.id}
                 className="card border-0 shadow-lg opacity-95">
                 <CardHeader className="text-center pb-4">
-                  <div className="w-full h-80 sm:h-96 mb-2 flex items-center justify-center">
-                    <img
-                      src={product.image || "/placeholder.svg"}
-                      alt={product.name}
-                      className="max-w-full max-h-full object-contain opacity-90"
-                    />
-                  </div>
-                  <CardTitle className="text-xl text-text">
-                    {product.name}
-                  </CardTitle>
+                  <Link
+                    href={`/shop/${productDetails[product.id]?.slug || ""}`}
+                    className="block group"
+                    aria-label={`View details for ${product.name}`}>
+                    <div className="w-full h-[24rem] sm:h-[30rem] md:h-[34rem] mb-3 flex items-center justify-center">
+                      <img
+                        src={product.image || "/placeholder.svg"}
+                        alt={product.name}
+                        loading="lazy"
+                        className="max-w-full max-h-full object-contain opacity-90 transition-transform duration-300 ease-out group-hover:scale-105"
+                      />
+                    </div>
+                    <CardTitle className="text-xl text-text group-hover:text-green transition-colors">
+                      {product.name}
+                    </CardTitle>
+                  </Link>
                   <p className="text-text text-sm opacity-80">
                     {product.description}
                   </p>
+                  <Link
+                    href={`/shop/${productDetails[product.id]?.slug || ""}`}
+                    className="inline-flex items-center gap-1 text-sm font-medium text-green hover:text-green-deep transition-colors">
+                    View details →
+                  </Link>
                 </CardHeader>
                 <CardContent>
                   <div className="flex flex-col items-center gap-3 py-10">
@@ -552,22 +565,33 @@ export default function ShopPage() {
             ) : (
             <Card key={product.id} className="card border-0 shadow-lg">
               <CardHeader className="text-center pb-4">
-                <div className="w-full h-80 sm:h-96 mb-2 flex items-center justify-center">
-                  <img
-                    src={product.image || "/placeholder.svg"}
-                    alt={product.name}
-                    className="max-w-full max-h-full object-contain"
-                  />
-                </div>
-                <CardTitle className="text-xl text-text">
-                  {product.name}
-                </CardTitle>
+                <Link
+                  href={`/shop/${productDetails[product.id]?.slug || ""}`}
+                  className="block group"
+                  aria-label={`View details for ${product.name}`}>
+                  <div className="w-full h-[24rem] sm:h-[30rem] md:h-[34rem] mb-3 flex items-center justify-center">
+                    <img
+                      src={product.image || "/placeholder.svg"}
+                      alt={product.name}
+                      loading="lazy"
+                      className="max-w-full max-h-full object-contain transition-transform duration-300 ease-out group-hover:scale-105"
+                    />
+                  </div>
+                  <CardTitle className="text-xl text-text group-hover:text-green transition-colors">
+                    {product.name}
+                  </CardTitle>
+                </Link>
                 <p className="text-text text-sm opacity-80">
                   {product.description}
                 </p>
                 <div className="text-2xl font-bold text-green">
                   ₹{product.price}
                 </div>
+                <Link
+                  href={`/shop/${productDetails[product.id]?.slug || ""}`}
+                  className="inline-flex items-center gap-1 text-sm font-medium text-green hover:text-green-deep transition-colors">
+                  View details →
+                </Link>
 
                 {/* Product Details Dialog */}
                 <Dialog>
