@@ -122,9 +122,10 @@ export default function HomePage() {
       {/* Hero Slider */}
       <HeroSlider />
 
-      {/* Product Showcase Section */}
+      {/* Product Showcase Section — wider container so 5-col grid uses the
+          full viewport width on desktops and cards grow with screen size. */}
       <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-[110rem] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-text mb-4 animate-slide-up">
               Our Fresh Products
