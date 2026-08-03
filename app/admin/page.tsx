@@ -1,5 +1,4 @@
 "use client";
-import { supabase } from "@/lib/supabase";
 import type React from "react";
 
 import { useState, useEffect } from "react";
@@ -99,58 +98,39 @@ export default function AdminPage() {
     }
   };
 
-  // 🔄 Updated fetchOrders with better error handling
+  /* Fetch orders via the server-side /api/get-orders route which uses the
+   * SERVICE_ROLE key on the server. The route bypasses RLS, so we can safely
+   * enable Row Level Security on public.orders without breaking the admin
+   * dashboard — and no Supabase key is exposed to the browser. */
   const fetchOrders = async () => {
     setLoading(true);
     setError("");
     try {
-      console.log("🔄 Fetching orders from Supabase...");
+      console.log("🔄 Fetching orders via /api/get-orders...");
+      const res = await fetch("/api/get-orders", { cache: "no-store" });
+      const body = await res.json().catch(() => ({}));
 
-      const { data, error } = await supabase
-        .from("orders")
-        .select("*")
-        .order("orderDate", { ascending: false }); // 🔄 Added proper ordering
-
-      if (error) {
-        console.error("❌ Supabase error:", error);
-        setError(`Database error: ${error.message}`);
+      if (!res.ok || body?.success === false) {
+        const msg = body?.error || `Server responded ${res.status}`;
+        console.error("❌ get-orders failed:", msg);
+        setError(`Database error: ${msg}`);
         setOrders([]);
         setFilteredOrders([]);
         return;
       }
 
-      if (!data) {
-        console.log("⚠️ No data returned from Supabase");
-        setOrders([]);
-        setFilteredOrders([]);
-        return;
-      }
+      const list = Array.isArray(body?.orders) ? body.orders : [];
+      console.log(`✅ Fetched ${list.length} orders`);
 
-      console.log(`✅ Fetched ${data.length} orders from Supabase`);
-
-      const parsed = data.map((order) => ({
+      // Normalise items in case any legacy row stored the JSON as a string.
+      const parsed = list.map((order: any) => ({
         ...order,
-        customerDetails: {
-          name: order.customer_name || order.name || "Unknown",
-          email: order.customer_email || order.email || "Unknown",
-          phone: order.customer_phone || order.phone || "Unknown",
-          address: order.customer_address || order.address || "Unknown",
-          city: order.customer_city || order.city || "Unknown",
-          pincode: order.customer_pincode || order.pincode || "Unknown",
-          specialInstructions:
-            order.special_instructions || order.specialInstructions || "",
-        },
-        orderId: order.order_id || order.orderId || order.id,
-        totalAmount: order.total_amount?.toString() || order.totalAmount || "0",
-        paymentMethod: order.payment_method || order.paymentMethod || "Unknown",
-        orderDate: order.order_date || order.orderDate || order.created_at,
         items:
           typeof order.items === "string"
             ? JSON.parse(order.items)
             : order.items || [],
       }));
 
-      console.log("✅ Parsed orders:", parsed.length);
       setOrders(parsed);
       setFilteredOrders(parsed);
       setLastRefresh(new Date());
