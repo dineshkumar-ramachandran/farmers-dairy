@@ -82,7 +82,7 @@ const products: any[] = [
   {
     id: 2,
     name: "Raw Cow Milk 1000ml",
-    price: 60,
+    price: 63,
     image: "/images/1000ml-raw-cow-milk.png",
     description: "Each drop of Farmer's Dairy milk carries Purity & Trust.",
     details: {
@@ -519,7 +519,7 @@ export default function ShopPage() {
           </DialogContent>
         </Dialog>
 
-        <div className="grid md:grid-cols-2 gap-6 lg:gap-8">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
           {products.map((product, index) =>
             product.comingSoon ? (
               <Card
@@ -530,7 +530,7 @@ export default function ShopPage() {
                     href={`/shop/${productDetails[product.id]?.slug || ""}`}
                     className="block group"
                     aria-label={`View details for ${product.name}`}>
-                    <div className="w-full h-[24rem] sm:h-[30rem] md:h-[34rem] mb-3 flex items-center justify-center">
+                    <div className="w-full h-72 sm:h-96 lg:h-[26rem] mb-3 flex items-center justify-center">
                       <img
                         src={product.image || "/placeholder.svg"}
                         alt={product.name}
@@ -569,7 +569,7 @@ export default function ShopPage() {
                   href={`/shop/${productDetails[product.id]?.slug || ""}`}
                   className="block group"
                   aria-label={`View details for ${product.name}`}>
-                  <div className="w-full h-[24rem] sm:h-[30rem] md:h-[34rem] mb-3 flex items-center justify-center">
+                  <div className="w-full h-72 sm:h-96 lg:h-[26rem] mb-3 flex items-center justify-center">
                     <img
                       src={product.image || "/placeholder.svg"}
                       alt={product.name}

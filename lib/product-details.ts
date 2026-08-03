@@ -100,7 +100,7 @@ export const productDetails: Record<number, ProductDetailContent> = {
     slug: "raw-cow-milk-1000ml",
     name: "Raw Cow Milk 1000ml",
     image: "/images/1000ml-raw-cow-milk.png",
-    price: 60,
+    price: 63,
     category: "Milk",
     tagline: "Each drop of Farmer's Dairy milk carries Purity & Trust.",
     paragraphs: [

@@ -72,6 +72,9 @@ body {
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    /* Belt-and-braces: catch any minor horizontal overflow from decorative
+       blobs / long footer strings so mobile never gets a sideways scrollbar. */
+    overflow-x: hidden;
   }
 
   h1,

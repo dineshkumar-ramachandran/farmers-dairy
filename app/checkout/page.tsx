@@ -783,12 +783,24 @@ export default function CheckoutPage() {
                       </div>
                       <div className="text-right">
                         <p className="font-medium">
-                          ₹{item.totalPrice || item.price} × {item.subscription === "sample" ? 1 : item.totalDays || 1}{" "}
-                          {item.subscription === "sample"
-                            ? item.codEligible ? "sample" : "unit"
-                            : item.totalDays && item.totalDays > 1
-                              ? "days"
-                              : "day"}
+                          {(() => {
+                            const unitPrice = item.totalPrice || item.price
+                            if (item.subscription === "sample") {
+                              // Sample pack is one pack per order; other one-time
+                              // items (Ghee / Paneer / Butter) multiply by the
+                              // quantity the customer picked.
+                              const count = item.codEligible ? 1 : item.quantity
+                              const label = item.codEligible
+                                ? "sample"
+                                : count > 1
+                                  ? "units"
+                                  : "unit"
+                              return `₹${unitPrice} × ${count} ${label}`
+                            }
+                            // Milk subscription — price × days (per pack).
+                            const days = item.totalDays || 1
+                            return `₹${unitPrice} × ${days} ${days > 1 ? "days" : "day"}`
+                          })()}
                         </p>
                         <p className="text-sm text-text opacity-70">
                           ₹{((item.totalPrice || item.price) * item.quantity).toFixed(2)}
