@@ -893,39 +893,62 @@ export default function ShopPage() {
                   </div>
                 )}
 
-                {/* Action Buttons */}
+                {/* Action Buttons — for products with size variants (Sample,
+                    Ghee, Paneer, Butter) send the shopper to the detail page
+                    so they pick the size explicitly. Milk subscription flow
+                    keeps its inline buttons because there's no variant
+                    picker — just subscription / date selection on the card. */}
                 <div className="flex flex-col space-y-2 pt-4">
-                  {product.isSample ? (
-                    <Button
-                      onClick={() => handleGetSample(product)}
-                      className="btn-primary w-full">
-                      {product.ctaLabel || "Get Sample"}
-                    </Button>
+                  {product.variants?.length ? (
+                    <>
+                      <Button
+                        onClick={() =>
+                          router.push(
+                            `/shop/${productDetails[product.id]?.slug || ""}`
+                          )
+                        }
+                        className="btn-primary w-full">
+                        {product.ctaLabel || "Choose Size & Buy"}
+                      </Button>
+                      <Button
+                        onClick={() =>
+                          router.push(
+                            `/shop/${productDetails[product.id]?.slug || ""}`
+                          )
+                        }
+                        variant="outline"
+                        className="w-full border-green text-green hover:bg-mint-light transition-colors duration-300">
+                        <ShoppingCart className="w-4 h-4 mr-2" />
+                        Choose Size & Add to Cart
+                      </Button>
+                    </>
                   ) : (
-                    <Button
-                      onClick={() => handleSubscribeNow(product)}
-                      className="btn-primary w-full"
-                      disabled={!isDateSelected(product.id)}>
-                      Subscribe Now
-                    </Button>
-                  )}
-                  {isInCart(product) ? (
-                    <Button
-                      onClick={() => router.push("/cart")}
-                      variant="outline"
-                      className="w-full border-green text-green hover:bg-mint-light transition-colors duration-300">
-                      <ShoppingCart className="w-4 h-4 mr-2" />
-                      Go to Cart
-                    </Button>
-                  ) : (
-                    <Button
-                      onClick={() => handleAddToCart(product)}
-                      variant="outline"
-                      className="w-full hover:bg-mint-light transition-colors duration-300"
-                      disabled={!product.isSample && !isDateSelected(product.id)}>
-                      <ShoppingCart className="w-4 h-4 mr-2" />
-                      Add to Cart
-                    </Button>
+                    <>
+                      <Button
+                        onClick={() => handleSubscribeNow(product)}
+                        className="btn-primary w-full"
+                        disabled={!isDateSelected(product.id)}>
+                        Subscribe Now
+                      </Button>
+                      {isInCart(product) ? (
+                        <Button
+                          onClick={() => router.push("/cart")}
+                          variant="outline"
+                          className="w-full border-green text-green hover:bg-mint-light transition-colors duration-300">
+                          <ShoppingCart className="w-4 h-4 mr-2" />
+                          Go to Cart
+                        </Button>
+                      ) : (
+                        <Button
+                          onClick={() => handleAddToCart(product)}
+                          variant="outline"
+                          className="w-full hover:bg-mint-light transition-colors duration-300"
+                          disabled={!isDateSelected(product.id)}>
+                          <ShoppingCart className="w-4 h-4 mr-2" />
+                          Add to Cart
+                        </Button>
+                      )}
+                    </>
                   )}
                 </div>
               </CardContent>
