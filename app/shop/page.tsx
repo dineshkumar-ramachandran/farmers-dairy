@@ -48,13 +48,13 @@ const products: any[] = [
   {
     id: 3,
     name: "Sample Pack",
-    price: "35 - 60",
+    price: "35 - 63",
     image: "/images/sample-raw-cow-milk.png",
     description: "Try & Taste our Milk with the Sample Pack.",
     details: {
       note1:
         "Sample pack allows you to try our fresh milk before committing to a subscription.",
-      note2: "Choose between 500ml (₹35) or 1000ml (₹60) sample packs.",
+      note2: "Choose between 500ml (₹35) or 1000ml (₹63) sample packs.",
       categories: ["Booking", "Raw Cow Milk", "Sample"],
     },
     isSample: true,
