@@ -117,15 +117,14 @@ export default function ShippingAndDeliveryPage() {
             </section>
 
             <section>
-              <h2 className="text-2xl font-semibold text-earth-900 mb-4">Glass Bottle Return Policy</h2>
+              <h2 className="text-2xl font-semibold text-earth-900 mb-4">Packaging</h2>
               <p className="text-earth-600 leading-relaxed mb-4">
-                Our eco-friendly glass bottles are reusable and should be returned:
+                Our milk is delivered in eco-friendly, food-grade packets:
               </p>
               <ul className="list-disc list-inside text-earth-600 space-y-2">
-                <li>Rinse bottles with clean water after use</li>
-                <li>Keep bottles ready for collection during next delivery</li>
-                <li>Damaged or lost bottles may incur replacement charges</li>
-                <li>We sanitize and reuse all returned bottles</li>
+                <li>Packets are sealed at 2 AM for maximum freshness</li>
+                <li>Please boil the milk within one hour of delivery</li>
+                <li>Empty packets can be recycled locally</li>
               </ul>
             </section>
 

@@ -17,6 +17,7 @@ export const metadata: Metadata = {
   title: "Farmer's Dairy - Fresh Farm Milk Delivered",
   description:
     "Premium quality farm-fresh milk delivered to your doorstep. Subscribe for daily, weekly, or monthly delivery.",
+  generator: "v0.dev",
 };
 
 export default function RootLayout({

@@ -25,7 +25,7 @@ export function HolidaySelector({
   onHolidaysChange,
 }: HolidaySelectorProps) {
   const [isOpen, setIsOpen] = useState(false)
-  const [selectedHoliday, setSelectedHoliday] = useState<Date | undefined>()
+  const [selectedHolidays, setSelectedHolidays] = useState<Date[]>([]) // 🔄 Changed to array for multiple selection
 
   const getDateRange = () => {
     if (subscription === "custom" && dateRange?.from && dateRange?.to) {
@@ -50,10 +50,16 @@ export function HolidaySelector({
 
   const range = getDateRange()
 
-  const addHoliday = () => {
-    if (selectedHoliday && !holidays.some((h) => h.getTime() === selectedHoliday.getTime())) {
-      onHolidaysChange([...holidays, selectedHoliday])
-      setSelectedHoliday(undefined)
+  // 🔄 Updated to handle multiple dates
+  // 🔄 Updated to add multiple holidays
+  const addHolidays = () => {
+    if (selectedHolidays.length > 0) {
+      const newHolidays = selectedHolidays.filter(
+        (selectedDate) => !holidays.some((existingDate) => existingDate.getTime() === selectedDate.getTime()),
+      )
+      onHolidaysChange([...holidays, ...newHolidays])
+      setSelectedHolidays([])
+      setIsOpen(false)
     }
   }
 
@@ -64,6 +70,11 @@ export function HolidaySelector({
   const isDateInRange = (date: Date) => {
     if (!range) return false
     return isWithinInterval(date, { start: range.from, end: range.to })
+  }
+
+  // 🔄 Check if date is selected for highlighting
+  const isDateSelected = (date: Date) => {
+    return selectedHolidays.some((d) => d.getTime() === date.getTime())
   }
 
   if (!range) return null
@@ -83,30 +94,55 @@ export function HolidaySelector({
             <DialogHeader>
               <DialogTitle className="flex items-center">
                 <CalendarX className="w-5 h-5 mr-2 text-btngreen" />
-                Select Holiday
+                Select Holidays
               </DialogTitle>
             </DialogHeader>
             <div className="space-y-4">
               <p className="text-sm text-earth-600">
-                Select dates when you don't want milk delivery. These days will be added to the end of your
+                Select multiple dates when you don't want milk delivery. These days will be added to the end of your
                 subscription.
               </p>
+
+              {/* 🔄 Show selected dates count */}
+              {selectedHolidays.length > 0 && (
+                <div className="p-2 bg-blue-50 rounded-md">
+                  <p className="text-sm text-blue-800">{selectedHolidays.length} date(s) selected</p>
+                  <div className="flex flex-wrap gap-1 mt-1">
+                    {selectedHolidays.map((date, index) => (
+                      <Badge key={index} variant="secondary" className="text-xs bg-blue-100 text-blue-800">
+                        {format(date, "MMM dd")}
+                      </Badge>
+                    ))}
+                  </div>
+                </div>
+              )}
+
               <Calendar
-                mode="single"
-                selected={selectedHoliday}
-                onSelect={setSelectedHoliday}
+                mode="multiple"
+                selected={selectedHolidays}
+                onSelect={(dates) => setSelectedHolidays(dates || [])}
                 disabled={(date) => !isDateInRange(date) || holidays.some((h) => h.getTime() === date.getTime())}
                 className="rounded-md border"
                 classNames={{
                   head_cell: "text-center font-normal text-sm w-9",
                   day: "h-9 w-9 p-0 font-normal",
+                  day_selected: "bg-blue-500 text-white hover:bg-blue-600",
                 }}
               />
+
               <div className="flex space-x-2">
-                <Button onClick={addHoliday} disabled={!selectedHoliday} className="btn-primary flex-1">
-                  Add Holiday
+                <Button onClick={addHolidays} disabled={selectedHolidays.length === 0} className="btn-primary flex-1">
+                  Add {selectedHolidays.length > 0 ? `${selectedHolidays.length} ` : ""}Holiday
+                  {selectedHolidays.length !== 1 ? "s" : ""}
                 </Button>
-                <Button variant="outline" onClick={() => setIsOpen(false)} className="flex-1">
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    setSelectedHolidays([])
+                    setIsOpen(false)
+                  }}
+                  className="flex-1"
+                >
                   Cancel
                 </Button>
               </div>

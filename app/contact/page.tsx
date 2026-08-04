@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Phone, Mail, MapPin, Clock } from "lucide-react"
+import { Phone, Mail, MapPin, Clock, CheckCircle, AlertCircle, Loader2 } from "lucide-react"
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -16,30 +16,52 @@ export default function ContactPage() {
     message: "",
   })
   const [errors, setErrors] = useState<{ [key: string]: string }>({})
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitStatus, setSubmitStatus] = useState<{
+    type: "success" | "error" | null
+    message: string
+  }>({ type: null, message: "" })
 
   const validateField = (name: string, value: string) => {
     const newErrors = { ...errors }
 
     switch (name) {
       case "name":
-        if (!/^[a-zA-Z\s]+$/.test(value)) {
+        if (!value.trim()) {
+          newErrors.name = "Name is required"
+        } else if (!/^[a-zA-Z\s]+$/.test(value)) {
           newErrors.name = "Name should contain only letters and spaces"
+        } else if (value.trim().length < 2) {
+          newErrors.name = "Name must be at least 2 characters"
         } else {
           delete newErrors.name
         }
         break
       case "phone":
-        if (!/^\d{10}$/.test(value)) {
-          newErrors.phone = "Phone number should be exactly 10 digits"
+        if (!value.trim()) {
+          newErrors.phone = "Phone number is required"
+        } else if (!/^\d{10}$/.test(value)) {
+          newErrors.phone = "Phone number must be exactly 10 digits"
         } else {
           delete newErrors.phone
         }
         break
       case "email":
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+        if (!value.trim()) {
+          newErrors.email = "Email is required"
+        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
           newErrors.email = "Please enter a valid email address"
         } else {
           delete newErrors.email
+        }
+        break
+      case "message":
+        if (!value.trim()) {
+          newErrors.message = "Message is required"
+        } else if (value.trim().length < 10) {
+          newErrors.message = "Message must be at least 10 characters"
+        } else {
+          delete newErrors.message
         }
         break
     }
@@ -47,18 +69,69 @@ export default function ContactPage() {
     setErrors(newErrors)
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-
-    // Validate all fields
+  const validateAllFields = () => {
     Object.keys(formData).forEach((key) => {
       validateField(key, formData[key as keyof typeof formData])
     })
+  }
 
-    if (Object.keys(errors).length === 0) {
-      console.log("Form submitted:", formData)
-      setFormData({ name: "", email: "", phone: "", message: "" })
-      alert("Thank you for your message! We'll get back to you soon.")
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+
+    // Validate all fields
+    validateAllFields()
+
+    // Check if form is valid
+    const isValid =
+      Object.keys(formData).every((key) => formData[key as keyof typeof formData].trim() !== "") &&
+      Object.keys(errors).length === 0
+
+    if (!isValid) {
+      setSubmitStatus({
+        type: "error",
+        message: "Please fill all fields correctly before submitting.",
+      })
+      return
+    }
+
+    setIsSubmitting(true)
+    setSubmitStatus({ type: null, message: "" })
+
+    try {
+      console.log("Submitting contact form:", formData)
+
+      const response = await fetch("/api/send-contact-email", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      })
+
+      const result = await response.json()
+      console.log("Contact form result:", result)
+
+      if (result.success) {
+        setSubmitStatus({
+          type: "success",
+          message: result.message || "Thank you for your message! We'll get back to you soon.",
+        })
+        setFormData({ name: "", email: "", phone: "", message: "" })
+        setErrors({})
+      } else {
+        setSubmitStatus({
+          type: "error",
+          message: result.error || "Failed to send message. Please try again.",
+        })
+      }
+    } catch (error) {
+      console.error("Error submitting contact form:", error)
+      setSubmitStatus({
+        type: "error",
+        message: "Network error. Please check your connection and try again.",
+      })
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
@@ -74,8 +147,13 @@ export default function ContactPage() {
       [name]: value,
     }))
 
-    // Validate field
+    // Validate field on change
     validateField(name, value)
+
+    // Clear submit status when user starts typing
+    if (submitStatus.type) {
+      setSubmitStatus({ type: null, message: "" })
+    }
   }
 
   return (
@@ -117,6 +195,26 @@ export default function ContactPage() {
               <CardTitle className="text-2xl text-text">Send us a Message</CardTitle>
             </CardHeader>
             <CardContent>
+              {/* Submit Status */}
+              {submitStatus.type && (
+                <div
+                  className={`mb-6 p-4 rounded-lg flex items-center ${
+                    submitStatus.type === "success"
+                      ? "bg-green-50 border border-green-200"
+                      : "bg-red-50 border border-red-200"
+                  }`}
+                >
+                  {submitStatus.type === "success" ? (
+                    <CheckCircle className="w-5 h-5 text-green-500 mr-2 flex-shrink-0" />
+                  ) : (
+                    <AlertCircle className="w-5 h-5 text-red-500 mr-2 flex-shrink-0" />
+                  )}
+                  <p className={`text-sm ${submitStatus.type === "success" ? "text-green-800" : "text-red-800"}`}>
+                    {submitStatus.message}
+                  </p>
+                </div>
+              )}
+
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
                   <label htmlFor="name" className="block text-sm font-medium text-text mb-2">
@@ -131,6 +229,7 @@ export default function ContactPage() {
                     onChange={handleChange}
                     className={`w-full focus:ring-green focus:border-green ${errors.name ? "border-red-500" : ""}`}
                     placeholder="Your full name"
+                    disabled={isSubmitting}
                   />
                   {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name}</p>}
                 </div>
@@ -148,6 +247,7 @@ export default function ContactPage() {
                     onChange={handleChange}
                     className={`w-full focus:ring-green focus:border-green ${errors.email ? "border-red-500" : ""}`}
                     placeholder="your.email@example.com"
+                    disabled={isSubmitting}
                   />
                   {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
                 </div>
@@ -165,6 +265,7 @@ export default function ContactPage() {
                     onChange={handleChange}
                     className={`w-full focus:ring-green focus:border-green ${errors.phone ? "border-red-500" : ""}`}
                     placeholder="10-digit phone number"
+                    disabled={isSubmitting}
                   />
                   {errors.phone && <p className="text-red-500 text-xs mt-1">{errors.phone}</p>}
                 </div>
@@ -180,13 +281,22 @@ export default function ContactPage() {
                     value={formData.message}
                     onChange={handleChange}
                     rows={6}
-                    className="w-full focus:ring-green focus:border-green"
+                    className={`w-full focus:ring-green focus:border-green ${errors.message ? "border-red-500" : ""}`}
                     placeholder="Tell us how we can help you..."
+                    disabled={isSubmitting}
                   />
+                  {errors.message && <p className="text-red-500 text-xs mt-1">{errors.message}</p>}
                 </div>
 
-                <Button type="submit" className="btn-primary w-full">
-                  Send Message
+                <Button type="submit" className="btn-primary w-full" disabled={isSubmitting}>
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      Sending...
+                    </>
+                  ) : (
+                    "Send Message"
+                  )}
                 </Button>
               </form>
             </CardContent>

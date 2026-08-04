@@ -18,11 +18,11 @@ export function Footer() {
           <div className="space-y-4 animate-slide-up">
             <div className="flex items-center">
               <Image
-                src="https://farmersdairy.in/images/farmers-dairy-logo.png"
+                src="/images/farmers-dairy-logo.png"
                 alt="Farmer's Dairy Logo"
                 width={120}
                 height={60}
-                className="h-12 w-auto"
+                className="h-auto w-[90px]"
               />
             </div>
             <p className="text-text text-sm">
@@ -148,7 +148,8 @@ export function Footer() {
 
         <div className="border-t border-mint mt-8 pt-8 text-center">
           <p className="text-text text-sm animate-fade-in">
-            © 2024 Farmer's Dairy. All rights reserved. | Designed by Onprimehub
+            © 2024 Farmer's Dairy. All rights reserved. | Designed by
+            Onprimehub
           </p>
         </div>
       </div>

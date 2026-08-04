@@ -36,7 +36,7 @@ export default function AboutPage() {
               </div>
               <h2 className="text-2xl font-bold text-earth-900 mb-4">Our Vision</h2>
               <p className="text-earth-600 leading-relaxed">
-                In this busy running world we deliver milk through eco friendly glass bottles to your doorstep. We
+                In this busy running world we deliver milk through eco friendly packets to your doorstep. We
                 envision a future where every family has access to pure, fresh, and nutritious milk directly from the
                 farm.
               </p>
@@ -84,7 +84,7 @@ export default function AboutPage() {
               <div>
                 <h3 className="text-xl font-semibold text-earth-900 mb-2">Eco-Friendly Delivery</h3>
                 <p className="text-earth-600">
-                  We deliver milk in eco-friendly glass bottles to reduce environmental impact. Our delivery team takes
+                  We deliver milk in eco-friendly packets to reduce environmental impact. Our delivery team takes
                   pride in punctual, reliable service.
                 </p>
               </div>
@@ -114,7 +114,7 @@ export default function AboutPage() {
             <div className="grid md:grid-cols-3 gap-8 text-center">
               <div className="animate-bounce-gentle">
                 <div className="text-4xl font-bold text-green-600 mb-2">2 AM</div>
-                <p className="text-earth-600">Bottling and Sealing</p>
+                <p className="text-earth-600">Packing and Sealing</p>
               </div>
               <div className="animate-bounce-gentle" style={{ animationDelay: "0.5s" }}>
                 <div className="text-4xl font-bold text-green-600 mb-2">4 AM</div>

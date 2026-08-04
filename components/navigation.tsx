@@ -58,14 +58,25 @@ export function Navigation() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between py-4">
             {/* Logo */}
-            <div className="flex-shrink-0 animate-scale-in">
+            {/* <div className="flex-shrink-0 animate-scale-in">
               <Link href="/">
                 <Image
-                  src="https://farmersdairy.in/images/farmers-dairy-logo.png"
+                  src="/images/farmers-dairy-logo.png"
                   alt="Farmer's Dairy Logo"
                   width={120}
                   height={60}
-                  className="h-12 w-auto"
+                  className="h-auto w-[90px]"
+                />
+              </Link>
+            </div> */}
+            <div className="flex-shrink-0 animate-scale-in w-full md:w-auto flex justify-center md:justify-start">
+              <Link href="/">
+                <Image
+                  src="/images/farmers-dairy-logo.png"
+                  alt="Farmer's Dairy Logo"
+                  width={120}
+                  height={60}
+                  className="h-auto w-[90px]"
                 />
               </Link>
             </div>

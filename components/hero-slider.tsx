@@ -4,50 +4,51 @@ import { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
 
+/**
+ * Farmer's Dairy hero slider — four product slides (Milk, Ghee, Paneer,
+ * Butter). Each background is a 1920×960 studio composite generated from the
+ * product photography with a soft feather blend into the brand cream.
+ */
 const slides = [
   {
     id: 1,
-    title: "Fresh Farm Milk",
-    subtitle: "Delivered Daily",
+    title: "Raw Cow Milk",
+    subtitle: "From Farm to Home",
     description:
-      "Experience the pure taste of farm-fresh milk delivered straight to your doorstep.",
-    backgroundImage:
-      'url("https://farmersdairy.in/images/Hero-slider-image-1.png")',
+      "Unprocessed Organic Cow Milk directly from our Farm to your Home.",
+    bullets: ["No Preservatives", "No Antibiotics"],
+    backgroundImage: "url('/images/hero-milk.jpg')",
     cta: "Start Subscription",
-    textPosition: "left",
   },
   {
     id: 2,
-    title: "100% Pure & Natural",
-    subtitle: "No Preservatives",
+    title: "Organic Cow Ghee",
+    subtitle: "Pure & Aromatic",
     description:
-      "Our cows graze on natural pastures, ensuring the highest quality and nutrition.",
-    backgroundImage:
-      "url('https://farmersdairy.in/images/Hero-slider-image-2.png')",
-    cta: "Shop Now",
-    textPosition: "right",
+      "Pure and Aromatic Organic Cow Ghee made from fresh Organic Cream, extracted from our Organic Milk.",
+    bullets: [],
+    backgroundImage: "url('/images/hero-ghee.jpg')",
+    cta: "Shop Ghee",
   },
   {
     id: 3,
-    title: "Eco-Friendly Delivery",
-    subtitle: "Glass Bottles",
+    title: "Organic Paneer",
+    subtitle: "Soft & Healthy",
     description:
-      "We deliver milk in eco-friendly glass bottles to reduce environmental impact.",
-    backgroundImage:
-      'url("https://farmersdairy.in/images/Hero-slider-image-3.png")',
-    cta: "Learn More",
-    textPosition: "left",
+      "Soft and Healthy Paneer made from Organic Cow milk & Lemon. Comes with paneer water inside.",
+    bullets: [],
+    backgroundImage: "url('/images/hero-paneer.jpg')",
+    cta: "Shop Paneer",
   },
   {
     id: 4,
-    title: "Farm to Table",
-    subtitle: "Fresh Daily",
+    title: "Organic Butter",
+    subtitle: "Creamy & Fresh",
     description:
-      "From our family farm to your family table, ensuring freshness in every drop.",
-    backgroundImage:
-      'url("https://farmersdairy.in/images/Hero-slider-image-4.png")',
-    cta: "Order Now",
-    textPosition: "left",
+      "Churned from Organic Cream. Soft and creamy butter for tasty dosas.",
+    bullets: [],
+    backgroundImage: "url('/images/hero-butter.jpg')",
+    cta: "Shop Butter",
   },
 ];
 
@@ -57,58 +58,80 @@ export function HeroSlider() {
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slides.length);
-    }, 5000);
+    }, 6000);
     return () => clearInterval(timer);
   }, []);
 
-  const nextSlide = () => {
-    setCurrentSlide((prev) => (prev + 1) % slides.length);
-  };
-
-  const prevSlide = () => {
+  const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % slides.length);
+  const prevSlide = () =>
     setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
-  };
 
   return (
-    <div className="relative h-[400px] sm:h-[500px] md:h-[600px] lg:h-[700px] overflow-hidden">
+    <div className="relative h-[400px] sm:h-[500px] md:h-[600px] lg:h-[680px] overflow-hidden">
       {slides.map((slide, index) => (
         <div
           key={slide.id}
-          className={`absolute inset-0 transition-transform duration-500 ease-in-out ${
+          aria-hidden={index !== currentSlide}
+          className={`absolute inset-0 transition-opacity duration-700 ease-out ${
             index === currentSlide
-              ? "translate-x-0"
-              : index < currentSlide
-              ? "-translate-x-full"
-              : "translate-x-full"
+              ? "opacity-100"
+              : "opacity-0 pointer-events-none"
           }`}
           style={{
             backgroundImage: slide.backgroundImage,
             backgroundSize: "cover",
             backgroundPosition: "center",
             backgroundRepeat: "no-repeat",
-          }}>
-          {/* Overlay for better text readability */}
-          <div className="absolute inset-0 bg-black bg-opacity-40"></div>
+          }}
+        >
+          {/* Mobile: strong full-width cream scrim so text never overlaps
+              product art. Desktop: soft partial gradient. */}
+          <div
+            className="absolute inset-0 pointer-events-none md:hidden"
+            style={{
+              background:
+                "linear-gradient(180deg, rgba(251,235,209,0.94) 0%, rgba(251,235,209,0.82) 55%, rgba(251,235,209,0.35) 100%)",
+            }}
+          />
+          <div
+            className="absolute inset-0 pointer-events-none hidden md:block"
+            style={{
+              background:
+                "linear-gradient(90deg, rgba(251,235,209,0.85) 0%, rgba(251,235,209,0.55) 30%, rgba(251,235,209,0) 60%)",
+            }}
+          />
 
           <div className="relative z-10 flex items-center h-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div
-              className={`max-w-2xl animate-slide-up ${
-                slide.textPosition === "right"
-                  ? "ml-auto text-right md:mr-8 lg:mr-16"
-                  : slide.textPosition === "center"
-                  ? "mx-auto text-center"
-                  : "mr-auto text-left md:ml-8 lg:ml-16"
-              }`}>
-              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-white mb-3 sm:mb-4 md:mb-6 leading-tight">
+            <div className="max-w-xl md:max-w-2xl animate-slide-up md:ml-4 lg:ml-10">
+              <p className="text-[11px] sm:text-[12px] font-bold uppercase tracking-[0.32em] text-butter-deep mb-3 sm:mb-4">
+                {slide.subtitle}
+              </p>
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-green-deep mb-3 sm:mb-4 md:mb-6 leading-[1.02]">
                 {slide.title}
-                <span className="block text-green-400">{slide.subtitle}</span>
               </h1>
-              <p className="text-base sm:text-lg md:text-xl text-gray-200 mb-4 sm:mb-6 md:mb-8 leading-relaxed max-w-xl">
+              <p className="text-base sm:text-lg md:text-xl text-text mb-4 sm:mb-5 leading-relaxed max-w-md sm:max-w-lg">
                 {slide.description}
               </p>
+              {slide.bullets.length > 0 && (
+                <ul className="mb-6 sm:mb-7 space-y-1.5">
+                  {slide.bullets.map((b) => (
+                    <li
+                      key={b}
+                      className="flex items-center gap-2 text-sm sm:text-base text-text font-medium"
+                    >
+                      <span
+                        className="inline-flex h-1.5 w-1.5 rounded-full bg-green"
+                        aria-hidden="true"
+                      />
+                      {b}
+                    </li>
+                  ))}
+                </ul>
+              )}
               <Link
                 href="/shop"
-                className="btn-primary inline-flex items-center text-sm sm:text-base">
+                className="btn-primary inline-flex items-center text-sm sm:text-base"
+              >
                 {slide.cta}
               </Link>
             </div>
@@ -119,25 +142,30 @@ export function HeroSlider() {
       {/* Navigation buttons */}
       <button
         onClick={prevSlide}
-        className="absolute left-2 sm:left-4 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white text-green p-2 sm:p-3 rounded-full transition-all duration-300 hover:scale-110 z-20">
+        aria-label="Previous slide"
+        className="absolute left-2 sm:left-4 top-1/2 transform -translate-y-1/2 bg-white/85 hover:bg-white text-green p-2 sm:p-3 rounded-full transition-all duration-300 hover:scale-110 z-20 shadow"
+      >
         <ChevronLeft className="w-4 h-4 sm:w-6 sm:h-6" />
       </button>
       <button
         onClick={nextSlide}
-        className="absolute right-2 sm:right-4 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white text-green p-2 sm:p-3 rounded-full transition-all duration-300 hover:scale-110 z-20">
+        aria-label="Next slide"
+        className="absolute right-2 sm:right-4 top-1/2 transform -translate-y-1/2 bg-white/85 hover:bg-white text-green p-2 sm:p-3 rounded-full transition-all duration-300 hover:scale-110 z-20 shadow"
+      >
         <ChevronRight className="w-4 h-4 sm:w-6 sm:h-6" />
       </button>
 
       {/* Dots indicator */}
-      <div className="absolute bottom-4 sm:bottom-6 left-1/2 transform -translate-x-1/2 flex space-x-2 z-20">
+      <div className="absolute bottom-4 sm:bottom-6 left-1/2 transform -translate-x-1/2 flex items-center gap-2 z-20">
         {slides.map((_, index) => (
           <button
             key={index}
             onClick={() => setCurrentSlide(index)}
-            className={`w-2 h-2 sm:w-3 sm:h-3 rounded-full transition-all duration-300 ${
+            aria-label={`Go to slide ${index + 1}`}
+            className={`h-[3px] rounded-full transition-all duration-300 ${
               index === currentSlide
-                ? "bg-green-400 scale-125"
-                : "bg-white/60 hover:bg-white/80"
+                ? "w-10 bg-green"
+                : "w-6 bg-green/40 hover:bg-green/70"
             }`}
           />
         ))}

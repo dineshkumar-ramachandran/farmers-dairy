@@ -33,7 +33,7 @@ export default function TermsAndConditionsPage() {
                 <li>All milk products are delivered fresh daily</li>
                 <li>Products are sourced directly from our farm</li>
                 <li>No preservatives or additives are used</li>
-                <li>Glass bottles are eco-friendly and reusable</li>
+                <li>Milk packets are eco-friendly and easy to recycle</li>
               </ul>
             </section>
 
