@@ -62,7 +62,7 @@ const products: any[] = [
     variantLabel: "Choose Quantity",
     variants: [
       { label: "500ml", price: 35 },
-      { label: "1000ml", price: 60 },
+      { label: "1000ml", price: 63 },
     ] as ProductVariant[],
   },
   {
