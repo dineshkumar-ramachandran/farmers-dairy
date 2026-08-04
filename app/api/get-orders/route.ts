@@ -3,11 +3,13 @@ import { createClient } from "@supabase/supabase-js";
 
 const supabaseUrl = "https://ddcungvetvmbikwfvytq.supabase.co";
 
-// 🔄 Use the same Supabase setup as your create-order route
-const supabase = createClient(
-  supabaseUrl,
-  process.env.SUPABASE_SERVICE_API_KEY!
-);
+// Use SERVICE_ROLE_KEY (server-only, bypasses RLS). Fall back to the legacy
+// misnamed variable so older deploys keep working.
+const supabaseServiceKey =
+  process.env.SUPABASE_SERVICE_ROLE_KEY ||
+  process.env.SUPABASE_SERVICE_API_KEY!;
+
+const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
 export async function GET() {
   try {

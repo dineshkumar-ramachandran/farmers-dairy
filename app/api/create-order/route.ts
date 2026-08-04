@@ -3,12 +3,14 @@ import { createClient } from "@supabase/supabase-js";
 
 const supabaseUrl = "https://ddcungvetvmbikwfvytq.supabase.co";
 
-console.log(supabaseUrl, process.env.SUPABASE_SERVICE_API_KEY!);
-// Supabase Server Client
-const supabase = createClient(
-  supabaseUrl,
-  process.env.SUPABASE_SERVICE_API_KEY!
-);
+// Use the SERVICE_ROLE_KEY (server-only, bypasses RLS) so orders can be
+// inserted even when RLS is enabled on public.orders. Fall back to the
+// legacy misnamed variable so existing deployments keep working.
+const supabaseServiceKey =
+  process.env.SUPABASE_SERVICE_ROLE_KEY ||
+  process.env.SUPABASE_SERVICE_API_KEY!;
+
+const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
 export async function POST(request: NextRequest) {
   try {

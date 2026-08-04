@@ -53,13 +53,13 @@ export const productDetails: Record<number, ProductDetailContent> = {
     slug: "sample-pack",
     name: "Sample Pack",
     image: "/images/sample-raw-cow-milk.png",
-    price: "35 - 60",
+    price: "35 - 63",
     category: "Milk",
     codEligible: true,
     variantLabel: "Choose Quantity",
     variants: [
       { label: "500ml", price: 35 },
-      { label: "1000ml", price: 60 },
+      { label: "1000ml", price: 63 },
     ],
     tagline: "Try & Taste our Milk with the Sample Pack.",
     paragraphs: [
@@ -67,7 +67,7 @@ export const productDetails: Record<number, ProductDetailContent> = {
       "Every sample pack is filled and sealed the same morning it's delivered — the same milk our regular customers wake up to.",
     ],
     features: [
-      "Two sizes: 500 ml (₹35) and 1000 ml (₹60)",
+      "Two sizes: 500 ml (₹35) and 1000 ml (₹63)",
       "Unprocessed, unadulterated raw cow milk",
       "No preservatives, no antibiotics",
       "One-time purchase — no subscription required",

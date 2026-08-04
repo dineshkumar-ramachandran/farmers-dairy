@@ -15,7 +15,7 @@ const featuredProducts = [
   {
     id: 3,
     name: "Sample Pack",
-    price: "35 - 60",
+    price: "35 - 63",
     image: "/images/sample-raw-cow-milk.png",
     description: "Try & Taste our Milk with the Sample Pack.",
     comingSoon: false,
