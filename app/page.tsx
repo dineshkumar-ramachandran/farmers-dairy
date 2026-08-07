@@ -136,7 +136,7 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 sm:gap-5 lg:gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 sm:gap-5 lg:gap-6">
             {featuredProducts.map((product, index) => (
               <div
                 key={product.id}
@@ -147,7 +147,7 @@ export default function HomePage() {
                   href={`/shop/${productDetails[product.id]?.slug || ""}`}
                   aria-label={`View details for ${product.name}`}
                   className="block">
-                  <div className="w-full h-52 sm:h-60 md:h-64 lg:h-56 mb-3 flex items-center justify-center">
+                  <div className="w-full h-96 md:h-64 lg:h-56 mb-3 flex items-center justify-center">
                     <img
                       src={product.image || "/placeholder.svg"}
                       alt={product.name}
