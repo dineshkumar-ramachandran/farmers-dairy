@@ -524,73 +524,85 @@ export default function ShopPage() {
             product.comingSoon ? (
               <Card
                 key={product.id}
-                className="card border-0 shadow-lg opacity-95">
+                className="card border-0 shadow-lg opacity-95 group relative overflow-hidden">
+                <span className="absolute top-4 right-4 z-10 chip">Coming Soon</span>
                 <CardHeader className="text-center pb-4">
                   <Link
                     href={`/shop/${productDetails[product.id]?.slug || ""}`}
-                    className="block group"
+                    className="relative block"
                     aria-label={`View details for ${product.name}`}>
-                    <div className="w-full h-96 lg:h-[26rem] mb-3 flex items-center justify-center">
+                    <div
+                      className="absolute inset-x-6 top-6 bottom-6 rounded-full opacity-70"
+                      style={{
+                        background:
+                          "radial-gradient(circle at 50% 55%, rgba(255,251,243,0.9) 0%, rgba(245,219,174,0.4) 55%, rgba(251,235,209,0) 78%)",
+                      }}
+                      aria-hidden="true"
+                    />
+                    <div className="relative w-full h-96 lg:h-[26rem] mb-3 flex items-center justify-center">
                       <img
                         src={product.image || "/placeholder.svg"}
                         alt={product.name}
                         loading="lazy"
-                        className="max-w-full max-h-full object-contain opacity-90 transition-transform duration-300 ease-out group-hover:scale-105"
+                        className="max-w-full max-h-full object-contain opacity-90 transition-transform duration-500 ease-out group-hover:scale-105"
                       />
                     </div>
-                    <CardTitle className="text-xl text-text group-hover:text-green transition-colors">
+                    <CardTitle className="font-display text-xl text-green-deep group-hover:text-green transition-colors">
                       {product.name}
                     </CardTitle>
                   </Link>
-                  <p className="text-text text-sm opacity-80">
+                  <p className="text-text/75 text-sm leading-relaxed">
                     {product.description}
                   </p>
-                  <Link
-                    href={`/shop/${productDetails[product.id]?.slug || ""}`}
-                    className="inline-flex items-center gap-1 text-sm font-medium text-green hover:text-green-deep transition-colors">
-                    View details →
-                  </Link>
                 </CardHeader>
                 <CardContent>
-                  <div className="flex flex-col items-center gap-3 py-10">
-                    <span className="inline-flex items-center px-4 py-1.5 rounded-full bg-butter/25 text-green-deep font-bold text-sm uppercase tracking-wider">
-                      Coming Soon
-                    </span>
+                  <div className="flex flex-col items-center gap-3 py-6 rule">
                     <p className="text-sm text-text/70 text-center px-4">
                       {product.details.note2}
                     </p>
+                    <Link
+                      href={`/shop/${productDetails[product.id]?.slug || ""}`}
+                      className="text-sm font-bold uppercase tracking-wider text-green hover:text-green-deep transition-colors">
+                      View Details →
+                    </Link>
                   </div>
                 </CardContent>
               </Card>
             ) : (
-            <Card key={product.id} className="card border-0 shadow-lg">
+            <Card key={product.id} className="card border-0 shadow-lg group overflow-hidden">
               <CardHeader className="text-center pb-4">
                 <Link
                   href={`/shop/${productDetails[product.id]?.slug || ""}`}
-                  className="block group"
+                  className="relative block"
                   aria-label={`View details for ${product.name}`}>
-                  <div className="w-full h-96 lg:h-[26rem] mb-3 flex items-center justify-center">
+                  <div
+                    className="absolute inset-x-6 top-6 bottom-6 rounded-full opacity-70"
+                    style={{
+                      background:
+                        "radial-gradient(circle at 50% 55%, rgba(255,251,243,0.9) 0%, rgba(245,219,174,0.4) 55%, rgba(251,235,209,0) 78%)",
+                    }}
+                    aria-hidden="true"
+                  />
+                  <div className="relative w-full h-96 lg:h-[26rem] mb-3 flex items-center justify-center">
                     <img
                       src={product.image || "/placeholder.svg"}
                       alt={product.name}
                       loading="lazy"
-                      className="max-w-full max-h-full object-contain transition-transform duration-300 ease-out group-hover:scale-105"
+                      className="max-w-full max-h-full object-contain transition-transform duration-500 ease-out group-hover:scale-105"
                     />
                   </div>
-                  <CardTitle className="text-xl text-text group-hover:text-green transition-colors">
+                  <CardTitle className="font-display text-xl text-green-deep group-hover:text-green transition-colors">
                     {product.name}
                   </CardTitle>
                 </Link>
-                <p className="text-text text-sm opacity-80">
+                <p className="text-text/75 text-sm leading-relaxed">
                   {product.description}
                 </p>
-                <div className="text-2xl font-bold text-green">
-                  ₹{product.price}
-                </div>
+                <div className="stamp mx-auto text-base">₹{product.price}</div>
                 <Link
                   href={`/shop/${productDetails[product.id]?.slug || ""}`}
-                  className="inline-flex items-center gap-1 text-sm font-medium text-green hover:text-green-deep transition-colors">
-                  View details →
+                  className="inline-flex items-center gap-1 text-sm font-bold uppercase tracking-wider text-green hover:text-green-deep transition-colors">
+                  View Details →
                 </Link>
 
                 {/* Product Details Dialog */}
