@@ -1,16 +1,28 @@
 import type React from "react";
 import type { Metadata } from "next";
-import { Montserrat } from "next/font/google";
+import { Plus_Jakarta_Sans, Bricolage_Grotesque } from "next/font/google";
 import "./globals.css";
 import { Navigation } from "@/components/navigation";
 import { Footer } from "@/components/footer";
 import { CartProvider } from "@/components/cart-context";
 import { FloatingWhatsApp } from "@/components/floating-whatsapp";
+import { ScrollToTop } from "@/components/scroll-to-top";
 
-const montserrat = Montserrat({
+/** Body typography — Plus Jakarta Sans reads warm and modern at body sizes. */
+const jakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700", "800"],
+  weight: ["400", "500", "600", "700", "800"],
   display: "swap",
+  variable: "--font-sans",
+});
+
+/** Display typography — Bricolage Grotesque gives editorial weight to hero
+ *  and section titles without feeling ornamental. */
+const bricolage = Bricolage_Grotesque({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
+  display: "swap",
+  variable: "--font-display",
 });
 
 export const metadata: Metadata = {
@@ -36,13 +48,14 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${montserrat.className} bg-sage-50`}
+        className={`${jakarta.variable} ${bricolage.variable} font-sans`}
         suppressHydrationWarning>
         <CartProvider>
           <Navigation />
           <main>{children}</main>
           <Footer />
           <FloatingWhatsApp />
+          <ScrollToTop />
         </CartProvider>
       </body>
     </html>

@@ -122,15 +122,16 @@ export default function HomePage() {
       {/* Hero Slider */}
       <HeroSlider />
 
-      {/* Product Showcase Section — wider container so 5-col grid uses the
-          full viewport width on desktops and cards grow with screen size. */}
-      <section className="py-16 bg-white">
-        <div className="max-w-[110rem] mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-text mb-4 animate-slide-up">
-              Our Fresh Products
+      {/* Product Showcase Section */}
+      <section className="relative py-20 sm:py-28 overflow-hidden bg-white">
+        <div className="pointer-events-none absolute -top-32 -right-24 w-[28rem] h-[28rem] blob animate-blob-slow bg-butter/10" aria-hidden="true" />
+        <div className="relative max-w-[110rem] mx-auto px-4 sm:px-6 lg:px-10">
+          <div className="text-center mb-14">
+            <p className="eyebrow mx-auto mb-5 justify-center">Our Products</p>
+            <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tightest mb-4">
+              Our Fresh <span className="italic text-gradient-green">Products</span>
             </h2>
-            <p className="text-lg text-text max-w-2xl mx-auto animate-fade-in">
+            <p className="text-lg text-text/80 max-w-2xl mx-auto leading-relaxed">
               From our Farm to your Home. Explore our wide range of Pure and
               Healthy Dairy Products.
             </p>
@@ -140,43 +141,47 @@ export default function HomePage() {
             {featuredProducts.map((product, index) => (
               <div
                 key={product.id}
-                className="card text-center animate-slide-up flex flex-col group"
-                style={{ animationDelay: `${index * 0.08}s` }}>
-                {/* Image + name link to the individual product page */}
+                className="card text-center animate-slide-up flex flex-col group !p-4 sm:!p-5"
+                style={{ animationDelay: `${index * 0.06}s` }}>
+                {/* Product stage with a soft radial glow behind the image */}
                 <Link
                   href={`/shop/${productDetails[product.id]?.slug || ""}`}
                   aria-label={`View details for ${product.name}`}
-                  className="block">
-                  <div className="w-full h-96 md:h-64 lg:h-56 mb-3 flex items-center justify-center">
+                  className="relative block">
+                  <div
+                    className="absolute inset-x-4 top-4 bottom-16 rounded-full opacity-70"
+                    style={{
+                      background:
+                        "radial-gradient(circle at 50% 55%, rgba(255,251,243,0.9) 0%, rgba(245,219,174,0.35) 55%, rgba(251,235,209,0) 80%)",
+                    }}
+                    aria-hidden="true"
+                  />
+                  <div className="relative w-full h-96 md:h-64 lg:h-56 mb-3 flex items-center justify-center">
                     <img
                       src={product.image || "/placeholder.svg"}
                       alt={product.name}
                       loading="lazy"
-                      className="max-w-full max-h-full object-contain transition-transform duration-300 ease-out group-hover:scale-105"
+                      className="max-w-full max-h-full object-contain transition-transform duration-500 ease-out group-hover:scale-105 group-hover:-rotate-1"
                     />
                   </div>
-                  <h3 className="text-base sm:text-xl font-semibold text-text mb-2 group-hover:text-green transition-colors">
+                  <h3 className="text-base sm:text-lg font-display font-bold text-green-deep mb-2 group-hover:text-green transition-colors leading-snug">
                     {product.name}
                   </h3>
                 </Link>
-                <p className="text-sm sm:text-base text-text opacity-80 mb-4 flex-1">
+                <p className="text-sm text-text/75 mb-4 flex-1 leading-relaxed">
                   {product.description}
                 </p>
                 {product.comingSoon ? (
-                  <span className="inline-flex items-center justify-center px-4 py-2 rounded-full bg-butter/20 text-green-deep text-xs sm:text-sm font-bold uppercase tracking-wider">
-                    Coming Soon
-                  </span>
+                  <span className="chip mx-auto">Coming Soon</span>
                 ) : (
                   <>
-                    <div className="text-xl sm:text-2xl font-bold text-green mb-4">
-                      ₹{product.price}
-                    </div>
+                    <div className="stamp mx-auto text-sm mb-4">₹{product.price}</div>
                     <Link
                       href={`/shop/${productDetails[product.id]?.slug || ""}`}
                       aria-label={`Buy ${product.name}`}
-                      className="btn-primary inline-flex items-center justify-center text-sm min-h-[44px]">
+                      className="btn-primary inline-flex items-center justify-center gap-2 text-[12px] w-full">
                       Buy Now
-                      <ArrowRight className="ml-2 w-4 h-4" aria-hidden="true" />
+                      <ArrowRight className="w-4 h-4" aria-hidden="true" />
                     </Link>
                   </>
                 )}
@@ -187,15 +192,17 @@ export default function HomePage() {
       </section>
 
       {/* Story Section */}
-      <section className="py-16 bg-mint-light">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold text-text mb-6 animate-slide-up">
-            A LITTLE STORY ABOUT US
+      <section className="relative py-20 sm:py-28 overflow-hidden bg-mint-light bg-grain">
+        <div className="pointer-events-none absolute -top-24 -left-16 w-[26rem] h-[26rem] blob animate-blob bg-butter/25" aria-hidden="true" />
+        <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <p className="eyebrow mx-auto mb-5 justify-center">Our Story</p>
+          <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tightest mb-4 animate-slide-up">
+            A LITTLE STORY <span className="italic text-green">ABOUT US</span>
           </h2>
-          <h3 className="text-2xl font-semibold text-green mb-8 animate-slide-up">
+          <h3 className="text-xl sm:text-2xl font-display italic text-butter-deep mb-8 animate-slide-up">
             Farmers Dairy
           </h3>
-          <p className="text-lg text-text leading-relaxed animate-fade-in">
+          <p className="text-base sm:text-lg text-text leading-[1.85] max-w-3xl mx-auto animate-fade-in first-letter:font-display first-letter:text-5xl first-letter:sm:text-6xl first-letter:font-bold first-letter:text-green first-letter:float-left first-letter:mr-3 first-letter:leading-[0.85]">
             A small start up with a big vision started by two youngsters,
             Farmer's dairy is a fresh dairy based product based company in
             Hosur. Farmer's Dairy is a company that acts as a direct
@@ -210,114 +217,86 @@ export default function HomePage() {
       </section>
 
       {/* Benefits Section */}
-      <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-text mb-4">
-              Why Choose Our Farm Fresh Milk?
+      <section className="relative py-20 sm:py-28 overflow-hidden bg-white">
+        <div className="pointer-events-none absolute -bottom-32 -right-24 w-[28rem] h-[28rem] blob animate-blob bg-butter/10" aria-hidden="true" />
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-14">
+            <p className="eyebrow mx-auto mb-5 justify-center">Why Us</p>
+            <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tightest mb-4">
+              Why Choose Our <span className="italic text-gradient-green">Farm Fresh Milk?</span>
             </h2>
-            <p className="text-lg text-text max-w-2xl mx-auto">
+            <p className="text-lg text-text/80 max-w-2xl mx-auto leading-relaxed">
               We're committed to delivering the purest, most nutritious milk
               from our family farm to your family table.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <div className="card text-center animate-slide-up">
-              <div className="w-16 h-16 bg-mint-light rounded-full flex items-center justify-center mx-auto mb-4 animate-bounce-gentle">
-                <Truck className="w-8 h-8 text-green icon-hover" />
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+            {[
+              { Icon: Truck, title: "Daily Delivery", text: "Fresh milk delivered to your doorstep every morning before 7 AM." },
+              { Icon: Shield, title: "100% Pure", text: "No additives, no preservatives. Just pure, natural farm milk." },
+              { Icon: Clock, title: "Always Fresh", text: "We assure the milk delivered to each and every customer is fresh and completely hygienic." },
+              { Icon: Heart, title: "Family Farm", text: "From our family farm to your family, with love and care in every drop." },
+            ].map(({ Icon, title, text }, index) => (
+              <div
+                key={title}
+                className="card text-center animate-slide-up group"
+                style={{ animationDelay: `${index * 0.08}s` }}
+              >
+                <div className="relative w-16 h-16 mx-auto mb-5">
+                  <div className="absolute inset-0 rounded-full bg-butter/20 group-hover:bg-butter/40 transition-colors duration-500" aria-hidden="true" />
+                  <div className="relative w-full h-full flex items-center justify-center rounded-full border border-butter/40 group-hover:border-butter transition-colors duration-500">
+                    <Icon className="w-7 h-7 text-green transition-transform duration-500 group-hover:scale-110" aria-hidden="true" />
+                  </div>
+                </div>
+                <h3 className="font-display text-lg sm:text-xl font-bold text-green-deep mb-2">
+                  {title}
+                </h3>
+                <p className="text-sm sm:text-base text-text/75 leading-relaxed">
+                  {text}
+                </p>
               </div>
-              <h3 className="text-xl font-semibold text-text mb-2">
-                Daily Delivery
-              </h3>
-              <p className="text-text opacity-80">
-                Fresh milk delivered to your doorstep every morning before 7 AM.
-              </p>
-            </div>
-
-            <div
-              className="card text-center animate-slide-up"
-              style={{ animationDelay: "0.1s" }}>
-              <div className="w-16 h-16 bg-mint-light rounded-full flex items-center justify-center mx-auto mb-4 animate-bounce-gentle">
-                <Shield className="w-8 h-8 text-green icon-hover" />
-              </div>
-              <h3 className="text-xl font-semibold text-text mb-2">
-                100% Pure
-              </h3>
-              <p className="text-text opacity-80">
-                No additives, no preservatives. Just pure, natural farm milk.
-              </p>
-            </div>
-
-            <div
-              className="card text-center animate-slide-up"
-              style={{ animationDelay: "0.2s" }}>
-              <div className="w-16 h-16 bg-mint-light rounded-full flex items-center justify-center mx-auto mb-4 animate-bounce-gentle">
-                <Clock className="w-8 h-8 text-green icon-hover" />
-              </div>
-              <h3 className="text-xl font-semibold text-text mb-2">
-                Always Fresh
-              </h3>
-              <p className="text-text opacity-80">
-                We assure the milk delivered to each and every customer is fresh
-                and completely hygienic.
-              </p>
-            </div>
-
-            <div
-              className="card text-center animate-slide-up"
-              style={{ animationDelay: "0.3s" }}>
-              <div className="w-16 h-16 bg-mint-light rounded-full flex items-center justify-center mx-auto mb-4 animate-bounce-gentle">
-                <Heart className="w-8 h-8 text-green icon-hover" />
-              </div>
-              <h3 className="text-xl font-semibold text-text mb-2">
-                Family Farm
-              </h3>
-              <p className="text-text opacity-80">
-                From our family farm to your family, with love and care in every
-                drop.
-              </p>
-            </div>
+            ))}
           </div>
         </div>
       </section>
 
       {/* Testimonials Section */}
-      <section className="py-16 bg-mint-light">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-text mb-4">
-              What Our Customers Say
+      <section className="relative py-20 sm:py-28 overflow-hidden bg-mint-light bg-grain">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-14">
+            <p className="eyebrow mx-auto mb-5 justify-center">Testimonials</p>
+            <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tightest mb-4">
+              What Our <span className="italic text-gradient-green">Customers Say</span>
             </h2>
-            <p className="text-lg text-text">
+            <p className="text-lg text-text/80 max-w-2xl mx-auto leading-relaxed">
               Join thousands of satisfied families who trust us for their daily
               milk needs.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-3 gap-6 lg:gap-8">
             {testimonials.map((testimonial, index) => (
               <div
                 key={index}
-                className="card text-center animate-slide-up"
+                className="card text-center animate-slide-up relative"
                 style={{ animationDelay: `${index * 0.1}s` }}>
-                <div className="mb-4">
-                  <Quote className="w-8 h-8 text-green mx-auto mb-4 animate-float" />
-                  <div className="flex justify-center mb-2">
-                    {[...Array(testimonial.rating)].map((_, i) => (
-                      <Star
-                        key={i}
-                        className="w-5 h-5 text-yellow-400 fill-current"
-                      />
-                    ))}
-                  </div>
+                <Quote className="absolute -top-3 left-6 w-10 h-10 text-butter/70 rotate-180" aria-hidden="true" />
+                <div className="flex justify-center mb-4 gap-0.5">
+                  {[...Array(testimonial.rating)].map((_, i) => (
+                    <Star
+                      key={i}
+                      className="w-4 h-4 text-butter fill-current"
+                      aria-hidden="true"
+                    />
+                  ))}
                 </div>
-                <p className="text-text mb-4 italic">"{testimonial.text}"</p>
-                <div className="text-center">
-                  <h4 className="font-semibold text-text">
+                <p className="text-text/85 mb-6 italic leading-relaxed">"{testimonial.text}"</p>
+                <div className="rule pt-4">
+                  <h4 className="font-display font-bold text-green-deep">
                     {testimonial.name}
                   </h4>
-                  <p className="text-sm text-text opacity-70">
+                  <p className="text-xs text-text/60 uppercase tracking-wider mt-1">
                     {testimonial.location}
                   </p>
                 </div>
@@ -328,18 +307,21 @@ export default function HomePage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 bg-white">
-        <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-text mb-4">
-            Ready to Experience Farm Fresh Milk?
+      <section className="relative py-20 sm:py-28 overflow-hidden bg-white">
+        <div className="pointer-events-none absolute -top-24 left-1/4 w-[24rem] h-[24rem] blob animate-blob bg-butter/15" aria-hidden="true" />
+        <div className="pointer-events-none absolute -bottom-24 right-1/4 w-[24rem] h-[24rem] blob animate-blob-slow bg-mint/10" aria-hidden="true" />
+        <div className="relative max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
+          <p className="eyebrow mx-auto mb-5 justify-center">Taste the Difference</p>
+          <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold tracking-tightest mb-6 leading-[1.05]">
+            Ready to Experience <span className="italic text-gradient-green">Farm Fresh</span> Milk?
           </h2>
-          <p className="text-lg text-text mb-8">
+          <p className="text-base sm:text-lg text-text/80 mb-9 leading-relaxed max-w-2xl mx-auto">
             Join thousands of families who trust us for their daily milk needs.
             Start your subscription today and taste the difference.
           </p>
-          <Link href="/shop" className="btn-primary inline-flex items-center">
+          <Link href="/shop" className="btn-primary inline-flex items-center gap-2">
             Browse Products
-            <ArrowRight className="ml-2 w-5 h-5" />
+            <ArrowRight className="w-5 h-5" />
           </Link>
         </div>
       </section>
