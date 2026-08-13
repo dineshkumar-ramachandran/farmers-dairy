@@ -49,7 +49,7 @@ export function SiteHeader() {
       >
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 md:px-6">
           <Link to="/" className="flex items-center gap-3" aria-label="Farmer's Dairy home">
-            <img src={LOGO} alt="Farmer's Dairy logo" className="h-11 w-auto" />
+            <img src={LOGO} alt="Farmer's Dairy logo" className="h-14 w-auto md:h-16" />
           </Link>
 
           <ul className="hidden items-center gap-8 md:flex">
@@ -99,7 +99,7 @@ export function SiteHeader() {
       {open && (
         <div className="fixed inset-0 z-50 bg-cream md:hidden">
           <div className="flex items-center justify-between px-4 py-4">
-            <img src={LOGO} alt="Farmer's Dairy logo" className="h-11 w-auto" />
+            <img src={LOGO} alt="Farmer's Dairy logo" className="h-14 w-auto md:h-16" />
             <button
               onClick={() => setOpen(false)}
               aria-label="Close menu"

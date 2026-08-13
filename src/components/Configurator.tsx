@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { addDays, format } from "date-fns";
 import { Minus, Plus, CalendarDays, Info, X } from "lucide-react";
 import { toast } from "sonner";
@@ -14,17 +14,49 @@ const PLANS = [
   { id: "custom", label: "Custom range", days: 0 },
 ];
 
-function earliestStart() {
-  const now = new Date();
-  const base = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  return now.getHours() >= 5 ? addDays(base, 1) : base;
+// Milk cut-offs (all times in the browser's local timezone, so a customer
+// in Hosur always sees Hosur time regardless of where our server sits).
+const EARLY_CUTOFF_HOUR = 5; // Orders placed BEFORE 05:00 → delivered same day after 5 AM
+const LATE_CUTOFF_HOUR = 19; // Orders placed AT/AFTER 19:00 → earliest delivery is tomorrow
+
+function earliestDeliveryFor(now: Date): Date {
+  const midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  return now.getHours() >= LATE_CUTOFF_HOUR ? addDays(midnight, 1) : midnight;
+}
+
+type DeliveryNotice = {
+  tone: "info" | "warn";
+  message: string;
+};
+
+function deliveryNoticeFor(now: Date): DeliveryNotice | null {
+  const h = now.getHours();
+  const midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  if (h < EARLY_CUTOFF_HOUR) {
+    return {
+      tone: "info",
+      message: `Since you're ordering before 5 AM, your first delivery will arrive after 5 AM today (${format(midnight, "d MMM yyyy")}).`,
+    };
+  }
+  if (h >= LATE_CUTOFF_HOUR) {
+    return {
+      tone: "warn",
+      message: `Orders after 7 PM are queued for the next day — your first delivery will arrive on ${format(addDays(midnight, 1), "d MMM yyyy")}.`,
+    };
+  }
+  return null;
 }
 
 export function Configurator({ product }: { product: Product }) {
   const { addToCart, hasKey } = useCart();
   const navigate = useNavigate();
-  const min = earliestStart();
   const isSub = product.isSubscription === true;
+
+  // Compute the earliest delivery date. We seed with a placeholder so SSR
+  // and client render match, then re-compute in the client effect so the
+  // date reflects the visitor's *local* time — dairy cut-offs are IST-critical.
+  const [min, setMin] = useState<Date>(() => earliestDeliveryFor(new Date()));
+  const [notice, setNotice] = useState<DeliveryNotice | null>(null);
 
   const [variant, setVariant] = useState(product.variants?.[0]?.label ?? "");
   const [qty, setQty] = useState(1);
@@ -33,6 +65,21 @@ export function Configurator({ product }: { product: Product }) {
   const [end, setEnd] = useState<Date>(addDays(min, 6));
   const [holidays, setHolidays] = useState<Date[]>([]);
   const [nudged, setNudged] = useState(false);
+
+  // Re-hydrate with the visitor's clock and, for milk products, surface the
+  // relevant delivery-window notice.
+  useEffect(() => {
+    const now = new Date();
+    const nextMin = earliestDeliveryFor(now);
+    setMin(nextMin);
+    setStart(nextMin);
+    setEnd(addDays(nextMin, 6));
+    if (isSub) {
+      const n = deliveryNoticeFor(now);
+      setNotice(n);
+      if (n) toast.info(n.message, { duration: 6500 });
+    }
+  }, [isSub]);
 
   const unitPrice = useMemo(() => {
     if (product.variants) {
@@ -99,6 +146,23 @@ export function Configurator({ product }: { product: Product }) {
 
   return (
     <div className="space-y-5">
+      {isSub && notice && (
+        <div
+          role="status"
+          className={`flex items-start gap-3 rounded-2xl border px-4 py-3 text-sm leading-snug ${
+            notice.tone === "warn"
+              ? "border-butter-deep/40 bg-butter/25 text-green-deep"
+              : "border-green/25 bg-cream text-green-deep"
+          }`}
+        >
+          <Info className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
+          <p>
+            <strong className="font-display font-bold">Delivery note:</strong>{" "}
+            {notice.message}
+          </p>
+        </div>
+      )}
+
       {product.variants && (
         <div>
           <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-green">
@@ -199,7 +263,7 @@ export function Configurator({ product }: { product: Product }) {
 
             <Popover>
               <PopoverTrigger asChild>
-                <button className="btn btn-secondary flex-1">Skip these dates</button>
+                <button className="btn btn-secondary flex-1">Need a Subscription Break</button>
               </PopoverTrigger>
               <PopoverContent className="w-auto p-0" align="start">
                 <Calendar
@@ -215,7 +279,7 @@ export function Configurator({ product }: { product: Product }) {
           {nudged && (
             <p className="flex items-start gap-2 rounded-xl bg-butter/20 px-3 py-2 text-xs text-green-deep">
               <Info className="mt-0.5 h-3.5 w-3.5 shrink-0" />
-              Orders for today close at 5 AM — first delivery will be tomorrow.
+              Please pick a date from {format(min, "d MMM yyyy")} onwards.
             </p>
           )}
 
@@ -226,7 +290,7 @@ export function Configurator({ product }: { product: Product }) {
                   key={h.toISOString()}
                   onClick={() => toggleHoliday(h)}
                   className="chip gap-1"
-                  aria-label={`Remove holiday ${format(h, "d MMM")}`}
+                  aria-label={`Remove break day ${format(h, "d MMM")}`}
                 >
                   {format(h, "d MMM")}
                   <X className="h-3 w-3" />
