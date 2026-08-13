@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "farmers-dairy-2",
+      "runtimeExecutable": "C:/Users/dines/AppData/Local/nvm/v22.23.1/npm.cmd",
+      "runtimeArgs": ["run", "dev"],
+      "port": 5173
+    }
+  ]
+}
