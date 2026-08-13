@@ -19,6 +19,7 @@ const slides = [
     bullets: ["No Preservatives", "No Antibiotics"],
     backgroundImage: "url('/images/hero-milk.jpg')",
     cta: "Start Subscription",
+    href: "/shop/raw-cow-milk-1000ml",
   },
   {
     id: 2,
@@ -29,6 +30,7 @@ const slides = [
     bullets: [],
     backgroundImage: "url('/images/hero-ghee.jpg')",
     cta: "Shop Ghee",
+    href: "/shop/organic-cow-ghee",
   },
   {
     id: 3,
@@ -39,6 +41,7 @@ const slides = [
     bullets: [],
     backgroundImage: "url('/images/hero-paneer.jpg')",
     cta: "Shop Paneer",
+    href: "/shop/organic-paneer",
   },
   {
     id: 4,
@@ -49,6 +52,7 @@ const slides = [
     bullets: [],
     backgroundImage: "url('/images/hero-butter.jpg')",
     cta: "Shop Butter",
+    href: "/shop/organic-butter",
   },
 ];
 
@@ -129,7 +133,7 @@ export function HeroSlider() {
                 </ul>
               )}
               <Link
-                href="/shop"
+                href={slide.href}
                 className="btn-primary inline-flex items-center text-sm sm:text-base"
               >
                 {slide.cta}
