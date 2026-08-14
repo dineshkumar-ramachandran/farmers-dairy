@@ -31,7 +31,7 @@ const whyUs = [
   {
     Icon: Truck,
     title: "Daily Delivery",
-    text: "Fresh milk delivered to your doorstep every morning before 7 AM.",
+    text: "Fresh milk delivered to your doorstep every morning before 6:45 AM.",
   },
   {
     Icon: Shield,
@@ -47,6 +47,21 @@ const whyUs = [
     Icon: Heart,
     title: "Family Farm",
     text: "From our family farm to your family, with love and care in every drop.",
+  },
+];
+
+const farmGallery = [
+  {
+    src: "https://raw.githubusercontent.com/dineshkumar-ramachandran/farmers-dairy/pagination/images/Hero-slider-image-2.png",
+    alt: "Our cows grazing on open pasture near Hosur",
+  },
+  {
+    src: "https://raw.githubusercontent.com/dineshkumar-ramachandran/farmers-dairy/pagination/images/Hero-slider-image-3.png",
+    alt: "Fresh milk being packed at the Farmer's Dairy farm",
+  },
+  {
+    src: "https://raw.githubusercontent.com/dineshkumar-ramachandran/farmers-dairy/pagination/images/Hero-slider-image-4.png",
+    alt: "The Farmer's Dairy family farm at dawn",
   },
 ];
 
@@ -153,12 +168,16 @@ function Home() {
                 <p className="mt-1 text-xs uppercase tracking-[0.2em] text-text/70">Families</p>
               </div>
               <div>
-                <Counter target={0} suffix="" />
-                <p className="mt-1 text-xs uppercase tracking-[0.2em] text-text/70">Preservatives</p>
+                <span className="font-display text-3xl font-extrabold text-green-deep">
+                  4.9★
+                </span>
+                <p className="mt-1 text-xs uppercase tracking-[0.2em] text-text/70">Rating</p>
               </div>
               <div>
-                <Counter target={7} suffix=" AM" />
-                <p className="mt-1 text-xs uppercase tracking-[0.2em] text-text/70">Delivery</p>
+                <span className="font-display text-2xl font-extrabold leading-tight text-green-deep">
+                  4 – 6:30
+                </span>
+                <p className="mt-1 text-xs uppercase tracking-[0.2em] text-text/70">AM Delivery</p>
               </div>
             </div>
           </div>
@@ -251,6 +270,41 @@ function Home() {
               ))}
             </div>
           </div>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-7xl px-6 py-20 md:py-28">
+        <div data-reveal className="reveal max-w-2xl">
+          <span className="eyebrow">Inside the Farm</span>
+          <h2 className="mt-5 text-4xl md:text-5xl">
+            A Peek at <span className="text-gradient-green">Where It All Begins</span>
+          </h2>
+          <p className="mt-4 text-text/80">
+            Real cows, real hands, real mornings — three snapshots from the farm that fills your
+            packets every day.
+          </p>
+        </div>
+        <div className="mt-12 grid gap-6 md:grid-cols-3">
+          {farmGallery.map((f, i) => (
+            <figure
+              key={f.src}
+              data-reveal
+              data-reveal-delay={i * 120}
+              className="reveal group overflow-hidden rounded-3xl bg-cream shadow-[0_10px_30px_-14px_rgba(15,46,10,0.35)]"
+            >
+              <div className="aspect-[4/5] overflow-hidden">
+                <img
+                  src={f.src}
+                  alt={f.alt}
+                  loading="lazy"
+                  className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                />
+              </div>
+              <figcaption className="border-t border-green/10 px-5 py-4 text-xs uppercase tracking-[0.18em] text-text/70">
+                {f.alt}
+              </figcaption>
+            </figure>
+          ))}
         </div>
       </section>
 

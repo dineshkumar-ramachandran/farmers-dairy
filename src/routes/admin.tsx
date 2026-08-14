@@ -2,7 +2,24 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { inr } from "@/lib/products";
 import { listAdminOrders, updateAdminOrderStatus } from "@/lib/orders.server";
-import type { AdminOrder as ApiAdminOrder } from "@/lib/order-types";
+import type { AdminOrder as ApiAdminOrder, OrderItemInput } from "@/lib/order-types";
+
+/**
+ * Old Next.js orders stored line items as `{ price, quantity, sampleSize }`.
+ * New TanStack Start orders use `{ unitPrice, quantity, variant, days }`.
+ * Normalise so the admin dashboard never renders NaN.
+ */
+function lineTotal(i: OrderItemInput): number {
+  const unit = Number(i.unitPrice ?? i.price ?? 0);
+  const qty = Number(i.quantity ?? 1);
+  const days = Number(i.days ?? 1);
+  const total = unit * qty * days;
+  return Number.isFinite(total) ? total : 0;
+}
+
+function safeInr(n: number): string {
+  return inr(Number.isFinite(n) ? n : 0);
+}
 
 export const Route = createFileRoute("/admin")({
   head: () => ({
@@ -251,7 +268,7 @@ function Admin() {
               <span className="text-sm text-text/75 md:col-span-2">
                 {o.items.map((i) => `${i.quantity}× ${i.name}`).join(", ")}
               </span>
-              <span className="font-semibold">{inr(o.total)}</span>
+              <span className="font-semibold">{safeInr(o.total)}</span>
               <span className="chip w-fit">{o.status}</span>
             </button>
           ))}
@@ -294,19 +311,22 @@ function Admin() {
               )}
             </div>
             <ul className="rule mt-6 space-y-3 pt-6 text-sm">
-              {open.items.map((i, idx) => (
-                <li key={i.key ?? idx} className="flex justify-between gap-4">
-                  <span>
-                    {i.quantity} × {i.name} {i.variant ? `(${i.variant})` : ""}
-                    {i.days && i.days > 1 ? ` · ${i.days} days` : ""}
-                  </span>
-                  <span>{inr(i.unitPrice * i.quantity * (i.days || 1))}</span>
-                </li>
-              ))}
+              {open.items.map((i, idx) => {
+                const size = i.variant ?? i.sampleSize;
+                return (
+                  <li key={i.key ?? idx} className="flex justify-between gap-4">
+                    <span>
+                      {i.quantity} × {i.name} {size ? `(${size})` : ""}
+                      {i.days && i.days > 1 ? ` · ${i.days} days` : ""}
+                    </span>
+                    <span>{safeInr(lineTotal(i))}</span>
+                  </li>
+                );
+              })}
             </ul>
             <p className="rule mt-6 flex justify-between pt-4 font-display text-lg font-bold text-green-deep">
               <span>Total</span>
-              <span>{inr(open.total)}</span>
+              <span>{safeInr(open.total)}</span>
             </p>
             <div className="mt-8 flex gap-3">
               <button

@@ -94,7 +94,15 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         rel: "stylesheet",
         href: "https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&display=swap",
       },
-      { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+      {
+        rel: "icon",
+        href: "https://raw.githubusercontent.com/dineshkumar-ramachandran/farmers-dairy/farmers-dairy/public/images/farmers-dairy-logo.png",
+        type: "image/png",
+      },
+      {
+        rel: "apple-touch-icon",
+        href: "https://raw.githubusercontent.com/dineshkumar-ramachandran/farmers-dairy/farmers-dairy/public/images/farmers-dairy-logo.png",
+      },
     ],
   }),
   shellComponent: RootShell,

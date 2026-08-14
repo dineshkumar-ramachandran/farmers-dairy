@@ -194,15 +194,31 @@ export function HeroSlider() {
                 ))}
               </ul>
             )}
-            <Link
-              to="/shop/$slug"
-              params={{ slug: slide.slug }}
-              key={`dcta-${index}`}
-              className="btn btn-primary mt-8"
-              style={{ animation: prefersReduced() ? undefined : "cta-pulse 1200ms ease-out 1" }}
-            >
-              {slide.cta}
-            </Link>
+            <div className="mt-8 flex flex-wrap items-center gap-3">
+              <Link
+                to="/shop/$slug"
+                params={{ slug: slide.slug }}
+                key={`dcta-${index}`}
+                className="btn btn-primary"
+                style={{ animation: prefersReduced() ? undefined : "cta-pulse 1200ms ease-out 1" }}
+              >
+                {slide.cta}
+              </Link>
+              <Link to="/shop" className="btn btn-secondary">
+                Browse all products
+              </Link>
+            </div>
+            <ul className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-green-deep/80">
+              <li className="flex items-center gap-2">
+                <span className="h-1.5 w-1.5 rounded-full bg-butter" /> 4 – 6:30 AM Delivery
+              </li>
+              <li className="flex items-center gap-2">
+                <span className="h-1.5 w-1.5 rounded-full bg-butter" /> Free within Hosur
+              </li>
+              <li className="flex items-center gap-2">
+                <span className="h-1.5 w-1.5 rounded-full bg-butter" /> 4.9★ from 1,200+ families
+              </li>
+            </ul>
           </div>
         </div>
 

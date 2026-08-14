@@ -63,14 +63,16 @@ const why = [
 const steps = [
   { title: "Milked", text: "Hand-checked cows milked at dawn on our Hosur farm." },
   { title: "Filtered & Packed", text: "Filtered and sealed into eco friendly packets." },
-  { title: "Delivered", text: "At your doorstep every morning before 7 AM." },
+  { title: "Delivered", text: "At your doorstep between 4 AM and 6:30 AM every morning." },
 ];
 
 function ProductDetail() {
   const { product } = Route.useLoaderData();
   const ref = useRevealRoot<HTMLDivElement>();
   const related = products.filter((p) => p.slug !== product.slug).slice(0, 3);
-  const thumbs = [product.image, product.hero].filter(Boolean) as string[];
+  // Only show the product photo — the marketing hero was duplicating the same
+  // subject on every PDP and adding visual clutter, so it is intentionally out.
+  const thumbs: string[] = [product.image];
   const [active, setActive] = useState(product.image);
   const detail = productDetails[product.slug] ?? fallbackDetail;
 
@@ -125,7 +127,7 @@ function ProductDetail() {
                 <Star key={i} className="h-4 w-4 fill-butter text-butter" aria-hidden="true" />
               ))}
             </div>
-            <span className="text-sm text-text/75">Loved by families in Hosur</span>
+            <span className="text-sm text-text/75">Loved by families across India</span>
           </div>
 
           <div className="mt-5">

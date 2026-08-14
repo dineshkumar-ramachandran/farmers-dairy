@@ -9,12 +9,12 @@ export type ProductDetail = {
 
 const milk: ProductDetail = {
   intro:
-    "Our raw cow milk comes from indigenous cows that graze on open, chemical-free pasture around Hosur. It is milked at dawn, filtered, chilled and sealed within the hour — never homogenised, never standardised, never watered down. What reaches your door is milk exactly as the cow gave it.",
+    "Hygienically sourced organic Cow Milk directly from the farm to your home. Milked at dawn, filtered and sealed within the hour, untouched by human hands from milking to packing — so what reaches your door is milk exactly as the cow gave it.",
   benefits: [
-    "Unhomogenised, so the cream naturally rises to the top",
-    "No preservatives, no antibiotics, no added water",
-    "Rich in A2 protein, calcium and natural fat",
-    "Delivered within hours of milking, every single morning",
+    "Untouched by human hands from milking to packing",
+    "Rich in Calcium and A2 protein",
+    "Completely safe and recommended for babies above 1 year",
+    "Delivered between 4 AM and 6:30 AM in eco friendly packets",
   ],
   nutrition: [
     { label: "Energy", value: "67 kcal / 100 ml" },
@@ -31,11 +31,11 @@ const milk: ProductDetail = {
   faqs: [
     {
       q: "What time is the milk delivered?",
-      a: "Before 7 AM every morning, at your doorstep in eco friendly packets.",
+      a: "Between 4 AM and 6:30 AM every morning, at your doorstep in eco friendly packets.",
     },
     {
       q: "Can I pause my subscription?",
-      a: "Yes. Use the skip-dates picker while ordering, or call us at 93637 78989 any time before 5 AM.",
+      a: "Yes. Use the Need a Subscription Break picker while ordering, or call us at 93637 78989 any time before 5 AM.",
     },
     {
       q: "Is the milk pasteurised?",
@@ -54,12 +54,13 @@ export const productDetails: Record<string, ProductDetail> = {
   },
   "organic-cow-ghee": {
     intro:
-      "Made the slow bilona way — fresh cream is cultured overnight, churned into butter, then simmered on a low flame until the milk solids turn golden and the kitchen fills with a nutty aroma. Nothing is rushed, and nothing is added.",
+      "Organic Cow Ghee slow-made from Farmer's Dairy Organic Butter — cultured cream churned into butter, then simmered on a low flame until the milk solids turn golden and the kitchen fills with a nutty aroma. Nothing is rushed, and nothing is added.",
     benefits: [
-      "Cultured cream, hand-churned and slow-simmered",
-      "Deep golden grain with a natural nutty aroma",
-      "High smoke point — ideal for everyday Indian cooking",
-      "No palm oil, no vegetable fat, no colouring",
+      "Made from Pure & Organic Butter churned from fresh cream",
+      "Slow-made for a rich taste and deep, nutty aroma",
+      "Supports digestion and gut health",
+      "Rich in essential vitamins",
+      "Boosts immunity naturally",
     ],
     nutrition: [
       { label: "Energy", value: "900 kcal / 100 g" },
@@ -84,11 +85,11 @@ export const productDetails: Record<string, ProductDetail> = {
   },
   "organic-paneer": {
     intro:
-      "Set fresh each morning with nothing but our organic cow milk and lemon juice. No vinegar, no chemical coagulants, no firming agents. It arrives sitting in its own paneer water so it stays soft until you cook it.",
+      "Soft and Healthy Paneer made from Organic Cow milk and Lemon. Set fresh each morning with nothing but our organic cow milk and lemon juice. No vinegar, no chemical coagulants, no firming agents. It arrives sitting in its own paneer water so it stays soft until you cook it.",
     benefits: [
       "Set with lemon only, never chemical coagulants",
-      "Packed in paneer water to keep it soft and moist",
-      "High protein, made the same day it is delivered",
+      "Packed with paneer water inside to keep it soft",
+      "High source of protein and nutrients",
       "Crumbles clean and holds shape when pan-fried",
     ],
     nutrition: [
@@ -114,11 +115,11 @@ export const productDetails: Record<string, ProductDetail> = {
   },
   "organic-butter": {
     intro:
-      "Small-batch butter churned from fresh organic cream, with nothing else in it. Pale gold, soft enough to spread straight from the fridge, and made in quantities small enough that every batch is tasted before it leaves the farm.",
+      "Organic Butter churned from fresh cream. Small-batch and made in quantities small enough that every batch is tasted before it leaves the farm — soft, creamy and perfect for tasty dosas.",
     benefits: [
       "Churned in small batches from fresh organic cream",
-      "Creamy, spreadable texture with a clean finish",
-      "No emulsifiers, no colouring, no preservatives",
+      "Keep refrigerated at all times to avoid off-smell",
+      "Helps maintain strong bones, healthy vision and immune function",
       "Perfect for dosas, toast and home-made ghee",
     ],
     nutrition: [

@@ -17,6 +17,11 @@ export type OrderItemInput = {
   startDate?: string;
   endDate?: string;
   holidays?: string[];
+  // Legacy Next.js orders — kept here so admin can normalise old rows
+  price?: number;
+  sampleSize?: string;
+  subscription?: string;
+  deliveryDate?: string;
 };
 
 export type SaveOrderInput = {
