@@ -183,16 +183,16 @@ export function HeroSlider() {
 
       <div className="mx-auto grid max-w-7xl grid-cols-1 gap-6 px-5 md:min-h-[650px] md:grid-cols-[minmax(0,44fr)_minmax(0,56fr)] md:gap-8 md:px-8 lg:min-h-[720px]">
         {/* ─────────── MOBILE image (order-first, visually on top) ─────────── */}
-        <div className="relative -mx-5 mt-2 md:hidden">
-          <div className="relative h-[44vh] min-h-[300px] max-h-[420px] w-full">
+        <div className="relative mt-4 md:hidden">
+          <div className="relative mx-auto flex h-[46vh] min-h-[320px] max-h-[440px] w-full items-center justify-center">
             {/* Warm glow so the transparent product sits on a soft base and
                 doesn't look like it's floating in space */}
             <div
               aria-hidden="true"
-              className="pointer-events-none absolute inset-0 mx-auto max-w-[80%]"
+              className="pointer-events-none absolute inset-x-4 inset-y-6"
               style={{
                 background:
-                  "radial-gradient(50% 45% at 50% 60%, rgba(249,187,106,0.32) 0%, rgba(251,235,209,0) 70%)",
+                  "radial-gradient(55% 45% at 50% 55%, rgba(249,187,106,0.28) 0%, rgba(251,235,209,0) 70%)",
               }}
             />
             {heroSlides.map((s, i) => (
@@ -204,7 +204,9 @@ export function HeroSlider() {
                 fetchPriority={i === 0 ? "high" : "low"}
                 decoding="async"
                 aria-hidden={i !== index}
-                className="absolute inset-0 h-full w-full object-contain"
+                // object-contain + max-h keeps the WHOLE product visible;
+                // no cropping regardless of aspect ratio
+                className="absolute inset-0 mx-auto h-full max-h-full w-auto max-w-[85%] object-contain"
                 style={{
                   opacity: i === index ? 1 : 0,
                   transform:
@@ -212,11 +214,7 @@ export function HeroSlider() {
                       ? `translate3d(0, ${reduced ? 0 : floatY.toFixed(2)}px, 0) scale(1)`
                       : "translate3d(30px, 0, 0) scale(0.97)",
                   transition: `opacity 900ms ${EASING}, transform 900ms ${EASING}`,
-                  // multiply blends any residual warm bg the PNG might have
-                  // into the cream site background; on truly transparent PNGs
-                  // it's a no-op for the transparent pixels
-                  mixBlendMode: "multiply",
-                  filter: "drop-shadow(0 24px 30px rgba(15, 46, 10, 0.18))",
+                  filter: "drop-shadow(0 20px 26px rgba(15, 46, 10, 0.20))",
                   willChange: i === index ? "transform" : undefined,
                 }}
               />
@@ -326,15 +324,15 @@ export function HeroSlider() {
 
         {/* ─────────── DESKTOP image column ─────────── */}
         <div className="relative hidden md:block">
-          <div className="relative flex h-full min-h-[560px] items-center justify-center">
+          <div className="relative flex h-full min-h-[560px] items-center justify-center py-10">
             {/* Warm radial cushion behind the product — gives depth without
                 a hard rectangular frame */}
             <div
               aria-hidden="true"
-              className="pointer-events-none absolute inset-0"
+              className="pointer-events-none absolute inset-6"
               style={{
                 background:
-                  "radial-gradient(45% 55% at 60% 55%, rgba(249,187,106,0.28) 0%, rgba(251,235,209,0) 68%)",
+                  "radial-gradient(45% 55% at 55% 55%, rgba(249,187,106,0.30) 0%, rgba(251,235,209,0) 68%)",
               }}
             />
             {heroSlides.map((s, i) => (
@@ -346,17 +344,17 @@ export function HeroSlider() {
                 fetchPriority={i === 0 ? "high" : "low"}
                 decoding="async"
                 aria-hidden={i !== index}
-                className="absolute top-1/2 max-h-[92%] max-w-[85%] -translate-y-1/2 object-contain"
+                // Absolute-fill + object-contain so the image scales to fit
+                // the column while never being cropped. max-w keeps small
+                // objects (paneer jar) from ballooning.
+                className="absolute inset-0 m-auto h-full max-h-[calc(100%-2rem)] w-auto max-w-[80%] object-contain"
                 style={{
                   opacity: i === index ? 1 : 0,
                   transform:
                     i === index
-                      ? `translate3d(0, calc(-50% + ${reduced ? 0 : floatY.toFixed(2)}px), 0) scale(1)`
-                      : "translate3d(50px, -50%, 0) scale(0.97)",
+                      ? `translate3d(0, ${reduced ? 0 : floatY.toFixed(2)}px, 0) scale(1)`
+                      : "translate3d(50px, 0, 0) scale(0.97)",
                   transition: `opacity 900ms ${EASING}, transform 900ms ${EASING}`,
-                  // multiply blends any residual warm bg into cream (safety
-                  // net for PNGs that ship with a faint studio backdrop)
-                  mixBlendMode: "multiply",
                   filter: "drop-shadow(0 40px 50px rgba(15, 46, 10, 0.22))",
                   willChange: i === index ? "transform" : undefined,
                 }}
