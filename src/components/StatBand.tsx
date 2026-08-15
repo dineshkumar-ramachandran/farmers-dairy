@@ -44,7 +44,7 @@ export function StatBand() {
         />
         <Stat
           target={49}
-          display={(v) => `${(v / 10).toFixed(1)}★`}
+          display={(v) => `${(v / 10).toFixed(1)} / 5 ★`}
           label="Customer rating"
         />
         <Stat

@@ -216,7 +216,7 @@ export function HeroSlider() {
                 <span className="h-1.5 w-1.5 rounded-full bg-butter" /> Free within Hosur
               </li>
               <li className="flex items-center gap-2">
-                <span className="h-1.5 w-1.5 rounded-full bg-butter" /> 4.9★ from 1,200+ families
+                <span className="h-1.5 w-1.5 rounded-full bg-butter" /> Rated 4.9 / 5 by 1,200+ families
               </li>
             </ul>
           </div>

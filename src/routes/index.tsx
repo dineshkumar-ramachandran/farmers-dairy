@@ -4,6 +4,7 @@ import { HeroSlider } from "@/components/HeroSlider";
 import { ProductCard } from "@/components/ProductCard";
 import { Marquee } from "@/components/Marquee";
 import { StatBand } from "@/components/StatBand";
+import { FarmGallery } from "@/components/FarmGallery";
 import { products } from "@/lib/products";
 import { useCountUp, useRevealRoot } from "@/lib/motion";
 
@@ -169,7 +170,7 @@ function Home() {
               </div>
               <div>
                 <span className="font-display text-3xl font-extrabold text-green-deep">
-                  4.9★
+                  4.9 <span className="text-2xl text-butter-deep">/ 5 ★</span>
                 </span>
                 <p className="mt-1 text-xs uppercase tracking-[0.2em] text-text/70">Rating</p>
               </div>
@@ -284,27 +285,8 @@ function Home() {
             packets every day.
           </p>
         </div>
-        <div className="mt-12 grid gap-6 md:grid-cols-3">
-          {farmGallery.map((f, i) => (
-            <figure
-              key={f.src}
-              data-reveal
-              data-reveal-delay={i * 120}
-              className="reveal group overflow-hidden rounded-3xl bg-cream shadow-[0_10px_30px_-14px_rgba(15,46,10,0.35)]"
-            >
-              <div className="aspect-[4/5] overflow-hidden">
-                <img
-                  src={f.src}
-                  alt={f.alt}
-                  loading="lazy"
-                  className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-                />
-              </div>
-              <figcaption className="border-t border-green/10 px-5 py-4 text-xs uppercase tracking-[0.18em] text-text/70">
-                {f.alt}
-              </figcaption>
-            </figure>
-          ))}
+        <div data-reveal className="reveal mt-12">
+          <FarmGallery photos={farmGallery} />
         </div>
       </section>
 

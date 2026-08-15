@@ -114,7 +114,7 @@ function CartPage() {
             Proceed to Checkout
           </Link>
           <p className="rule mt-6 pt-4 text-[11px] uppercase tracking-[0.14em] text-text/70">
-            SSL secured · Razorpay accepted · 4.9★ from 1200+ deliveries
+            SSL secured · Razorpay accepted · Rated 4.9 / 5 by 1,200+ families
           </p>
         </aside>
       </div>

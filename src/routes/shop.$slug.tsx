@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { Droplets, Leaf, Star, Truck } from "lucide-react";
 import { fallbackDetail, productDetails } from "@/lib/product-details";
@@ -75,6 +75,17 @@ function ProductDetail() {
   const thumbs: string[] = [product.image];
   const [active, setActive] = useState(product.image);
   const detail = productDetails[product.slug] ?? fallbackDetail;
+
+  // Navigating between PDPs reuses this component (same file route with a
+  // different :slug param), so React does NOT remount. Manually re-sync the
+  // active thumbnail and scroll the window back to the top whenever the slug
+  // changes — otherwise the "You may like" tiles look like they do nothing.
+  useEffect(() => {
+    setActive(product.image);
+    if (typeof window !== "undefined") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  }, [product.slug, product.image]);
 
   return (
     <div ref={ref} className="mx-auto max-w-7xl px-6 py-12 md:py-20">
