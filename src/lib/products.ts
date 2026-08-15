@@ -188,43 +188,76 @@ export const basePrice = (p: Product) =>
 export const inr = (n: number) =>
   `₹${n.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 
-export const heroSlides = [
+// Dedicated hero PNGs (desktop + mobile crops) supplied by the client and
+// hosted on the pagination branch — pulled via GitHub raw so we don't add
+// ~15 MB of binaries to this repo.
+const HERO_ART_BASE =
+  "https://raw.githubusercontent.com/dineshkumar-ramachandran/farmers-dairy/pagination/images";
+
+export type HeroSlide = {
+  id: string;
+  eyebrow: string;
+  title: string;
+  description: string;
+  bullets: string[];
+  cta: string;
+  href: string;
+  imageDesktop: string;
+  imageMobile: string;
+  alt: string;
+};
+
+export const heroSlides: HeroSlide[] = [
   {
-    title: "Raw Cow Milk",
-    subtitle: "From Farm to Home",
-    description: "Unprocessed Organic Cow Milk directly from our Farm to your Home.",
+    id: "milk",
+    eyebrow: "From Farm to Home",
+    title: "Fresh Cow Milk",
+    description:
+      "Pure, fresh cow milk delivered from our farm to your doorstep every morning.",
     bullets: ["No Preservatives", "No Antibiotics"],
     cta: "Start Subscription",
-    slug: "raw-cow-milk-1000ml",
-    image: `${IMG_BASE}/hero-milk.jpg`,
+    href: "/shop/raw-cow-milk-1000ml",
+    imageDesktop: `${HERO_ART_BASE}/milk-desktop.png`,
+    imageMobile: `${HERO_ART_BASE}/milk-mobile.png`,
+    alt: "Farmer's Dairy fresh cow milk",
   },
   {
+    id: "ghee",
+    eyebrow: "Pure & Traditional",
     title: "Organic Cow Ghee",
-    subtitle: "Pure & Aromatic",
     description:
-      "Pure and Aromatic Organic Cow Ghee made from fresh Organic Cream, extracted from our Organic Milk.",
+      "Slowly crafted from pure organic cow milk for rich flavour, aroma and everyday goodness.",
     bullets: ["Slow-Made Bilona Style", "Rich & Nutty Aroma"],
     cta: "Shop Ghee",
-    slug: "organic-cow-ghee",
-    image: `${IMG_BASE}/hero-ghee.jpg`,
+    href: "/shop/organic-cow-ghee",
+    imageDesktop: `${HERO_ART_BASE}/ghee-desktop.png`,
+    imageMobile: `${HERO_ART_BASE}/ghee-mobile.png`,
+    alt: "Farmer's Dairy organic cow ghee",
   },
   {
-    title: "Organic Paneer",
-    subtitle: "Soft & Healthy",
-    description:
-      "Soft and Healthy Paneer made from Organic Cow milk & Lemon. Comes with paneer water inside.",
-    bullets: ["Set with Lemon Only", "Packed in Paneer Water"],
-    cta: "Shop Paneer",
-    slug: "organic-paneer",
-    image: `${IMG_BASE}/hero-paneer.jpg`,
-  },
-  {
+    id: "butter",
+    eyebrow: "Creamy & Fresh",
     title: "Organic Butter",
-    subtitle: "Creamy & Fresh",
-    description: "Churned from Organic Cream. Soft and creamy butter for tasty dosas.",
+    description:
+      "Soft, creamy butter churned from organic cream for delicious everyday meals.",
     bullets: ["Small-Batch Churned", "No Colouring, No Additives"],
     cta: "Shop Butter",
-    slug: "organic-butter",
-    image: `${IMG_BASE}/hero-butter.jpg`,
+    href: "/shop/organic-butter",
+    imageDesktop: `${HERO_ART_BASE}/butter-desktop.png`,
+    imageMobile: `${HERO_ART_BASE}/butter-mobile.png`,
+    alt: "Farmer's Dairy organic butter",
+  },
+  {
+    id: "paneer",
+    eyebrow: "Soft & Healthy",
+    title: "Organic Paneer",
+    description:
+      "Soft and fresh organic paneer made from pure cow milk, perfect for everyday cooking.",
+    bullets: ["Set with Lemon Only", "Packed in Paneer Water"],
+    cta: "Shop Paneer",
+    href: "/shop/organic-paneer",
+    imageDesktop: `${HERO_ART_BASE}/paneer-desktop.png`,
+    imageMobile: `${HERO_ART_BASE}/paneer-mobile.png`,
+    alt: "Farmer's Dairy organic malai paneer",
   },
 ];

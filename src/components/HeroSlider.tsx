@@ -1,265 +1,454 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import { heroSlides } from "@/lib/products";
+import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
+import { heroSlides, type HeroSlide } from "@/lib/products";
 import { prefersReduced } from "@/lib/motion";
 
 /**
- * Hero slider — desktop uses a full-bleed background with copy laid over a
- * left-fade scrim. Mobile stacks the product photo above the copy so both are
- * clearly visible on narrow screens (image is a fixed-height media card, copy
- * follows below).
+ * Premium 4-slide hero.
+ *
+ * Layout — desktop: text left (≈42 % col), photograph right (≈58 %); mobile:
+ * responsive art on top, copy stack below.
+ *
+ * Motion —
+ *  • Typewriter reveal on the H1 (55 ms/char desktop, 40 ms/char mobile).
+ *  • Product image enters translateX(50 px) scale(0.97) → 0/1 with a subtle
+ *    continuous 5 – 7 s float once it's landed.
+ *  • Everything runs on transform + opacity only (compositor-friendly) and
+ *    fully respects prefers-reduced-motion.
+ *
+ * A11y — arrow-key navigation, aria-labels on every control, live region
+ * announces the active slide title.
  */
+
+const AUTOPLAY_MS = 6000;
+const TYPE_SPEED_DESKTOP = 55;
+const TYPE_SPEED_MOBILE = 40;
+const POST_TYPE_HOLD = 1600;
+const EASING = "cubic-bezier(0.22, 1, 0.36, 1)";
+
+function useIsMobile(breakpoint = 768) {
+  const [mobile, setMobile] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia(`(max-width: ${breakpoint - 1}px)`);
+    const on = () => setMobile(mq.matches);
+    on();
+    mq.addEventListener("change", on);
+    return () => mq.removeEventListener("change", on);
+  }, [breakpoint]);
+  return mobile;
+}
+
+/**
+ * Typewriter — mounts fresh per-slide (via the caller's `key`), animates one
+ * character at a time, then fades in a soft underline swipe.
+ * Reserves the full heading height up-front (invisible sibling) so the page
+ * never shifts as characters appear.
+ */
+function TypewriterHeading({
+  text,
+  speed,
+  mobile,
+}: {
+  text: string;
+  speed: number;
+  mobile: boolean;
+}) {
+  const [count, setCount] = useState(prefersReduced() ? text.length : 0);
+
+  useEffect(() => {
+    if (prefersReduced()) {
+      setCount(text.length);
+      return;
+    }
+    setCount(0);
+    let i = 0;
+    const tick = () => {
+      i += 1;
+      setCount(i);
+      if (i < text.length) id = window.setTimeout(tick, speed);
+    };
+    let id = window.setTimeout(tick, speed);
+    return () => window.clearTimeout(id);
+  }, [text, speed]);
+
+  const done = count >= text.length;
+
+  return (
+    <h1
+      className="font-display font-extrabold text-green-deep"
+      style={{
+        letterSpacing: "-0.02em",
+        lineHeight: 1.02,
+        // clamp keeps the ceiling reasonable per breakpoint without a MQ ladder
+        fontSize: mobile
+          ? "clamp(2.2rem, 8.5vw, 3rem)"
+          : "clamp(3rem, 5.4vw, 4.6rem)",
+      }}
+    >
+      {/* Reserved-space placeholder — the invisible copy locks height so the
+          typewriter never causes reflow */}
+      <span className="relative block">
+        <span aria-hidden="true" className="invisible whitespace-pre-wrap">
+          {text}
+        </span>
+        <span className="absolute inset-0 whitespace-pre-wrap">
+          {text.slice(0, count)}
+          {!done && (
+            <span
+              aria-hidden="true"
+              className="ml-[2px] inline-block align-[-0.05em] text-butter-deep"
+              style={{
+                width: "0.06em",
+                height: "0.9em",
+                background: "currentColor",
+                animation: "hero-caret 1s steps(2) infinite",
+              }}
+            />
+          )}
+          <span className="sr-only">{text}</span>
+        </span>
+      </span>
+    </h1>
+  );
+}
+
 export function HeroSlider() {
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
-  const [offset, setOffset] = useState(0);
+  const [floatY, setFloatY] = useState(0);
   const touchX = useRef(0);
+  const mobile = useIsMobile();
+  const reduced = prefersReduced();
 
-  useEffect(() => {
-    if (prefersReduced()) return;
-    const onScroll = () => setOffset(Math.min(60, window.scrollY * 0.18));
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  const go = useCallback(
+  const slide = useMemo<HeroSlide>(() => heroSlides[index]!, [index]);
+  const nextIndex = useCallback(
     (n: number) => setIndex((i) => (n + heroSlides.length) % heroSlides.length),
     [],
   );
+  const goto = useCallback((i: number) => setIndex(i), []);
 
+  // Autoplay — pauses on hover / touch. `paused` is set by handlers below.
   useEffect(() => {
-    if (paused || prefersReduced()) return;
-    const t = window.setInterval(() => go(index + 1), 6500);
-    return () => window.clearInterval(t);
-  }, [index, paused, go]);
+    if (paused || reduced) return;
+    const id = window.setTimeout(() => nextIndex(index + 1), AUTOPLAY_MS);
+    return () => window.clearTimeout(id);
+  }, [index, paused, nextIndex, reduced]);
 
-  const slide = heroSlides[index]!;
+  // Very subtle continuous product-image float (5.5 s round trip, ~5 px).
+  useEffect(() => {
+    if (reduced) return;
+    const start = performance.now();
+    let raf = 0;
+    const loop = (t: number) => {
+      const cycle = ((t - start) % 5500) / 5500;
+      setFloatY(Math.sin(cycle * Math.PI * 2) * 5);
+      raf = requestAnimationFrame(loop);
+    };
+    raf = requestAnimationFrame(loop);
+    return () => cancelAnimationFrame(raf);
+  }, [reduced]);
 
-  const shell =
-    "relative overflow-hidden md:h-[520px] lg:h-[620px] xl:h-[700px]";
+  // Progress bar per slide — resets on every slide change
+  const [progressKey, setProgressKey] = useState(0);
+  useEffect(() => setProgressKey((k) => k + 1), [index]);
 
   return (
     <section
-      className={shell}
       aria-roledescription="carousel"
-      aria-label="Featured products"
+      aria-label="Featured Farmer's Dairy products"
       tabIndex={0}
+      className="relative isolate overflow-hidden bg-cream"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
+      onFocus={() => setPaused(true)}
+      onBlur={() => setPaused(false)}
       onKeyDown={(e) => {
-        if (e.key === "ArrowRight") go(index + 1);
-        if (e.key === "ArrowLeft") go(index - 1);
+        if (e.key === "ArrowRight") nextIndex(index + 1);
+        if (e.key === "ArrowLeft") nextIndex(index - 1);
         if (e.key === "Home") setIndex(0);
         if (e.key === "End") setIndex(heroSlides.length - 1);
-        if (e.key === " ") {
-          e.preventDefault();
-          setPaused((p) => !p);
-        }
       }}
-      onTouchStart={(e) => (touchX.current = e.touches[0]!.clientX)}
+      onTouchStart={(e) => {
+        setPaused(true);
+        touchX.current = e.touches[0]!.clientX;
+      }}
       onTouchEnd={(e) => {
         const dx = e.changedTouches[0]!.clientX - touchX.current;
-        if (Math.abs(dx) > 50) go(index + (dx < 0 ? 1 : -1));
+        if (Math.abs(dx) > 50) nextIndex(index + (dx < 0 ? 1 : -1));
+        // Resume autoplay 3 s after the user lifts their finger
+        window.setTimeout(() => setPaused(false), 3000);
       }}
     >
-      {/* ─────────────── MOBILE (< md): stacked image + copy ─────────────── */}
-      <div className="md:hidden">
-        {/* Image card — full width, fixed height, no scrim */}
-        <div className="relative h-[300px] overflow-hidden bg-cream sm:h-[360px]">
-          {heroSlides.map((s, i) => (
-            <img
-              key={s.title}
-              src={s.image}
-              alt={s.title}
-              loading={i === 0 ? "eager" : "lazy"}
-              fetchPriority={i === 0 ? "high" : "low"}
-              className="absolute inset-0 h-full w-full object-cover transition-opacity duration-[900ms]"
-              style={{
-                opacity: i === index ? 1 : 0,
-                transform: `scale(${i === index ? 1.04 : 1})`,
-                transition: "opacity 900ms, transform 8000ms ease-out",
-              }}
-              aria-hidden={i !== index}
-            />
-          ))}
-          {/* Prev / next — smaller, sit inside the image card */}
-          <button
-            onClick={() => go(index - 1)}
-            aria-label="Previous slide"
-            className="absolute left-3 top-1/2 grid h-9 w-9 -translate-y-1/2 place-items-center rounded-full bg-card/90 text-green shadow-lg"
-          >
-            <ChevronLeft className="h-4 w-4" />
-          </button>
-          <button
-            onClick={() => go(index + 1)}
-            aria-label="Next slide"
-            className="absolute right-3 top-1/2 grid h-9 w-9 -translate-y-1/2 place-items-center rounded-full bg-card/90 text-green shadow-lg"
-          >
-            <ChevronRight className="h-4 w-4" />
-          </button>
-          <div className="absolute bottom-3 left-1/2 flex -translate-x-1/2 items-center gap-1.5">
+      {/* Soft radial warmth behind the product — pinned to the right on
+          desktop, centred on mobile. Sits under everything as bg accent. */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 -z-10"
+        style={{
+          background:
+            "radial-gradient(60% 55% at 78% 45%, rgba(249,187,106,0.20) 0%, rgba(251,235,209,0) 65%)",
+        }}
+      />
+
+      <div className="mx-auto grid max-w-7xl grid-cols-1 gap-6 px-5 md:min-h-[650px] md:grid-cols-[minmax(0,44fr)_minmax(0,56fr)] md:gap-8 md:px-8 lg:min-h-[720px]">
+        {/* ─────────── MOBILE image (order-first, visually on top) ─────────── */}
+        <div className="relative -mx-5 mt-2 md:hidden">
+          <div className="relative h-[44vh] min-h-[300px] max-h-[420px] w-full">
             {heroSlides.map((s, i) => (
-              <button
-                key={s.title}
-                onClick={() => setIndex(i)}
-                aria-label={`Go to slide ${i + 1}`}
-                className={`h-[3px] rounded-full transition-all ${
-                  i === index ? "w-10 bg-cream" : "w-5 bg-cream/60"
-                }`}
+              <img
+                key={s.id}
+                src={s.imageMobile}
+                alt={s.alt}
+                loading={i === 0 ? "eager" : "lazy"}
+                fetchPriority={i === 0 ? "high" : "low"}
+                decoding="async"
+                aria-hidden={i !== index}
+                className="absolute inset-0 h-full w-full object-contain"
+                style={{
+                  opacity: i === index ? 1 : 0,
+                  transform:
+                    i === index
+                      ? `translate3d(0, ${reduced ? 0 : floatY.toFixed(2)}px, 0) scale(1)`
+                      : "translate3d(30px, 0, 0) scale(0.97)",
+                  transition: `opacity 900ms ${EASING}, transform 900ms ${EASING}`,
+                  willChange: i === index ? "transform" : undefined,
+                }}
               />
             ))}
           </div>
         </div>
-        {/* Copy card — flows below on a warm cream background */}
-        <div
-          key={`mcopy-${index}`}
-          className="bg-cream px-5 py-8"
-          style={{ animation: prefersReduced() ? undefined : "fade-in 700ms 100ms both" }}
-        >
-          <p className="text-[10px] font-bold uppercase tracking-[0.32em] text-butter-deep">
-            {slide.subtitle}
+
+        {/* ─────────── COPY column (left on desktop, below image on mobile) ── */}
+        <div className="relative z-10 flex flex-col justify-center py-8 md:py-16">
+          {/* Eyebrow + heading are keyed by index so they remount + replay
+              their entrance animation on every slide change */}
+          <p
+            key={`eyebrow-${index}`}
+            className="text-[11px] font-bold uppercase tracking-[0.28em] text-butter-deep"
+            style={{
+              animation: reduced
+                ? undefined
+                : `hero-rise 700ms ${EASING} both`,
+            }}
+          >
+            {slide.eyebrow}
           </p>
-          <h1 className="display-hero mt-3 text-3xl">{slide.title}</h1>
-          <p className="mt-4 text-[15px] leading-relaxed text-text">{slide.description}</p>
+
+          <div key={`heading-${index}`} className="mt-4">
+            <TypewriterHeading
+              text={slide.title}
+              speed={mobile ? TYPE_SPEED_MOBILE : TYPE_SPEED_DESKTOP}
+              mobile={mobile}
+            />
+          </div>
+
+          <p
+            key={`desc-${index}`}
+            className="mt-5 max-w-[480px] text-[15px] leading-[1.7] text-text md:text-base"
+            style={{
+              animation: reduced
+                ? undefined
+                : `hero-rise 700ms ${EASING} both`,
+              animationDelay: reduced ? undefined : `${POST_TYPE_HOLD * 0.4}ms`,
+            }}
+          >
+            {slide.description}
+          </p>
+
           {slide.bullets.length > 0 && (
-            <ul className="mt-4 space-y-1.5">
+            <ul
+              key={`bullets-${index}`}
+              className="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-sm font-semibold text-green-deep"
+              style={{
+                animation: reduced
+                  ? undefined
+                  : `hero-rise 700ms ${EASING} both`,
+                animationDelay: reduced
+                  ? undefined
+                  : `${POST_TYPE_HOLD * 0.55}ms`,
+              }}
+            >
               {slide.bullets.map((b) => (
-                <li
-                  key={b}
-                  className="flex items-center gap-2 text-sm font-semibold text-green-deep"
-                >
+                <li key={b} className="flex items-center gap-2">
                   <span className="h-1.5 w-1.5 rounded-full bg-green" />
                   {b}
                 </li>
               ))}
             </ul>
           )}
-          <Link
-            to="/shop/$slug"
-            params={{ slug: slide.slug }}
-            key={`mcta-${index}`}
-            className="btn btn-primary mt-6 w-full"
+
+          <div
+            key={`cta-${index}`}
+            className="mt-8"
+            style={{
+              animation: reduced
+                ? undefined
+                : `hero-rise 700ms ${EASING} both`,
+              animationDelay: reduced
+                ? undefined
+                : `${POST_TYPE_HOLD * 0.75}ms`,
+            }}
           >
-            {slide.cta}
-          </Link>
+            <Link
+              to={slide.href}
+              className="group inline-flex items-center gap-2 rounded-full bg-green px-7 py-3.5 text-[13px] font-bold uppercase tracking-[0.16em] text-cream shadow-[0_2px_0_0_var(--green-deep),0_18px_28px_-18px_rgba(28,70,16,0.75)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-green-deep hover:shadow-[0_3px_0_0_var(--green-deep),0_28px_44px_-20px_rgba(28,70,16,0.7)]"
+            >
+              {slide.cta}
+              <ArrowRight
+                className="h-4 w-4 -translate-x-1 opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100"
+                aria-hidden="true"
+              />
+            </Link>
+          </div>
+
+          {/* Live region — announces the active title to assistive tech */}
+          <span className="sr-only" aria-live="polite">
+            Slide {index + 1} of {heroSlides.length}: {slide.title}
+          </span>
+
+          {/* Slide indicator — desktop position (inline at the bottom of the
+              copy column). Mobile version sits at the very bottom of the copy
+              stack, below the CTA. */}
+          <Indicator
+            index={index}
+            onGoto={goto}
+            progressKey={progressKey}
+            paused={paused || reduced}
+            className="mt-10"
+          />
+        </div>
+
+        {/* ─────────── DESKTOP image column ─────────── */}
+        <div className="relative hidden md:block">
+          <div className="relative flex h-full min-h-[560px] items-center justify-end">
+            {heroSlides.map((s, i) => (
+              <img
+                key={s.id}
+                src={s.imageDesktop}
+                alt={s.alt}
+                loading={i === 0 ? "eager" : "lazy"}
+                fetchPriority={i === 0 ? "high" : "low"}
+                decoding="async"
+                aria-hidden={i !== index}
+                className="absolute right-0 top-1/2 max-h-[92%] w-[92%] max-w-none -translate-y-1/2 object-contain"
+                style={{
+                  opacity: i === index ? 1 : 0,
+                  transform:
+                    i === index
+                      ? `translate3d(0, calc(-50% + ${reduced ? 0 : floatY.toFixed(2)}px), 0) scale(1)`
+                      : "translate3d(50px, -50%, 0) scale(0.97)",
+                  transition: `opacity 900ms ${EASING}, transform 900ms ${EASING}`,
+                  willChange: i === index ? "transform" : undefined,
+                }}
+              />
+            ))}
+          </div>
+
+          {/* Prev / next — subtle circular controls, only rendered on desktop */}
+          <button
+            onClick={() => nextIndex(index - 1)}
+            aria-label="Previous slide"
+            className="absolute left-2 top-1/2 z-10 grid h-10 w-10 -translate-y-1/2 place-items-center rounded-full bg-cream/90 text-green shadow-[0_8px_20px_-10px_rgba(15,46,10,0.4)] transition-transform hover:-translate-y-[calc(50%+2px)]"
+          >
+            <ChevronLeft className="h-4 w-4" />
+          </button>
+          <button
+            onClick={() => nextIndex(index + 1)}
+            aria-label="Next slide"
+            className="absolute right-2 top-1/2 z-10 grid h-10 w-10 -translate-y-1/2 place-items-center rounded-full bg-cream/90 text-green shadow-[0_8px_20px_-10px_rgba(15,46,10,0.4)] transition-transform hover:-translate-y-[calc(50%+2px)]"
+          >
+            <ChevronRight className="h-4 w-4" />
+          </button>
         </div>
       </div>
 
-      {/* ─────────────── DESKTOP (>= md): overlaid on hero art ─────────────── */}
-      <div className="hidden md:block">
-        {heroSlides.map((s, i) => (
-          <div
-            key={s.title}
-            aria-hidden={i !== index}
-            className="absolute inset-0 transition-opacity duration-[900ms]"
-            style={{ opacity: i === index ? 1 : 0 }}
-          >
-            <img
-              src={s.image}
-              alt={s.title}
-              loading={i === 0 ? "eager" : "lazy"}
-              fetchPriority={i === 0 ? "high" : "low"}
-              className="h-full w-full object-cover transition-transform duration-[8000ms] ease-out"
-              style={{
-                transform: `translate3d(0, ${i === index ? -offset : 0}px, 0) scale(${i === index ? 1.06 : 1})`,
-              }}
-            />
-            <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(251,235,209,0.9)_0%,rgba(251,235,209,0)_62%)]" />
-          </div>
-        ))}
-
-        <div className="relative mx-auto flex h-full max-w-7xl items-center px-6">
-          <div
-            key={`dcopy-${index}`}
-            className="max-w-xl"
-            style={{ animation: prefersReduced() ? undefined : "fade-in 700ms 150ms both" }}
-          >
-            <p className="text-[11px] font-bold uppercase tracking-[0.32em] text-butter-deep">
-              {slide.subtitle}
-            </p>
-            <h1 className="display-hero mt-4 text-5xl lg:text-7xl">{slide.title}</h1>
-            <p className="mt-5 max-w-md text-base text-text">{slide.description}</p>
-            {slide.bullets.length > 0 && (
-              <ul className="mt-4 space-y-2">
-                {slide.bullets.map((b) => (
-                  <li
-                    key={b}
-                    className="flex items-center gap-3 text-sm font-semibold text-green-deep"
-                  >
-                    <span className="h-2 w-2 rounded-full bg-green" />
-                    {b}
-                  </li>
-                ))}
-              </ul>
-            )}
-            <div className="mt-8 flex flex-wrap items-center gap-3">
-              <Link
-                to="/shop/$slug"
-                params={{ slug: slide.slug }}
-                key={`dcta-${index}`}
-                className="btn btn-primary"
-                style={{ animation: prefersReduced() ? undefined : "cta-pulse 1200ms ease-out 1" }}
-              >
-                {slide.cta}
-              </Link>
-              <Link to="/shop" className="btn btn-secondary">
-                Browse all products
-              </Link>
-            </div>
-            <ul className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-green-deep/80">
-              <li className="flex items-center gap-2">
-                <span className="h-1.5 w-1.5 rounded-full bg-butter" /> 4 – 6:30 AM Delivery
-              </li>
-              <li className="flex items-center gap-2">
-                <span className="h-1.5 w-1.5 rounded-full bg-butter" /> Free within Hosur
-              </li>
-              <li className="flex items-center gap-2">
-                <span className="h-1.5 w-1.5 rounded-full bg-butter" /> Rated 4.9 / 5 by 1,200+ families
-              </li>
-            </ul>
-          </div>
-        </div>
-
-        <button
-          onClick={() => go(index - 1)}
-          aria-label="Previous slide"
-          className="absolute left-3 top-1/2 grid h-12 w-12 -translate-y-1/2 place-items-center rounded-full bg-card/90 text-green shadow-lg transition-transform hover:-translate-y-[calc(50%+2px)]"
-        >
-          <ChevronLeft className="h-5 w-5" />
-        </button>
-        <button
-          onClick={() => go(index + 1)}
-          aria-label="Next slide"
-          className="absolute right-3 top-1/2 grid h-12 w-12 -translate-y-1/2 place-items-center rounded-full bg-card/90 text-green shadow-lg transition-transform hover:-translate-y-[calc(50%+2px)]"
-        >
-          <ChevronRight className="h-5 w-5" />
-        </button>
-
-        <div
-          key={`progress-${index}`}
-          aria-hidden="true"
-          className="hero-progress"
-          style={{
-            animation: prefersReduced() ? undefined : "hero-progress-fill 6500ms linear forwards",
-            animationPlayState: paused ? "paused" : "running",
-          }}
-        />
-
-        <div className="absolute bottom-6 left-1/2 flex -translate-x-1/2 items-center gap-2">
-          {heroSlides.map((s, i) => (
-            <button
-              key={s.title}
-              onClick={() => setIndex(i)}
-              aria-label={`Go to slide ${i + 1}`}
-              className={`h-[3px] rounded-full transition-all ${
-                i === index ? "w-12 bg-green" : "w-6 bg-green/40"
-              }`}
-            />
-          ))}
-        </div>
-      </div>
+      {/* Keyframes co-located so this component is drop-in usable */}
+      <style>{`
+        @keyframes hero-rise {
+          0%   { opacity: 0; transform: translateY(14px); }
+          100% { opacity: 1; transform: translateY(0);    }
+        }
+        @keyframes hero-caret {
+          0%, 50%   { opacity: 1; }
+          50.01%, 100% { opacity: 0; }
+        }
+      `}</style>
     </section>
+  );
+}
+
+/* ─────────────────────────── Slide indicator ─────────────────────────── */
+
+function Indicator({
+  index,
+  onGoto,
+  progressKey,
+  paused,
+  className,
+}: {
+  index: number;
+  onGoto: (i: number) => void;
+  progressKey: number;
+  paused: boolean;
+  className?: string;
+}) {
+  const count = heroSlides.length;
+  return (
+    <div
+      role="tablist"
+      aria-label="Hero slides"
+      className={`flex items-center gap-4 ${className ?? ""}`}
+    >
+      <span className="font-display text-sm font-bold tracking-wider text-green-deep tabular-nums">
+        {String(index + 1).padStart(2, "0")}
+      </span>
+      <div className="flex flex-1 items-center gap-2">
+        {Array.from({ length: count }).map((_, i) => {
+          const active = i === index;
+          return (
+            <button
+              key={i}
+              role="tab"
+              aria-selected={active}
+              aria-label={`Go to slide ${i + 1}`}
+              onClick={() => onGoto(i)}
+              className="group relative h-[3px] flex-1 overflow-hidden rounded-full bg-green/15"
+            >
+              {/* Static fill for slides already viewed */}
+              <span
+                aria-hidden="true"
+                className="absolute inset-0 origin-left bg-green transition-transform duration-500"
+                style={{
+                  transform: `scaleX(${i < index ? 1 : 0})`,
+                }}
+              />
+              {/* Autoplay progress fill for the current slide */}
+              {active && (
+                <span
+                  key={progressKey}
+                  aria-hidden="true"
+                  className="absolute inset-0 origin-left bg-green"
+                  style={{
+                    animation: paused
+                      ? undefined
+                      : `hero-progress ${AUTOPLAY_MS}ms linear forwards`,
+                  }}
+                />
+              )}
+            </button>
+          );
+        })}
+        <style>{`
+          @keyframes hero-progress {
+            from { transform: scaleX(0); }
+            to   { transform: scaleX(1); }
+          }
+        `}</style>
+      </div>
+      <span className="font-display text-xs font-medium tracking-wider text-text/60 tabular-nums">
+        / {String(count).padStart(2, "0")}
+      </span>
+    </div>
   );
 }
