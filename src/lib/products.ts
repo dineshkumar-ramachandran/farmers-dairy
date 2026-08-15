@@ -188,11 +188,11 @@ export const basePrice = (p: Product) =>
 export const inr = (n: number) =>
   `₹${n.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 
-// Dedicated hero PNGs (desktop + mobile crops) supplied by the client and
-// hosted on the pagination branch — pulled via GitHub raw so we don't add
-// ~15 MB of binaries to this repo.
-const HERO_ART_BASE =
-  "https://raw.githubusercontent.com/dineshkumar-ramachandran/farmers-dairy/pagination/images";
+// Hero uses the *transparent* product PNGs from the farmers-dairy branch so
+// the products sit directly on the cream site background — no rectangular
+// beige frame like the earlier hero-desktop composites had. IMG_BASE already
+// points at the right place; we just reuse it.
+const HERO_ART_BASE = IMG_BASE;
 
 export type HeroSlide = {
   id: string;
@@ -217,8 +217,8 @@ export const heroSlides: HeroSlide[] = [
     bullets: ["No Preservatives", "No Antibiotics"],
     cta: "Start Subscription",
     href: "/shop/raw-cow-milk-1000ml",
-    imageDesktop: `${HERO_ART_BASE}/milk-desktop.png`,
-    imageMobile: `${HERO_ART_BASE}/milk-mobile.png`,
+    imageDesktop: `${HERO_ART_BASE}/1000ml-raw-cow-milk.png`,
+    imageMobile: `${HERO_ART_BASE}/1000ml-raw-cow-milk.png`,
     alt: "Farmer's Dairy fresh cow milk",
   },
   {
@@ -230,8 +230,8 @@ export const heroSlides: HeroSlide[] = [
     bullets: ["Slow-Made Bilona Style", "Rich & Nutty Aroma"],
     cta: "Shop Ghee",
     href: "/shop/organic-cow-ghee",
-    imageDesktop: `${HERO_ART_BASE}/ghee-desktop.png`,
-    imageMobile: `${HERO_ART_BASE}/ghee-mobile.png`,
+    imageDesktop: `${HERO_ART_BASE}/organic-ghee.png`,
+    imageMobile: `${HERO_ART_BASE}/organic-ghee.png`,
     alt: "Farmer's Dairy organic cow ghee",
   },
   {
@@ -243,8 +243,8 @@ export const heroSlides: HeroSlide[] = [
     bullets: ["Small-Batch Churned", "No Colouring, No Additives"],
     cta: "Shop Butter",
     href: "/shop/organic-butter",
-    imageDesktop: `${HERO_ART_BASE}/butter-desktop.png`,
-    imageMobile: `${HERO_ART_BASE}/butter-mobile.png`,
+    imageDesktop: `${HERO_ART_BASE}/organic-butter.png`,
+    imageMobile: `${HERO_ART_BASE}/organic-butter.png`,
     alt: "Farmer's Dairy organic butter",
   },
   {
@@ -256,8 +256,8 @@ export const heroSlides: HeroSlide[] = [
     bullets: ["Set with Lemon Only", "Packed in Paneer Water"],
     cta: "Shop Paneer",
     href: "/shop/organic-paneer",
-    imageDesktop: `${HERO_ART_BASE}/paneer-desktop.png`,
-    imageMobile: `${HERO_ART_BASE}/paneer-mobile.png`,
+    imageDesktop: `${HERO_ART_BASE}/organic-paneer.png`,
+    imageMobile: `${HERO_ART_BASE}/organic-paneer.png`,
     alt: "Farmer's Dairy organic malai paneer",
   },
 ];

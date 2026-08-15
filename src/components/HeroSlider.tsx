@@ -180,21 +180,21 @@ export function HeroSlider() {
         window.setTimeout(() => setPaused(false), 3000);
       }}
     >
-      {/* Soft radial warmth behind the product — pinned to the right on
-          desktop, centred on mobile. Sits under everything as bg accent. */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 -z-10"
-        style={{
-          background:
-            "radial-gradient(60% 55% at 78% 45%, rgba(249,187,106,0.20) 0%, rgba(251,235,209,0) 65%)",
-        }}
-      />
 
       <div className="mx-auto grid max-w-7xl grid-cols-1 gap-6 px-5 md:min-h-[650px] md:grid-cols-[minmax(0,44fr)_minmax(0,56fr)] md:gap-8 md:px-8 lg:min-h-[720px]">
         {/* ─────────── MOBILE image (order-first, visually on top) ─────────── */}
         <div className="relative -mx-5 mt-2 md:hidden">
           <div className="relative h-[44vh] min-h-[300px] max-h-[420px] w-full">
+            {/* Warm glow so the transparent product sits on a soft base and
+                doesn't look like it's floating in space */}
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-0 mx-auto max-w-[80%]"
+              style={{
+                background:
+                  "radial-gradient(50% 45% at 50% 60%, rgba(249,187,106,0.32) 0%, rgba(251,235,209,0) 70%)",
+              }}
+            />
             {heroSlides.map((s, i) => (
               <img
                 key={s.id}
@@ -212,6 +212,11 @@ export function HeroSlider() {
                       ? `translate3d(0, ${reduced ? 0 : floatY.toFixed(2)}px, 0) scale(1)`
                       : "translate3d(30px, 0, 0) scale(0.97)",
                   transition: `opacity 900ms ${EASING}, transform 900ms ${EASING}`,
+                  // multiply blends any residual warm bg the PNG might have
+                  // into the cream site background; on truly transparent PNGs
+                  // it's a no-op for the transparent pixels
+                  mixBlendMode: "multiply",
+                  filter: "drop-shadow(0 24px 30px rgba(15, 46, 10, 0.18))",
                   willChange: i === index ? "transform" : undefined,
                 }}
               />
@@ -321,7 +326,17 @@ export function HeroSlider() {
 
         {/* ─────────── DESKTOP image column ─────────── */}
         <div className="relative hidden md:block">
-          <div className="relative flex h-full min-h-[560px] items-center justify-end">
+          <div className="relative flex h-full min-h-[560px] items-center justify-center">
+            {/* Warm radial cushion behind the product — gives depth without
+                a hard rectangular frame */}
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-0"
+              style={{
+                background:
+                  "radial-gradient(45% 55% at 60% 55%, rgba(249,187,106,0.28) 0%, rgba(251,235,209,0) 68%)",
+              }}
+            />
             {heroSlides.map((s, i) => (
               <img
                 key={s.id}
@@ -331,7 +346,7 @@ export function HeroSlider() {
                 fetchPriority={i === 0 ? "high" : "low"}
                 decoding="async"
                 aria-hidden={i !== index}
-                className="absolute right-0 top-1/2 max-h-[92%] w-[92%] max-w-none -translate-y-1/2 object-contain"
+                className="absolute top-1/2 max-h-[92%] max-w-[85%] -translate-y-1/2 object-contain"
                 style={{
                   opacity: i === index ? 1 : 0,
                   transform:
@@ -339,6 +354,10 @@ export function HeroSlider() {
                       ? `translate3d(0, calc(-50% + ${reduced ? 0 : floatY.toFixed(2)}px), 0) scale(1)`
                       : "translate3d(50px, -50%, 0) scale(0.97)",
                   transition: `opacity 900ms ${EASING}, transform 900ms ${EASING}`,
+                  // multiply blends any residual warm bg into cream (safety
+                  // net for PNGs that ship with a faint studio backdrop)
+                  mixBlendMode: "multiply",
+                  filter: "drop-shadow(0 40px 50px rgba(15, 46, 10, 0.22))",
                   willChange: i === index ? "transform" : undefined,
                 }}
               />
