@@ -8,7 +8,9 @@ deployed. To put the whole site behind it (or take it back out), edit
 ## Enable maintenance mode
 
 1. Open `vercel.json`.
-2. **Uncomment** the `rewrites` block so it looks like this:
+2. **Add** the `rewrites` block so the whole file looks like this
+   (Vercel's `vercel.json` schema doesn't accept JSON comments, so the
+   rewrites are documented here — not commented out in the file itself):
 
    ```json
    {
