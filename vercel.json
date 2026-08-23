@@ -3,11 +3,5 @@
   "framework": null,
   "buildCommand": "pnpm build",
   "installCommand": "pnpm install --frozen-lockfile=false",
-  "outputDirectory": ".vercel/output",
-  "rewrites": [
-    {
-      "source": "/((?!maintenance\\.html|images/.*|favicon.*|.well-known/.*).*)",
-      "destination": "/maintenance.html"
-    }
-  ]
+  "outputDirectory": ".vercel/output"
 }
