@@ -117,7 +117,17 @@ export function SiteFooter() {
 
         <div className="mt-12 flex flex-col gap-2 border-t border-cream/15 pt-6 text-xs text-cream/60 sm:flex-row sm:items-center sm:justify-between">
           <p>© 2024 Farmer's Dairy. All rights reserved.</p>
-          <p className="text-butter">Designed by Onprimehub</p>
+          <p>
+            Designed by{" "}
+            <a
+              href="https://onprimehub.com"
+              target="_blank"
+              rel="external noopener"
+              className="text-butter hover:text-butter-deep"
+            >
+              Onprimehub
+            </a>
+          </p>
         </div>
       </div>
     </footer>

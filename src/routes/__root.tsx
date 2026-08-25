@@ -94,6 +94,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         rel: "stylesheet",
         href: "https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&display=swap",
       },
+      // Explicit shortcut icon + icon links so no browser falls back to
+      // /favicon.ico (which used to be the Lovable default and is what
+      // Google's cache is still surfacing in search results).
+      {
+        rel: "shortcut icon",
+        href: "https://raw.githubusercontent.com/dineshkumar-ramachandran/farmers-dairy/farmers-dairy/public/images/farmers-dairy-logo.png",
+        type: "image/png",
+      },
       {
         rel: "icon",
         href: "https://raw.githubusercontent.com/dineshkumar-ramachandran/farmers-dairy/farmers-dairy/public/images/farmers-dairy-logo.png",

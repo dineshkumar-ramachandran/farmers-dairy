@@ -59,7 +59,7 @@ export const products: Product[] = [
     name: "Raw Cow Milk 500ml",
     price: 35,
     slug: "raw-cow-milk-500ml",
-    image: `${IMG_BASE}/500ml-raw-cow-milk.png`,
+    image: `/images/milk-transparent.png`, // ✅
     description: "Hygienically sourced organic Cow Milk directly from the farm to your home.",
     subscription: true,
     isSubscription: true,
@@ -85,7 +85,7 @@ export const products: Product[] = [
     name: "Organic Cow Ghee",
     price: "₹629 – ₹1249",
     slug: "organic-cow-ghee",
-    image: `${IMG_BASE}/organic-ghee.png`,
+    image: `/images/ghee-transparent.png`, // ✅
     description: "Pure organic cow ghee, slow-made from farm-fresh milk.",
     variantLabel: "Choose Size",
     variants: [
@@ -101,7 +101,7 @@ export const products: Product[] = [
     name: "Organic Paneer",
     price: "₹159 – ₹719",
     slug: "organic-paneer",
-    image: `${IMG_BASE}/organic-paneer.png`,
+    image: `/images/paneer-transparent.png`, // ✅
     description:
       "Soft and Healthy Paneer made from Organic Cow milk & Lemon. Comes with paneer water inside.",
     variantLabel: "Choose Weight",
@@ -119,7 +119,7 @@ export const products: Product[] = [
     name: "Organic Butter",
     price: "₹249 – ₹449",
     slug: "organic-butter",
-    image: `${IMG_BASE}/organic-butter.png`,
+    image: `/images/butter-transparent.png`, // ✅
     description: "Churned from Organic Cream. Soft and creamy butter for tasty dosas.",
     variantLabel: "Choose Size",
     variants: [
@@ -212,8 +212,7 @@ export const heroSlides: HeroSlide[] = [
     id: "milk",
     eyebrow: "From Farm to Home",
     title: "Fresh Cow Milk",
-    description:
-      "Pure, fresh cow milk delivered from our farm to your doorstep every morning.",
+    description: "Pure, fresh cow milk delivered from our farm to your doorstep every morning.",
     bullets: ["No Preservatives", "No Antibiotics"],
     cta: "Start Subscription",
     href: "/shop/raw-cow-milk-1000ml",
@@ -238,8 +237,7 @@ export const heroSlides: HeroSlide[] = [
     id: "butter",
     eyebrow: "Creamy & Fresh",
     title: "Organic Butter",
-    description:
-      "Soft, creamy butter churned from organic cream for delicious everyday meals.",
+    description: "Soft, creamy butter churned from organic cream for delicious everyday meals.",
     bullets: ["Small-Batch Churned", "No Colouring, No Additives"],
     cta: "Shop Butter",
     href: "/shop/organic-butter",
