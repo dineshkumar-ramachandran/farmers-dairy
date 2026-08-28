@@ -16,6 +16,7 @@ import { Route as CancellationAndRefundRouteImport } from './routes/cancellation
 import { Route as CartRouteImport } from './routes/cart'
 import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as KeepAliveRouteImport } from './routes/keep-alive'
 import { Route as OrderConfirmationRouteImport } from './routes/order-confirmation'
 import { Route as PrivacyPolicyRouteImport } from './routes/privacy-policy'
 import { Route as ShippingAndDeliveryRouteImport } from './routes/shipping-and-delivery'
@@ -58,6 +59,11 @@ const ContactRoute = ContactRouteImport.update({
   path: '/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
+const KeepAliveRoute = KeepAliveRouteImport.update({
+  id: '/keep-alive',
+  path: '/keep-alive',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const OrderConfirmationRoute = OrderConfirmationRouteImport.update({
   id: '/order-confirmation',
   path: '/order-confirmation',
@@ -97,6 +103,7 @@ export interface FileRoutesByFullPath {
   '/cart': typeof CartRoute
   '/checkout': typeof CheckoutRoute
   '/contact': typeof ContactRoute
+  '/keep-alive': typeof KeepAliveRoute
   '/order-confirmation': typeof OrderConfirmationRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
   '/shipping-and-delivery': typeof ShippingAndDeliveryRoute
@@ -112,6 +119,7 @@ export interface FileRoutesByTo {
   '/cart': typeof CartRoute
   '/checkout': typeof CheckoutRoute
   '/contact': typeof ContactRoute
+  '/keep-alive': typeof KeepAliveRoute
   '/order-confirmation': typeof OrderConfirmationRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
   '/shipping-and-delivery': typeof ShippingAndDeliveryRoute
@@ -128,6 +136,7 @@ export interface FileRoutesById {
   '/cart': typeof CartRoute
   '/checkout': typeof CheckoutRoute
   '/contact': typeof ContactRoute
+  '/keep-alive': typeof KeepAliveRoute
   '/order-confirmation': typeof OrderConfirmationRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
   '/shipping-and-delivery': typeof ShippingAndDeliveryRoute
@@ -145,6 +154,7 @@ export interface FileRouteTypes {
     | '/cart'
     | '/checkout'
     | '/contact'
+    | '/keep-alive'
     | '/order-confirmation'
     | '/privacy-policy'
     | '/shipping-and-delivery'
@@ -160,6 +170,7 @@ export interface FileRouteTypes {
     | '/cart'
     | '/checkout'
     | '/contact'
+    | '/keep-alive'
     | '/order-confirmation'
     | '/privacy-policy'
     | '/shipping-and-delivery'
@@ -175,6 +186,7 @@ export interface FileRouteTypes {
     | '/cart'
     | '/checkout'
     | '/contact'
+    | '/keep-alive'
     | '/order-confirmation'
     | '/privacy-policy'
     | '/shipping-and-delivery'
@@ -191,6 +203,7 @@ export interface RootRouteChildren {
   CartRoute: typeof CartRoute
   CheckoutRoute: typeof CheckoutRoute
   ContactRoute: typeof ContactRoute
+  KeepAliveRoute: typeof KeepAliveRoute
   OrderConfirmationRoute: typeof OrderConfirmationRoute
   PrivacyPolicyRoute: typeof PrivacyPolicyRoute
   ShippingAndDeliveryRoute: typeof ShippingAndDeliveryRoute
@@ -250,6 +263,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ContactRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/keep-alive': {
+      id: '/keep-alive'
+      path: '/keep-alive'
+      fullPath: '/keep-alive'
+      preLoaderRoute: typeof KeepAliveRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/order-confirmation': {
       id: '/order-confirmation'
       path: '/order-confirmation'
@@ -303,6 +323,7 @@ const rootRouteChildren: RootRouteChildren = {
   CartRoute: CartRoute,
   CheckoutRoute: CheckoutRoute,
   ContactRoute: ContactRoute,
+  KeepAliveRoute: KeepAliveRoute,
   OrderConfirmationRoute: OrderConfirmationRoute,
   PrivacyPolicyRoute: PrivacyPolicyRoute,
   ShippingAndDeliveryRoute: ShippingAndDeliveryRoute,

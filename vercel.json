@@ -3,5 +3,11 @@
   "framework": null,
   "buildCommand": "pnpm build",
   "installCommand": "pnpm install --frozen-lockfile=false",
-  "outputDirectory": ".vercel/output"
+  "outputDirectory": ".vercel/output",
+  "crons": [
+    {
+      "path": "/keep-alive",
+      "schedule": "0 3 * * 1,4"
+    }
+  ]
 }
