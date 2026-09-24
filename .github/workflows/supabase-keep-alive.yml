@@ -1,0 +1,55 @@
+name: Supabase keep-alive
+
+# Pings the production /keep-alive route four times a week to prevent the
+# Supabase Free-plan project from auto-pausing after 7 days of inactivity.
+#
+# Why this exists alongside the Vercel Cron in vercel.json:
+# - Vercel Cron on the Hobby plan is skipped for low-traffic projects and
+#   silently missed pings while the site sat quiet, letting Supabase pause.
+# - GitHub Actions cron runs on GitHub's clock regardless of any project
+#   traffic, and the free tier is 2000 minutes/month — a curl every other
+#   day uses roughly 4 seconds.
+#
+# The endpoint runs supabaseAdmin().from("orders").select() server-side, which
+# is what Supabase actually counts as activity.
+
+on:
+  schedule:
+    # Every Sunday, Tuesday, Thursday, and Saturday at 03:15 UTC (08:45 IST).
+    # Twice-weekly proved to be too close to the 7-day threshold; four keeps
+    # a healthy margin even if one run is missed.
+    - cron: "15 3 * * 0,2,4,6"
+  workflow_dispatch: {}
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Ping /keep-alive
+        run: |
+          set -e
+          URL="${KEEPALIVE_URL:-https://www.farmersdairy.in/keep-alive}"
+          echo "GET $URL"
+          # Retry up to 3 times with a 15 s cap per attempt; Vercel cold starts
+          # occasionally hit 10 s on the first request.
+          for i in 1 2 3; do
+            HTTP=$(curl -s -o /tmp/body -w "%{http_code}" --max-time 15 "$URL") && break
+            echo "attempt $i failed"; sleep 5
+          done
+          echo "HTTP $HTTP"
+          echo "--- body (first 800 chars) ---"
+          head -c 800 /tmp/body || true
+          echo
+          # Fail the workflow if the loader reported the Supabase call failed
+          # (so we get an email from GitHub instead of a silent miss).
+          if grep -q '"ok":!1' /tmp/body; then
+            echo "::error::Supabase ping reported failure — see body above"
+            exit 1
+          fi
+          if [ "$HTTP" != "200" ]; then
+            echo "::error::Non-200 response from $URL"
+            exit 1
+          fi
+        env:
+          KEEPALIVE_URL: https://www.farmersdairy.in/keep-alive
