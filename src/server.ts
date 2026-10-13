@@ -2,8 +2,6 @@ import "./lib/error-capture";
 
 import { consumeLastCapturedError } from "./lib/error-capture";
 import { renderErrorPage } from "./lib/error-page";
-import { MAINTENANCE_HTML } from "./lib/maintenance-html";
-import { shouldServeMaintenance } from "./lib/maintenance";
 
 type ServerEntry = {
   fetch: (request: Request, env: unknown, ctx: unknown) => Promise<Response> | Response;
@@ -48,20 +46,6 @@ function isH3SwallowedErrorBody(body: string): boolean {
 
 export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
-    // Short-circuit everything to the maintenance page when the flag is on.
-    // Runs before TanStack sees the request so vercel.json rewrites aren't
-    // needed (and don't work with the Nitro Vercel preset anyway).
-    if (shouldServeMaintenance(request)) {
-      return new Response(MAINTENANCE_HTML, {
-        status: 200,
-        headers: {
-          "content-type": "text/html; charset=utf-8",
-          "cache-control": "no-store",
-          "x-maintenance": "active",
-        },
-      });
-    }
-
     try {
       const handler = await getServerEntry();
       const response = await handler.fetch(request, env, ctx);
