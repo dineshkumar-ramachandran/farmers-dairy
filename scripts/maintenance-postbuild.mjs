@@ -52,13 +52,25 @@ if (enabled) {
   // automatically), `headers.Location` carries the redirect target,
   // `status` sets the HTTP code. 302 keeps crawlers from caching the
   // maintenance page as the real site.
+  // Vercel auto-anchors `src` with ^ and $, so leading ^ was a wart.
+  // The negative lookahead carves out the exempt paths.
   const maintenanceRoute = {
-    src: "^/(?!maintenance\\.html|keep-alive|images/|assets/|favicon|\\.well-known/).*",
+    src: "/(?!maintenance\\.html|keep-alive|images/|assets/|favicon|\\.well-known/).*",
     status: 302,
     headers: { Location: "/maintenance.html" },
   };
   config.routes.unshift(maintenanceRoute);
   console.log("[maintenance-postbuild] MAINTENANCE MODE ON — redirect injected");
+
+  // Make the deploy itself identifiable in production curl output. Lets us
+  // confirm whether the postbuild ran at all without logging into Vercel.
+  config.routes.unshift({
+    src: "/.vercel/maintenance-status",
+    status: 200,
+    headers: {
+      "Content-Type": "text/plain; charset=utf-8",
+    },
+  });
 } else {
   console.log("[maintenance-postbuild] maintenance off — no redirect injected");
 }
