@@ -1,46 +1,68 @@
 # Maintenance mode
 
-A branded static maintenance page lives at `public/maintenance.html`. Vercel
-serves it at `https://www.farmersdairy.in/maintenance.html` as soon as it's
-deployed. To put the whole site behind it (or take it back out), edit
-`vercel.json` and redeploy — 30 seconds either way.
+The maintenance toggle lives in `src/lib/maintenance.ts` and intercepts every
+request inside the serverless function entry (`src/server.ts`) **before**
+TanStack handles it. This replaces the earlier `vercel.json` rewrites
+approach, which silently stopped working because the Nitro Vercel preset
+generates its own routing config that overrides `vercel.json` rewrites.
 
 ## Enable maintenance mode
 
-1. Open `vercel.json`.
-2. **Add** the `rewrites` block so the whole file looks like this
-   (Vercel's `vercel.json` schema doesn't accept JSON comments, so the
-   rewrites are documented here — not commented out in the file itself):
+Edit `src/lib/maintenance.ts`:
 
-   ```json
-   {
-     "$schema": "https://openapi.vercel.sh/vercel.json",
-     "framework": null,
-     "buildCommand": "pnpm build",
-     "installCommand": "pnpm install --frozen-lockfile=false",
-     "outputDirectory": ".vercel/output",
-     "rewrites": [
-       { "source": "/((?!maintenance.html|images/.*|favicon.*|.well-known/.*).*)", "destination": "/maintenance.html" }
-     ]
-   }
-   ```
+```ts
+export const MAINTENANCE_ENABLED = true;   // flip to true
+```
 
-3. Commit and push:
+Commit and push:
 
-   ```bash
-   git add vercel.json
-   git commit -m "chore: enable maintenance mode"
-   git push
-   ```
+```bash
+git add src/lib/maintenance.ts
+git commit -m "chore: enable maintenance mode"
+git push
+```
 
-Every request except `/maintenance.html` itself, `/images/*`, `/favicon.*` and
-`/.well-known/*` (SSL renewal) rewrites to the maintenance page while still
-serving a 200 — so browsers, ad crawlers, and the WhatsApp / call links on
-the page all keep working.
+Vercel redeploys (~60–90 s). Every route except the exempt list below returns
+the maintenance page as a 200. Browser URL is preserved.
 
 ## Disable maintenance mode
 
-Remove the `rewrites` block (or comment it out), commit and push.
+Flip the same constant back to `false`, commit, push.
+
+## Alternative: Vercel env var (no commit)
+
+Set `MAINTENANCE_MODE=true` in **Vercel → Project → Settings → Environment
+Variables** and redeploy. The server honours either source (constant or env
+var). Delete the env var to turn it back off.
+
+## Exempt routes
+
+These keep working even in maintenance mode (defined in
+`src/lib/maintenance.ts`):
+
+- `/maintenance.html` — the static copy, for direct linking
+- `/keep-alive` — Supabase keep-alive cron must keep hitting the DB so the
+  Free-plan project doesn't auto-pause while the site is down
+- `/images/*` — logo on the maintenance page
+- `/assets/*` — Vite hashed CSS/JS the maintenance page uses
+- `/.well-known/*` — SSL renewal
+- `/favicon*` — browser tab icon
+
+## Where the page comes from
+
+`src/lib/maintenance-html.ts` holds the maintenance page inlined as a
+template literal, generated from `public/maintenance.html`. Keep both in
+sync — the Vercel serverless function reads the inlined copy because the
+public tree isn't bundled into the function.
+
+To regenerate the inlined copy after editing `public/maintenance.html`:
+
+```bash
+node scratch/inline-maint.mjs   # or re-run whatever generator you prefer
+```
+
+(There's no committed generator script; the two files are small and manual
+sync is fine.)
 
 ## Preview locally
 
@@ -48,12 +70,5 @@ Remove the `rewrites` block (or comment it out), commit and push.
 pnpm dev
 ```
 
-Then open http://localhost:8080/maintenance.html directly. The rewrite rule
-only takes effect on Vercel — `pnpm dev` always serves the real site so you
-can keep working while the production URL is under maintenance.
-
-## Test on a preview URL first
-
-Push a branch other than `farmers-dairy-2.0` with the rewrite enabled. Vercel
-gives it its own preview URL — you can confirm the maintenance page looks
-right on your phone and desktop before you flip the production branch.
+Then open http://localhost:8080 — the maintenance middleware runs in dev too
+when the flag or env var is on.
